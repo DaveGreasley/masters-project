@@ -3,3 +3,7 @@ CFLAGS=-I
 
 sleep:
 	$(CC) sleep.c -o sleep
+
+
+clean:
+	rm sleep
