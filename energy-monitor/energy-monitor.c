@@ -96,9 +96,10 @@ void* measure_energy(void *param)
 
 void get_command(int argc, char *argv[])
 {
+    int i;
     strcat(command, "./");
 
-    for (int i = 1; i <= argc; i++)
+    for (i = 1; i <= argc; i++)
     {
         strcat(command, argv[i]);
     }
@@ -122,4 +123,6 @@ int main(int argc, char *argv[])
 
     pthread_join(launch_thread, NULL);
     pthread_join(measure_thread, NULL);
+
+    return 0;
 }
