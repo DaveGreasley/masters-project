@@ -15,6 +15,9 @@ pthread_t measure_thread;
 // Sample rate in Hz
 const float sample_rate = 100;
 
+// MSR_PKG_ENERGY_STATUS MSR is a 32 bit integer so this is its max value.
+const long long energy_max_value = 2147483647;
+
 char command[100];
 
 double get_timestamp()
@@ -36,7 +39,7 @@ void* start_benchmark(void *param)
     benchmark_complete = true;
     pthread_mutex_unlock(&mutex);
 
-    printf("Benchmark complete. Took %lf seconds\n", (benchmark_start-benchmark_end));
+    printf("Benchmark complete. Took %lf seconds\n", (benchmark_end-benchmark_start));
 
     return NULL;
 }
@@ -66,9 +69,15 @@ void* measure_energy(void *param)
         {
             if (current_value < previous_value)
             {
-                // handle overflow
+                // Here we handle the overflow of the MSR_PKG_ENERGY_STATUS MSR. Energy is 
+                // stored as a 32bit integer and when this number is exceeded the value is reset
+                // to 0. 
+                energy += (energy_max_value - previous_value) + current_value;
             }
-            energy += current_value - previous_value;
+            else 
+            {
+                energy += current_value - previous_value;
+            }
         }
 
         previous_value = current_value;
