@@ -26,8 +26,8 @@ char command[100];
 double get_timestamp()
 {
       struct timeval tv;
-        gettimeofday(&tv, NULL);
-          return tv.tv_sec + tv.tv_usec*1e-6;
+      gettimeofday(&tv, NULL);
+      return tv.tv_sec + tv.tv_usec*1e-6;
 }
 
 void* start_benchmark(void *param)
@@ -92,9 +92,14 @@ void* measure_energy(void *param)
 }
 
 
-char *get_command(char *argv[])
+void get_command(int argc, char *argv[])
 {
-    return "./sleep 10";
+    strcat(command, "./");
+
+    for (int i = 1; i <= argc; i++)
+    {
+        strcat(command, argv[i]);
+    }
 }
 
 
@@ -106,7 +111,7 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    strcpy(command, get_command(argv));
+    get_command(argc, argv);
 
     benchmark_complete = false;
 
