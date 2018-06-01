@@ -38,10 +38,10 @@ void* measure_energy(void *param)
     long long previous_value = -1;
     long long current_value = -1;
 
+    printf("Measuring energy.\n");
+
     while(!benchmark_complete)
     {
-        printf("Measuring energy.");
-
         FILE *fff = fopen("/sys/class/powercap/intel-rapl/intel-rapl:0/energy_uj", "r");
         if (fff==NULL)
         {
@@ -66,6 +66,8 @@ void* measure_energy(void *param)
 
         sleep(1/sample_rate);
     }
+
+    printf("Used %lld energy", energy);
 }
 
 
