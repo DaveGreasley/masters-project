@@ -1,15 +1,15 @@
 CC=gcc
-CFLAGS=-I --std=c99 -Wall
+CFLAGS=-I -std=c99 -Wall
 
 .PHONY : all clean
 
 all: energy-monitor sleep
 
 energy-monitor:
-	$(CC) -pthread energy-monitor.c -o energy-monitor
+	$(CC) $(CFLAGS) -pthread energy-monitor.c -o energy-monitor
 
 sleep:
-	$(CC) sleep.c -o sleep
+	$(CC) $(CFLAGS) sleep.c -o sleep
 
 
 clean:

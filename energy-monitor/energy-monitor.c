@@ -89,6 +89,8 @@ void* measure_energy(void *param)
     }
 
     printf("Used %lld Joules,\n", (energy/energy_conversion_factor));
+
+    return NULL;
 }
 
 
