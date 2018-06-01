@@ -17,17 +17,26 @@ const float sample_rate = 100;
 
 char command[100];
 
+double get_timestamp()
+{
+      struct timeval tv;
+        gettimeofday(&tv, NULL);
+          return tv.tv_sec + tv.tv_usec*1e-6;
+}
+
 void* start_benchmark(void *param)
 {
     printf("Starting %s\n", command);
 
+    double benchmark_start = get_timestamp();
     int status = system(command);
+    double benchmark_end = get_timestamp();
 
     pthread_mutex_lock(&mutex);
     benchmark_complete = true;
     pthread_mutex_unlock(&mutex);
 
-    printf("Done.\n");
+    printf("Benchmark complete. Took %lf seconds\n", (benchmark_start-benchmark_end));
 
     return NULL;
 }
@@ -67,7 +76,7 @@ void* measure_energy(void *param)
         sleep(1/sample_rate);
     }
 
-    printf("Used %lld energy", energy);
+    printf("Used %lld energy\n", energy);
 }
 
 
