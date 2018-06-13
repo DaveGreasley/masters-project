@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#SBATCH --job-name dg-test
+#SBATCH --nodes 1
+#SBATCH --ntasks-per-node 28
+#SBATCH --time 120:00:00
+#SBATCH --partition cpu
+#SBATCH --output test.out
+#SBATCH --exclusive
+
+echo Running on host `hostname`
+echo Time is `date`
+echo Directory is `pwd`
+echo Slurm job ID is $SLURM_JOB_ID
+echo This job runs on the following machines:
+echo `echo $SLURM_JOB_NODELIST | uniq`
+
+echo $SLURM_JOB_NODELIST > machine.file.$SLURM_JOBID
+numnodes=`wc machine.file.$SLURM_JOBID | awk '{ print $1 }'`
+echo $numnodes
+
+~/masters-project/energy-monitor/energy-monitor ~/masters-project/benchmarks/NPB3.3-OMP/bin/bt.B.x
