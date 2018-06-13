@@ -18,8 +18,8 @@ const float sample_rate = 100;
 // MSR_PKG_ENERGY_STATUS MSR is a 32 bit integer so this is its max value.
 const long long energy_max_value = 2147483647;
 
-// Factor to convert energy units into Joules
-const long energy_conversion_factor = 15300000;
+// Energy measurement is in micro joules 
+const long energy_conversion_factor = 1000000;
 
 char command[100];
 
