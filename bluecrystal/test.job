@@ -3,10 +3,12 @@
 #SBATCH --job-name dg-test
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node 28
-#SBATCH --time 120:00:00
-#SBATCH --partition cpu
+#SBATCH --time 0:20:00
+#SBATCH --partition veryshort
 #SBATCH --output test.out
 #SBATCH --exclusive
+
+EXPORT OMP_NUM_THREADS=27
 
 echo Running on host `hostname`
 echo Time is `date`
