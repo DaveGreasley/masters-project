@@ -97,7 +97,6 @@ void* measure_energy(void *param)
 void get_command(int argc, char *argv[])
 {
     int i;
-    strcat(command, "./");
 
     for (i = 1; i < argc; i = i +1)
     {
