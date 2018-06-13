@@ -1,0 +1,5 @@
+sbatch 
+squeue -u $user
+squeue | grep cpu
+sacct
+sinfo
