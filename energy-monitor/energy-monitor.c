@@ -4,7 +4,7 @@
 #include <pthread.h>
 #include <stdbool.h>
 #include <unistd.h>
-
+#include <sys/sysinfo.h>
 
 bool benchmark_complete;
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -22,6 +22,8 @@ const long long energy_max_value = 2147483647;
 const long energy_conversion_factor = 1000000;
 
 char command[100];
+
+int total_packages=0;
 
 double get_timestamp()
 {
@@ -50,41 +52,48 @@ void* start_benchmark(void *param)
 void* measure_energy(void *param)
 {
     long long energy = 0;
-    long long previous_value = -1;
-    long long current_value = -1;
+    long long previous_value[total_packages];
+    long long current_value [total_packages];
+    int i = 0;
+    char filename[100];
+
+    for(i=0;i<total_packages;i++) previous_value[i]=current_value[i]=-1;
 
     printf("Measuring energy.\n");
 
     while(!benchmark_complete)
     {
-        FILE *fff = fopen("/sys/class/powercap/intel-rapl/intel-rapl:0/energy_uj", "r");
-        if (fff==NULL)
-        {
-            printf("Error: Cannot access RAPL counters\n");
-        }
-        else
-        {
-            fscanf(fff, "%lld", &current_value);
-            fclose(fff);
-        }
+        for (i=0;i<total_packages;i++)
+	{
+		sprintf(filename, "/sys/class/powercap/intel-rapl/intel-rapl:%d/energy_uj", i);
+		FILE *fff = fopen(filename, "r");
+		if (fff==NULL)
+		{
+		    printf("Error: Cannot access RAPL counters\n");
+		}
+		else
+		{
+		    fscanf(fff, "%lld", &current_value[i]);
+		    fclose(fff);
+		}
 
-        if (previous_value > -1) 
-        {
-            if (current_value < previous_value)
-            {
-                // Here we handle the overflow of the MSR_PKG_ENERGY_STATUS MSR. Energy is 
-                // stored as a 32bit integer and when this number is exceeded the value is reset
-                // to 0. 
-                energy += (energy_max_value - previous_value) + current_value;
-            }
-            else 
-            {
-                energy += current_value - previous_value;
-            }
-        }
+		if (previous_value[i] > -1) 
+		{
+		    if (current_value[i] < previous_value[i])
+		    {
+			// Here we handle the overflow of the MSR_PKG_ENERGY_STATUS MSR. Energy is 
+			// stored as a 32bit integer and when this number is exceeded the value is reset
+			// to 0. 
+			energy += (energy_max_value - previous_value[i]) + current_value[i];
+		    }
+		    else 
+		    {
+			energy += current_value[i] - previous_value[i];
+		    }
+		}
 
-        previous_value = current_value;
-
+		previous_value[i] = current_value[i];
+	}
         sleep(1/sample_rate);
     }
 
@@ -105,6 +114,34 @@ void get_command(int argc, char *argv[])
     }
 }
 
+#define MAX_CPUS	1024
+#define MAX_PACKAGES	16
+
+void detect_packages(void) {
+
+        char filename[BUFSIZ];
+        FILE *fff;
+        int package;
+        int i;
+	int package_map[MAX_PACKAGES];
+
+        for(i=0;i<MAX_PACKAGES;i++) package_map[i]=-1;
+
+        for(i=0;i<MAX_CPUS;i++) {
+                sprintf(filename,"/sys/devices/system/cpu/cpu%d/topology/physical_package_id",i);
+                fff=fopen(filename,"r");
+                if (fff==NULL) break;
+                fscanf(fff,"%d",&package);
+                fclose(fff);
+
+                if (package_map[package]==-1) {
+                        total_packages++;
+                        package_map[package]=i;
+                }
+
+        }
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -113,6 +150,10 @@ int main(int argc, char *argv[])
         printf("You must provide an executable to monitor\n");
         exit(1);
     }
+
+    detect_packages();
+
+    printf("There are %d processors on %d packages\n", get_nprocs(), total_packages);
 
     get_command(argc, argv);
 
