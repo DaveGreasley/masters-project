@@ -64,36 +64,37 @@ void* measure_energy(void *param)
     while(!benchmark_complete)
     {
         for (i=0;i<total_packages;i++)
-	{
-		sprintf(filename, "/sys/class/powercap/intel-rapl/intel-rapl:%d/energy_uj", i);
-		FILE *fff = fopen(filename, "r");
-		if (fff==NULL)
-		{
-		    printf("Error: Cannot access RAPL counters\n");
-		}
-		else
-		{
-		    fscanf(fff, "%lld", &current_value[i]);
-		    fclose(fff);
-		}
-
-		if (previous_value[i] > -1) 
-		{
-		    if (current_value[i] < previous_value[i])
+	    {
+		    sprintf(filename, "/sys/class/powercap/intel-rapl/intel-rapl:%d/energy_uj", i);
+		    FILE *fff = fopen(filename, "r");
+		    if (fff==NULL)
 		    {
-			// Here we handle the overflow of the MSR_PKG_ENERGY_STATUS MSR. Energy is 
-			// stored as a 32bit integer and when this number is exceeded the value is reset
-			// to 0. 
-			energy += (energy_max_value - previous_value[i]) + current_value[i];
+		        printf("Error: Cannot access RAPL counters\n");
 		    }
-		    else 
+		    else
 		    {
-			energy += current_value[i] - previous_value[i];
+		        fscanf(fff, "%lld", &current_value[i]);
+		        fclose(fff);
 		    }
-		}
 
-		previous_value[i] = current_value[i];
-	}
+		    if (previous_value[i] > -1) 
+		    {
+		        if (current_value[i] < previous_value[i])
+		        {
+			        // Here we handle the overflow of the MSR_PKG_ENERGY_STATUS MSR. Energy is 
+			        // stored as a 32bit integer and when this number is exceeded the value is reset
+			        // to 0. 
+			        energy += (energy_max_value - previous_value[i]) + current_value[i];
+		        }
+		        else 
+		        {
+			        energy += current_value[i] - previous_value[i];
+		        }
+		    }
+
+		    previous_value[i] = current_value[i];
+	    }
+
         sleep(1/sample_rate);
     }
 
@@ -117,29 +118,30 @@ void get_command(int argc, char *argv[])
 #define MAX_CPUS	1024
 #define MAX_PACKAGES	16
 
-void detect_packages(void) {
+void detect_packages(void)
+{
+    char filename[BUFSIZ];
+    FILE *fff;
+    int package;
+    int i;
+    int package_map[MAX_PACKAGES];
 
-        char filename[BUFSIZ];
-        FILE *fff;
-        int package;
-        int i;
-	int package_map[MAX_PACKAGES];
+    for(i=0;i<MAX_PACKAGES;i++) package_map[i]=-1;
 
-        for(i=0;i<MAX_PACKAGES;i++) package_map[i]=-1;
+    for(i=0;i<MAX_CPUS;i++) 
+    {
+        sprintf(filename,"/sys/devices/system/cpu/cpu%d/topology/physical_package_id",i);
+        fff=fopen(filename,"r");
+        if (fff==NULL) break;
+        fscanf(fff,"%d",&package);
+        fclose(fff);
 
-        for(i=0;i<MAX_CPUS;i++) {
-                sprintf(filename,"/sys/devices/system/cpu/cpu%d/topology/physical_package_id",i);
-                fff=fopen(filename,"r");
-                if (fff==NULL) break;
-                fscanf(fff,"%d",&package);
-                fclose(fff);
-
-                if (package_map[package]==-1) {
-                        total_packages++;
-                        package_map[package]=i;
-                }
-
+        if (package_map[package]==-1) 
+        {
+            total_packages++;
+            package_map[package]=i;
         }
+    }
 }
 
 
