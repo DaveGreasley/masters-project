@@ -1,5 +1,5 @@
 *.o
 *.x
 *.h
-*.machine.file.*
+*machine.file.*
 *.out
