@@ -15,8 +15,8 @@ pthread_t measure_thread;
 // Sample rate in Hz
 const float sample_rate = 100;
 
-// MSR_PKG_ENERGY_STATUS MSR is a 32 bit integer so this is its max value.
-const long long energy_max_value = 2147483647;
+// The sysfs energy_uj value resets at this value
+const long long energy_max_value = 262143328850;
 
 // Energy measurement is in micro joules 
 const long energy_conversion_factor = 1000000;
@@ -81,9 +81,7 @@ void* measure_energy(void *param)
 		    {
 		        if (current_value[i] < previous_value[i])
 		        {
-			        // Here we handle the overflow of the MSR_PKG_ENERGY_STATUS MSR. Energy is 
-			        // stored as a 32bit integer and when this number is exceeded the value is reset
-			        // to 0. 
+			        // Here we handle the overflow of the sysfs energy_uj measurement 
 			        energy += (energy_max_value - previous_value[i]) + current_value[i];
 		        }
 		        else 
