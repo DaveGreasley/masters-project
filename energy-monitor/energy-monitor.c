@@ -140,6 +140,8 @@ void get_command(int argc, char *argv[])
         strcat(command, argv[i]);
         strcat(command, " ");
     }
+
+    strcat(command, "> result");
 }
 
 #define MAX_CPUS	1024
