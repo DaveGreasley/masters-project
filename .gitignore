@@ -2,3 +2,4 @@
 *.x
 *machine.file.*
 *.out
+npbparams.h
