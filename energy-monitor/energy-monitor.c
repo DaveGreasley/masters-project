@@ -15,11 +15,17 @@ pthread_t measure_thread;
 // Sample rate in Hz
 const float sample_rate = 100;
 
-// The sysfs energy_uj value resets at this value
-const long long energy_max_value = 262143328850;
+// The cpu package sysfs energy_uj value resets at this value
+const long long pkg_energy_max_value = 262143328850;
 
-// Energy measurement is in micro joules 
-const long energy_conversion_factor = 1000000;
+// The dram sysfs energy_uj value resets at this value
+const long long dram_energy_max_value = 65712999613;
+
+// The energy consumed by the launched program
+long long energy_uj = 0;
+
+// The execution time of the launched program
+double execution_time = 0;
 
 char command[100];
 
@@ -27,76 +33,99 @@ int total_packages=0;
 
 double get_timestamp()
 {
-      struct timeval tv;
-      gettimeofday(&tv, NULL);
-      return tv.tv_sec + tv.tv_usec*1e-6;
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return tv.tv_sec + tv.tv_usec*1e-6;
 }
 
 void* start_benchmark(void *param)
 {
-    printf("Starting %s\n", command);
-
     double benchmark_start = get_timestamp();
     int status = system(command);
     double benchmark_end = get_timestamp();
 
+    execution_time = benchmark_end - benchmark_start;
+
     pthread_mutex_lock(&mutex);
     benchmark_complete = true;
     pthread_mutex_unlock(&mutex);
-
-    printf("Benchmark complete. Took %lf seconds\n", (benchmark_end-benchmark_start));
 
     return NULL;
 }
 
 void* measure_energy(void *param)
 {
-    long long energy = 0;
-    long long previous_value[total_packages];
-    long long current_value [total_packages];
+    long long pkg_previous_value[total_packages];
+    long long pkg_current_value [total_packages];
+    long long dram_current_value[total_packages];
+    long long dram_previous_value[total_packages];
     int i = 0;
-    char filename[100];
-
-    for(i=0;i<total_packages;i++) previous_value[i]=current_value[i]=-1;
-
-    printf("Measuring energy.\n");
+    char filename_pkg[100];
+    char filename_dram[100];
+    for(i=0;i<total_packages;i++) dram_current_value[i]=dram_previous_value[i]=pkg_previous_value[i]=pkg_current_value[i]=-1;
 
     while(!benchmark_complete)
     {
         for (i=0;i<total_packages;i++)
 	    {
-		    sprintf(filename, "/sys/class/powercap/intel-rapl/intel-rapl:%d/energy_uj", i);
-		    FILE *fff = fopen(filename, "r");
+		    sprintf(filename_pkg, "/sys/class/powercap/intel-rapl/intel-rapl:%d/energy_uj", i);
+		    FILE *fff = fopen(filename_pkg, "r");
 		    if (fff==NULL)
 		    {
-		        printf("Error: Cannot access RAPL counters\n");
+		        printf("Error: Cannot access Package RAPL counters\n");
 		    }
 		    else
 		    {
-		        fscanf(fff, "%lld", &current_value[i]);
+		        fscanf(fff, "%lld", &pkg_current_value[i]);
 		        fclose(fff);
 		    }
 
-		    if (previous_value[i] > -1) 
+		    if (pkg_previous_value[i] > -1) 
 		    {
-		        if (current_value[i] < previous_value[i])
+		        if (pkg_current_value[i] < pkg_previous_value[i])
 		        {
 			        // Here we handle the overflow of the sysfs energy_uj measurement 
-			        energy += (energy_max_value - previous_value[i]) + current_value[i];
+			        energy_uj += (pkg_energy_max_value - pkg_previous_value[i]) + pkg_current_value[i];
 		        }
 		        else 
 		        {
-			        energy += current_value[i] - previous_value[i];
+			        energy_uj += pkg_current_value[i] - pkg_previous_value[i];
 		        }
 		    }
 
-		    previous_value[i] = current_value[i];
-	    }
+		    pkg_previous_value[i] = pkg_current_value[i];
+
+        
+		    sprintf(filename_dram, "/sys/class/powercap/intel-rapl/intel-rapl:%d/intel-rapl:%d:0", i, i);
+		    fff = fopen(filename_dram, "r");
+		    if (fff==NULL)
+		    {
+		        printf("Error: Cannot access DRAM RAPL counters\n");
+		    }
+		    else
+		    {
+		        fscanf(fff, "%lld", &dram_current_value[i]);
+		        fclose(fff);
+		    }
+
+		    if (dram_previous_value[i] > -1) 
+		    {
+		        if (dram_current_value[i] < dram_previous_value[i])
+		        {
+			        // Here we handle the overflow of the sysfs energy_uj measurement 
+			        energy_uj += (dram_energy_max_value - dram_previous_value[i]) + dram_current_value[i];
+		        }
+		        else 
+		        {
+			        energy_uj += dram_current_value[i] - dram_previous_value[i];
+		        }
+		    }
+
+		    dram_previous_value[i] = dram_current_value[i];
+        }
 
         sleep(1/sample_rate);
     }
-
-    printf("Used %lld Joules,\n", (energy/energy_conversion_factor));
 
     return NULL;
 }
@@ -153,8 +182,6 @@ int main(int argc, char *argv[])
 
     detect_packages();
 
-    printf("There are %d processors on %d packages\n", get_nprocs(), total_packages);
-
     get_command(argc, argv);
 
     benchmark_complete = false;
@@ -164,6 +191,8 @@ int main(int argc, char *argv[])
 
     pthread_join(launch_thread, NULL);
     pthread_join(measure_thread, NULL);
+
+    printf("%lld,%f\n", energy_uj, execution_time);
 
     return 0;
 }

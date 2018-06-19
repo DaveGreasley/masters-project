@@ -5,7 +5,7 @@ CFLAGS=-I -std=c99 -Wall
 
 all: energy-monitor
 
-energy-monitor:
+energy-monitor: energy-monitor.c
 	$(CC) $(CFLAGS) -pthread energy-monitor.c -o energy-monitor
 
 clean:
