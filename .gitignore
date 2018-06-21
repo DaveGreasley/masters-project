@@ -3,3 +3,4 @@
 *machine.file.*
 *.out
 npbparams.h
+.ipynb_checkpoints
