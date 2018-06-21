@@ -6,15 +6,19 @@ from subprocess import call, Popen, PIPE
 
 flags = ["-O0", "-O1", "-O2", "-O3"]
 
+environment = "bc"
+
 base_dir = str(Path.home()) + "/masters-project"
 build_dir = base_dir + "/benchmarks/NPB3.3-OMP"
 energy_monitor = base_dir + "/energy-monitor/energy-monitor"
 bin_dir = base_dir + "/benchmarks/NPB3.3-OMP/bin"
-results_filename = base_dir + "/results/fix_flags." + time.strftime("%Y%m%d-%H%M%S") + ".csv"
+results_filename = base_dir + "/results/fix_flags." + environment + "."  + time.strftime("%Y%m%d-%H%M%S") + ".csv"
 
 samples = 3
 
 with open(results_filename, mode="a", buffering=1) as results_file:
+    results_file.write("Benchmark, Flags, Energy, Time\n")
+
     for flag in flags:
 
         os.environ['COMPILE_FLAGS'] = flag

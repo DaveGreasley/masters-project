@@ -8,39 +8,46 @@
 # The class is one of "S", "W", "A" through "E" 
 # (except that no classes C,D,E for DC and no class E for IS and UA).
 # No blank lines. 
-# The following example builds sample sizes of all benchmarks. 
-ft  B
-ft  C
-ft  D
-ft	E
-mg  B
-mg  C
-mg  D
-mg	E
-sp  B
-sp  C
-sp  D
-sp	E
-lu  B
-lu  C
-lu  D
-lu	E
-bt  B
 bt  C
-bt  D
-bt	E
+cg  C 
+ep  D 
+ft  B
 is  B
-is  C
-is	D
-ep  B
-ep  C
-ep  D
-ep	E
-cg  B
-cg  C
-cg  D
-cg	E
+lu  B
+mg  D
+sp  B
 ua  B
-ua  C
-ua	D
-dc  B
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
