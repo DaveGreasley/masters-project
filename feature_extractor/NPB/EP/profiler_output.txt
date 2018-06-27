@@ -1,0 +1,54 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 122K of event 'cpu-clock'
+# Event count (approx.): 30520250000
+#
+# Overhead  Command  Shared Object      Symbol                            
+# ........  .......  .................  ..................................
+#
+    46.69%  ep.B.x   libm-2.26.so       [.] __ieee754_log_avx
+    45.39%  ep.B.x   ep.B.x             [.] MAIN__._omp_fn.2
+     5.19%  ep.B.x   ep.B.x             [.] vranlc_
+     1.33%  ep.B.x   libm-2.26.so       [.] __log
+     0.55%  ep.B.x   [kernel.kallsyms]  [k] exit_to_usermode_loop
+     0.22%  ep.B.x   [kernel.kallsyms]  [k] __softirqentry_text_start
+     0.21%  ep.B.x   ep.B.x             [.] log@plt
+     0.20%  ep.B.x   libm-2.26.so       [.] @plt
+     0.12%  ep.B.x   [kernel.kallsyms]  [k] finish_task_switch
+     0.02%  ep.B.x   libgomp.so.1.0.0   [.] 0x0000000000019511
+     0.02%  ep.B.x   [kernel.kallsyms]  [k] e1000_alloc_rx_buffers
+     0.01%  ep.B.x   libc-2.26.so       [.] __mcount_internal
+     0.01%  ep.B.x   [kernel.kallsyms]  [k] e1000_xmit_frame
+     0.01%  ep.B.x   [kernel.kallsyms]  [k] _raw_spin_unlock_irqrestore
+     0.01%  ep.B.x   libgomp.so.1.0.0   [.] 0x0000000000019379
+     0.00%  ep.B.x   libc-2.26.so       [.] _mcount
+     0.00%  ep.B.x   [kernel.kallsyms]  [k] entry_SYSCALL_64_fastpath
+     0.00%  ep.B.x   libc-2.26.so       [.] __profil_counter
+     0.00%  ep.B.x   [kernel.kallsyms]  [k] e1000_clean
+     0.00%  ep.B.x   [kernel.kallsyms]  [k] VbglR0GRPerform
+     0.00%  ep.B.x   [kernel.kallsyms]  [k] __clear_user
+     0.00%  ep.B.x   [kernel.kallsyms]  [k] __do_page_fault
+     0.00%  ep.B.x   [kernel.kallsyms]  [k] copy_user_generic_string
+     0.00%  ep.B.x   [kernel.kallsyms]  [k] do_signal
+     0.00%  ep.B.x   [kernel.kallsyms]  [k] ext4_finish_bio
+     0.00%  ep.B.x   [kernel.kallsyms]  [k] fpu__clear
+     0.00%  ep.B.x   [kernel.kallsyms]  [k] load_balance
+     0.00%  ep.B.x   [kernel.kallsyms]  [k] mm_update_next_owner
+     0.00%  ep.B.x   [kernel.kallsyms]  [k] queue_work_on
+     0.00%  ep.B.x   [kernel.kallsyms]  [k] rcu_cblist_dequeue
+     0.00%  ep.B.x   [kernel.kallsyms]  [k] run_timer_softirq
+     0.00%  ep.B.x   [kernel.kallsyms]  [k] swake_up
+     0.00%  ep.B.x   [kernel.kallsyms]  [k] sys_rt_sigreturn
+     0.00%  ep.B.x   ep.B.x             [.] randlc_
+     0.00%  ep.B.x   ld-2.26.so         [.] _dl_lookup_symbol_x
+     0.00%  ep.B.x   libgomp.so.1.0.0   [.] 0x000000000001937d
+     0.00%  ep.B.x   libgomp.so.1.0.0   [.] 0x0000000000019513
+     0.00%  ep.B.x   libgomp.so.1.0.0   [.] 0x0000000000019515
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

@@ -1,0 +1,75 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 27K of event 'cpu-clock'
+# Event count (approx.): 6987000000
+#
+# Overhead  Command  Shared Object      Symbol                                       
+# ........  .......  .................  .............................................
+#
+    41.80%  is.B.x   libc-2.26.so       [.] __mcount_internal
+    28.55%  is.B.x   is.B.x             [.] randlc
+    17.80%  is.B.x   is.B.x             [.] rank._omp_fn.4
+     4.14%  is.B.x   libc-2.26.so       [.] _mcount
+     4.05%  is.B.x   is.B.x             [.] create_seq._omp_fn.0
+     0.78%  is.B.x   is.B.x             [.] full_verify._omp_fn.2
+     0.58%  is.B.x   libgomp.so.1.0.0   [.] 0x0000000000019511
+     0.43%  is.B.x   [kernel.kallsyms]  [k] exit_to_usermode_loop
+     0.42%  is.B.x   [kernel.kallsyms]  [k] __do_page_fault
+     0.25%  is.B.x   is.B.x             [.] full_verify._omp_fn.3
+     0.19%  is.B.x   is.B.x             [.] alloc_key_buff._omp_fn.1
+     0.17%  is.B.x   [kernel.kallsyms]  [k] __softirqentry_text_start
+     0.16%  is.B.x   [kernel.kallsyms]  [k] finish_task_switch
+     0.11%  is.B.x   [kernel.kallsyms]  [k] clear_page_rep
+     0.06%  is.B.x   [kernel.kallsyms]  [k] get_page_from_freelist
+     0.06%  is.B.x   [kernel.kallsyms]  [k] _raw_spin_unlock_irqrestore
+     0.04%  is.B.x   libgomp.so.1.0.0   [.] 0x0000000000019513
+     0.03%  is.B.x   [kernel.kallsyms]  [k] __handle_mm_fault
+     0.03%  is.B.x   libgomp.so.1.0.0   [.] 0x0000000000019379
+     0.03%  is.B.x   [kernel.kallsyms]  [k] handle_mm_fault
+     0.03%  is.B.x   [kernel.kallsyms]  [k] free_hot_cold_page
+     0.02%  is.B.x   [kernel.kallsyms]  [k] _raw_spin_lock
+     0.02%  is.B.x   [kernel.kallsyms]  [k] get_mem_cgroup_from_mm
+     0.02%  is.B.x   [kernel.kallsyms]  [k] handle_pte_fault
+     0.02%  is.B.x   [kernel.kallsyms]  [k] __alloc_pages_nodemask
+     0.02%  is.B.x   [kernel.kallsyms]  [k] entry_SYSCALL_64_fastpath
+     0.02%  is.B.x   [kernel.kallsyms]  [k] try_charge
+     0.01%  is.B.x   [kernel.kallsyms]  [k] lru_cache_add_active_or_unevictable
+     0.01%  is.B.x   libgomp.so.1.0.0   [.] 0x0000000000019515
+     0.01%  is.B.x   [kernel.kallsyms]  [k] __lru_cache_add
+     0.01%  is.B.x   [kernel.kallsyms]  [k] page_remove_rmap
+     0.01%  is.B.x   [kernel.kallsyms]  [k] release_pages
+     0.01%  is.B.x   [kernel.kallsyms]  [k] __raw_callee_save___pv_queued_spin_unlock
+     0.01%  is.B.x   [kernel.kallsyms]  [k] alloc_pages_vma
+     0.01%  is.B.x   [kernel.kallsyms]  [k] mem_cgroup_from_task
+     0.01%  is.B.x   [kernel.kallsyms]  [k] mem_cgroup_try_charge
+     0.01%  is.B.x   [kernel.kallsyms]  [k] page_add_new_anon_rmap
+     0.01%  is.B.x   [kernel.kallsyms]  [k] unmap_page_range
+     0.01%  is.B.x   [kernel.kallsyms]  [k] vmacache_find
+     0.00%  is.B.x   [kernel.kallsyms]  [k] __bitmap_and
+     0.00%  is.B.x   [kernel.kallsyms]  [k] __clear_user
+     0.00%  is.B.x   [kernel.kallsyms]  [k] __fpu__restore_sig
+     0.00%  is.B.x   [kernel.kallsyms]  [k] __page_set_anon_rmap
+     0.00%  is.B.x   [kernel.kallsyms]  [k] copy_user_generic_string
+     0.00%  is.B.x   [kernel.kallsyms]  [k] down_read_trylock
+     0.00%  is.B.x   [kernel.kallsyms]  [k] error_exit
+     0.00%  is.B.x   [kernel.kallsyms]  [k] fpu__clear
+     0.00%  is.B.x   [kernel.kallsyms]  [k] fpu__drop
+     0.00%  is.B.x   [kernel.kallsyms]  [k] free_pages_and_swap_cache
+     0.00%  is.B.x   [kernel.kallsyms]  [k] get_task_policy.part.28
+     0.00%  is.B.x   [kernel.kallsyms]  [k] get_vma_policy.part.32
+     0.00%  is.B.x   [kernel.kallsyms]  [k] mem_cgroup_commit_charge
+     0.00%  is.B.x   [kernel.kallsyms]  [k] mm_update_next_owner
+     0.00%  is.B.x   [kernel.kallsyms]  [k] pagevec_lru_move_fn
+     0.00%  is.B.x   [kernel.kallsyms]  [k] policy_node
+     0.00%  is.B.x   is.B.x             [.] rank
+     0.00%  is.B.x   ld-2.26.so         [.] check_match
+     0.00%  is.B.x   libgomp.so.1.0.0   [.] 0x000000000000a38d
+     0.00%  is.B.x   libgomp.so.1.0.0   [.] 0x000000000001937b
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

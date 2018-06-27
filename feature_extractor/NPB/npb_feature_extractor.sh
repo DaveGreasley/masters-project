@@ -7,6 +7,7 @@ whereis $CK_F95
 
 cd BT
 $CK_F95 -O3 -c -fopenmp -mcmodel=medium bt.f --ct-extract-features -lm
+$CK_F95 -O3 -c -fopenmp -mcmodel=medium solve_subs.f --ct-extract-features -lm
 
 cd ../CG
 $CK_F95 -O3 -c -fopenmp -mcmodel=medium cg.f --ct-extract-features -lm
@@ -22,13 +23,15 @@ $CK_CC -O3 -c -fopenmp -mcmodel=medium is.c --ct-extract-features -lm
 
 cd ../LU
 $CK_F95 -O3 -c -fopenmp -mcmodel=medium lu.f --ct-extract-features -lm
+$CK_F95 -O3 -c -fopenmp -mcmodel=medium rhs.f --ct-extract-features -lm
 
 cd ../MG
 $CK_F95 -O3 -c -fopenmp -mcmodel=medium mg.f --ct-extract-features -lm
 
 cd ../SP
 $CK_F95 -O3 -c -fopenmp -mcmodel=medium sp.f --ct-extract-features -lm
+$CK_F95 -O3 -c -fopenmp -mcmodel=medium rhs.f --ct-extract-features -lm
 
 cd ../UA
 $CK_F95 -O3 -c -fopenmp -mcmodel=medium ua.f --ct-extract-features -lm
-
+$CK_F95 -O3 -c -fopenmp -mcmodel=medium diffuse.f --ct-extract-features -lm

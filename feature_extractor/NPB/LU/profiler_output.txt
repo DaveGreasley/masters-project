@@ -1,0 +1,125 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 492K of event 'cpu-clock'
+# Event count (approx.): 123225000000
+#
+# Overhead  Command  Shared Object      Symbol                                       
+# ........  .......  .................  .............................................
+#
+    25.58%  lu.B.x   lu.B.x             [.] rhs_._omp_fn.0
+    19.87%  lu.B.x   lu.B.x             [.] buts_
+    18.70%  lu.B.x   lu.B.x             [.] blts_
+    15.84%  lu.B.x   lu.B.x             [.] jacld_
+    14.57%  lu.B.x   lu.B.x             [.] jacu_
+     2.24%  lu.B.x   lu.B.x             [.] ssor_._omp_fn.1
+     0.85%  lu.B.x   lu.B.x             [.] sync_left_
+     0.56%  lu.B.x   libgomp.so.1.0.0   [.] 0x0000000000019511
+     0.43%  lu.B.x   lu.B.x             [.] sync_right_
+     0.25%  lu.B.x   lu.B.x             [.] exact_
+     0.23%  lu.B.x   libc-2.26.so       [.] __mcount_internal
+     0.17%  lu.B.x   [kernel.kallsyms]  [k] __softirqentry_text_start
+     0.14%  lu.B.x   [kernel.kallsyms]  [k] finish_task_switch
+     0.13%  lu.B.x   [kernel.kallsyms]  [k] exit_to_usermode_loop
+     0.11%  lu.B.x   lu.B.x             [.] erhs_._omp_fn.0
+     0.04%  lu.B.x   lu.B.x             [.] setiv_._omp_fn.0
+     0.04%  lu.B.x   [kernel.kallsyms]  [k] entry_SYSCALL_64_fastpath
+     0.03%  lu.B.x   libc-2.26.so       [.] _mcount
+     0.02%  lu.B.x   libgomp.so.1.0.0   [.] 0x0000000000019513
+     0.02%  lu.B.x   libc-2.26.so       [.] __profil_counter
+     0.02%  lu.B.x   libgomp.so.1.0.0   [.] 0x0000000000019515
+     0.02%  lu.B.x   libgomp.so.1.0.0   [.] omp_get_num_threads
+     0.02%  lu.B.x   lu.B.x             [.] l2norm_._omp_fn.0
+     0.01%  lu.B.x   [kernel.kallsyms]  [k] __fpu__restore_sig
+     0.01%  lu.B.x   [kernel.kallsyms]  [k] _raw_spin_unlock_irqrestore
+     0.01%  lu.B.x   libgomp.so.1.0.0   [.] 0x0000000000019379
+     0.01%  lu.B.x   [kernel.kallsyms]  [k] __do_page_fault
+     0.01%  lu.B.x   [kernel.kallsyms]  [k] ptregs_sys_rt_sigreturn
+     0.01%  lu.B.x   lu.B.x             [.] error_._omp_fn.0
+     0.00%  lu.B.x   libc-2.26.so       [.] __restore_rt
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] restore_sigcontext
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] sys_rt_sigreturn
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] __set_current_blocked
+     0.00%  lu.B.x   libgomp.so.1.0.0   [.] 0x0000000000019508
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] copy_user_generic_string
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] e1000_alloc_rx_buffers
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] get_signal
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] mem_cgroup_handle_over_high
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] clear_page_rep
+     0.00%  lu.B.x   lu.B.x             [.] setbv_._omp_fn.0
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] do_sigaltstack
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] run_timer_softirq
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] update_sd_lb_stats
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] _copy_from_user
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] do_syscall_64
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] get_page_from_freelist
+     0.00%  lu.B.x   lu.B.x             [.] ssor_._omp_fn.0
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] VbglR0GRPerform
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] restore_altstack
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] e1000_xmit_frame
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] fpstate_init
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] get_mem_cgroup_from_mm
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] stub_ptregs_64
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] _raw_spin_lock
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] e1000_clean
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] find_busiest_group
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] fpu__clear
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] fpu__restore_sig
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] futex_wake
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] mem_cgroup_commit_charge
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] _find_next_bit
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] alloc_pages_vma
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] do_signal
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] lru_cache_add_active_or_unevictable
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] __bitmap_and
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] __clear_user
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] __mod_node_page_state
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] __raw_callee_save___pv_queued_spin_unlock
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] copy_fpstate_to_sigframe
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] cpumask_next_and
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] find_first_bit
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] fpu__activate_curr
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] fpu__alloc_mathframe
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] free_hot_cold_page
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] handle_pte_fault
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] kmem_cache_free
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] load_balance
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] rebalance_domains
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] signal_setup_done
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] unmap_page_range
+     0.00%  lu.B.x   libgomp.so.1.0.0   [.] GOMP_barrier
+     0.00%  lu.B.x   libgomp.so.1.0.0   [.] omp_get_thread_num
+     0.00%  lu.B.x   libgomp.so.1.0.0   [.] 0x000000000001937b
+     0.00%  lu.B.x   lu.B.x             [.] pintgr_._omp_fn.0
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] __dec_node_state
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] __dev_queue_xmit
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] __lru_cache_add
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] __pv_queued_spin_lock_slowpath
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] __schedule
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] __sg_free_table
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] aa_free_task_context
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] call_timer_fn
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] dec_zone_page_state
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] free_hot_cold_page_list
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] free_pages_and_swap_cache
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] free_uid
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] get_futex_key
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] mem_cgroup_from_task
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] memcpy
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] memset
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] mm_update_next_owner
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] page_remove_rmap
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] pmd_devmap_trans_unstable
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] queue_work_on
+     0.00%  lu.B.x   [kernel.kallsyms]  [k] release_pages
+     0.00%  lu.B.x   libc-2.26.so       [.] __strlen_avx2
+     0.00%  lu.B.x   libgomp.so.1.0.0   [.] 0x0000000000016dc5
+     0.00%  lu.B.x   lu.B.x             [.] GOMP_barrier@plt
+     0.00%  lu.B.x   lu.B.x             [.] omp_get_num_threads@plt
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

@@ -1,0 +1,128 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 719K of event 'cpu-clock'
+# Event count (approx.): 179887250000
+#
+# Overhead  Command  Shared Object         Symbol                               
+# ........  .......  ....................  .....................................
+#
+    21.24%  bt.B.x   bt.B.x                [.] binvcrhs_
+    15.14%  bt.B.x   libc-2.26.so          [.] __mcount_internal
+    11.78%  bt.B.x   bt.B.x                [.] compute_rhs_._omp_fn.0
+    11.65%  bt.B.x   bt.B.x                [.] y_solve_._omp_fn.0
+    11.33%  bt.B.x   bt.B.x                [.] z_solve_._omp_fn.0
+    11.23%  bt.B.x   bt.B.x                [.] matmul_sub_
+     9.69%  bt.B.x   bt.B.x                [.] x_solve_._omp_fn.0
+     3.51%  bt.B.x   bt.B.x                [.] matvec_sub_
+     1.57%  bt.B.x   libc-2.26.so          [.] _mcount
+     0.93%  bt.B.x   libgomp.so.1.0.0      [.] 0x0000000000019511
+     0.69%  bt.B.x   bt.B.x                [.] add_._omp_fn.0
+     0.22%  bt.B.x   bt.B.x                [.] lhsinit_
+     0.19%  bt.B.x   bt.B.x                [.] exact_solution_
+     0.18%  bt.B.x   [kernel.kallsyms]     [k] __softirqentry_text_start
+     0.13%  bt.B.x   [kernel.kallsyms]     [k] exit_to_usermode_loop
+     0.13%  bt.B.x   bt.B.x                [.] binvrhs_
+     0.11%  bt.B.x   [kernel.kallsyms]     [k] finish_task_switch
+     0.06%  bt.B.x   bt.B.x                [.] exact_rhs_._omp_fn.0
+     0.05%  bt.B.x   bt.B.x                [.] initialize_._omp_fn.0
+     0.04%  bt.B.x   libgomp.so.1.0.0      [.] 0x0000000000019513
+     0.03%  bt.B.x   libgomp.so.1.0.0      [.] 0x0000000000019515
+     0.02%  bt.B.x   libgomp.so.1.0.0      [.] 0x0000000000019379
+     0.01%  bt.B.x   [kernel.kallsyms]     [k] entry_SYSCALL_64_fastpath
+     0.01%  bt.B.x   [kernel.kallsyms]     [k] _raw_spin_unlock_irqrestore
+     0.01%  bt.B.x   libc-2.26.so          [.] __profil_counter
+     0.01%  bt.B.x   [kernel.kallsyms]     [k] __do_page_fault
+     0.01%  bt.B.x   libgomp.so.1.0.0      [.] 0x0000000000019508
+     0.01%  bt.B.x   bt.B.x                [.] error_norm_._omp_fn.0
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] __fpu__restore_sig
+     0.00%  bt.B.x   bt.B.x                [.] rhs_norm_._omp_fn.1
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] clear_page_rep
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] update_sd_lb_stats
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] ptregs_sys_rt_sigreturn
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] VbglR0GRPerform
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] __set_current_blocked
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] e1000_xmit_frame
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] fpu__clear
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] free_hot_cold_page
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] mem_cgroup_handle_over_high
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] run_timer_softirq
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] _copy_from_user
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] _raw_spin_lock
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] copy_user_generic_string
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] futex_wake
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] restore_altstack
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] restore_sigcontext
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] sys_rt_sigreturn
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] do_sigaltstack
+     0.00%  bt.B.x   libc-2.26.so          [.] __restore_rt
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] __clear_user
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] __mod_node_page_state
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] copy_fpstate_to_sigframe
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] do_signal
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] e1000_alloc_rx_buffers
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] e1000_clean
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] find_busiest_group
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] fpstate_init
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] fpu__activate_curr
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] get_page_from_freelist
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] handle_mm_fault
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] rebalance_domains
+     0.00%  bt.B.x   libgomp.so.1.0.0      [.] GOMP_parallel
+     0.00%  bt.B.x   libgomp.so.1.0.0      [.] GOMP_parallel_end
+     0.00%  bt.B.x   libgomp.so.1.0.0      [.] 0x000000000001937d
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] __bitmap_and
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] __handle_mm_fault
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] _find_next_bit
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] cpumask_next_and
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] fpu__alloc_mathframe
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] fpu__restore_sig
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] get_mem_cgroup_from_mm
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] handle_pte_fault
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] hash_futex
+     0.00%  bt.B.x   libgomp.so.1.0.0      [.] GOMP_barrier
+     0.00%  bt.B.x   libgomp.so.1.0.0      [.] 0x000000000001937b
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] __sk_destruct
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] __x86_indirect_thunk_rax
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] _raw_spin_lock_irqsave
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] do_syscall_64
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] down_read_trylock
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] ext4_finish_bio
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] find_first_bit
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] free_pages_and_swap_cache
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] get_futex_key_refs.isra.13
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] get_sigframe.isra.13.constprop.14
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] get_signal
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] group_balance_cpu
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] kfree
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] load_balance
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] mem_cgroup_commit_charge
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] mem_cgroup_from_task
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] mem_cgroup_try_charge
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] memcpy
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] memset
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] mm_update_next_owner
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] n_tty_write
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] page_remove_rmap
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] policy_nodemask
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] signal_setup_done
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] stub_ptregs_64
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] try_charge
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] vm_normal_page
+     0.00%  bt.B.x   [kernel.kallsyms]     [k] vmacache_find
+     0.00%  bt.B.x   ld-2.26.so            [.] _dl_add_to_namespace_list
+     0.00%  bt.B.x   libc-2.26.so          [.] __strncmp_sse42
+     0.00%  bt.B.x   libc-2.26.so          [.] cfree@GLIBC_2.2.5
+     0.00%  bt.B.x   libgfortran.so.4.0.0  [.] 0x000000000019b72c
+     0.00%  bt.B.x   libgomp.so.1.0.0      [.] 0x0000000000016d90
+     0.00%  bt.B.x   libgomp.so.1.0.0      [.] 0x0000000000019370
+     0.00%  bt.B.x   libgomp.so.1.0.0      [.] 0x00000000000194e7
+     0.00%  bt.B.x   libgomp.so.1.0.0      [.] 0x000000000001952f
+     0.00%  bt.B.x   libgomp.so.1.0.0      [.] 0x0000000000019633
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

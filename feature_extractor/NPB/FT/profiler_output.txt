@@ -1,0 +1,124 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 146K of event 'cpu-clock'
+# Event count (approx.): 36516250000
+#
+# Overhead  Command  Shared Object      Symbol                                       
+# ........  .......  .................  .............................................
+#
+    67.29%  ft.B.x   ft.B.x             [.] fftz2_
+     7.12%  ft.B.x   ft.B.x             [.] cffts3_._omp_fn.6
+     6.60%  ft.B.x   ft.B.x             [.] evolve_._omp_fn.1
+     5.80%  ft.B.x   ft.B.x             [.] cffts2_._omp_fn.5
+     5.73%  ft.B.x   ft.B.x             [.] cffts1_._omp_fn.4
+     1.60%  ft.B.x   ft.B.x             [.] cfftz_
+     1.57%  ft.B.x   libm-2.26.so       [.] __ieee754_exp_avx
+     0.77%  ft.B.x   libgomp.so.1.0.0   [.] 0x0000000000019511
+     0.49%  ft.B.x   [kernel.kallsyms]  [k] clear_page_rep
+     0.40%  ft.B.x   ft.B.x             [.] init_ui_._omp_fn.7
+     0.35%  ft.B.x   [kernel.kallsyms]  [k] __do_page_fault
+     0.32%  ft.B.x   libc-2.26.so       [.] __mcount_internal
+     0.29%  ft.B.x   ft.B.x             [.] vranlc_
+     0.26%  ft.B.x   ft.B.x             [.] compute_indexmap_._omp_fn.3
+     0.17%  ft.B.x   [kernel.kallsyms]  [k] exit_to_usermode_loop
+     0.17%  ft.B.x   [kernel.kallsyms]  [k] __softirqentry_text_start
+     0.15%  ft.B.x   [kernel.kallsyms]  [k] finish_task_switch
+     0.13%  ft.B.x   libm-2.26.so       [.] __GI___exp
+     0.08%  ft.B.x   [kernel.kallsyms]  [k] _raw_spin_unlock_irqrestore
+     0.08%  ft.B.x   libc-2.26.so       [.] _mcount
+     0.05%  ft.B.x   [kernel.kallsyms]  [k] get_page_from_freelist
+     0.05%  ft.B.x   libgomp.so.1.0.0   [.] 0x0000000000019379
+     0.04%  ft.B.x   [kernel.kallsyms]  [k] free_hot_cold_page
+     0.04%  ft.B.x   libgomp.so.1.0.0   [.] 0x0000000000019513
+     0.03%  ft.B.x   libm-2.26.so       [.] @plt
+     0.03%  ft.B.x   [kernel.kallsyms]  [k] __handle_mm_fault
+     0.02%  ft.B.x   [kernel.kallsyms]  [k] get_mem_cgroup_from_mm
+     0.02%  ft.B.x   [kernel.kallsyms]  [k] _raw_spin_lock
+     0.02%  ft.B.x   libgomp.so.1.0.0   [.] 0x0000000000019515
+     0.02%  ft.B.x   [kernel.kallsyms]  [k] handle_mm_fault
+     0.02%  ft.B.x   libc-2.26.so       [.] __profil_counter
+     0.02%  ft.B.x   [kernel.kallsyms]  [k] try_charge
+     0.02%  ft.B.x   [kernel.kallsyms]  [k] entry_SYSCALL_64_fastpath
+     0.02%  ft.B.x   [kernel.kallsyms]  [k] handle_pte_fault
+     0.02%  ft.B.x   [kernel.kallsyms]  [k] unmap_page_range
+     0.01%  ft.B.x   [kernel.kallsyms]  [k] mem_cgroup_commit_charge
+     0.01%  ft.B.x   [kernel.kallsyms]  [k] __fpu__restore_sig
+     0.01%  ft.B.x   ft.B.x             [.] exp@plt
+     0.01%  ft.B.x   [kernel.kallsyms]  [k] __alloc_pages_nodemask
+     0.01%  ft.B.x   [kernel.kallsyms]  [k] page_add_new_anon_rmap
+     0.01%  ft.B.x   [kernel.kallsyms]  [k] __lru_cache_add
+     0.01%  ft.B.x   [kernel.kallsyms]  [k] __mod_node_page_state
+     0.01%  ft.B.x   [kernel.kallsyms]  [k] page_remove_rmap
+     0.01%  ft.B.x   [kernel.kallsyms]  [k] alloc_pages_vma
+     0.01%  ft.B.x   [kernel.kallsyms]  [k] down_read_trylock
+     0.01%  ft.B.x   [kernel.kallsyms]  [k] vmacache_find
+     0.01%  ft.B.x   [kernel.kallsyms]  [k] free_pages_and_swap_cache
+     0.01%  ft.B.x   [kernel.kallsyms]  [k] lru_cache_add_active_or_unevictable
+     0.01%  ft.B.x   libgomp.so.1.0.0   [.] 0x0000000000019508
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] __raw_callee_save___pv_queued_spin_unlock
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] mem_cgroup_try_charge
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] page_counter_try_charge
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] release_pages
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] free_hot_cold_page_list
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] mem_cgroup_from_task
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] run_timer_softirq
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] up_read
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] __get_vma_policy
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] fpu__clear
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] ptregs_sys_rt_sigreturn
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] uncharge_list
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] vm_normal_page
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] _cond_resched
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] copy_user_generic_string
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] fpstate_init
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] load_balance
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] mem_cgroup_handle_over_high
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] restore_sigcontext
+     0.00%  ft.B.x   libgomp.so.1.0.0   [.] 0x000000000001937d
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] __page_set_anon_rmap
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] __schedule
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] __set_current_blocked
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] do_signal
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] find_vma
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] fpu__alloc_mathframe
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] sys_rt_sigreturn
+     0.00%  ft.B.x   ft.B.x             [.] checksum_._omp_fn.0
+     0.00%  ft.B.x   ft.B.x             [.] compute_initial_conditions_._omp_fn.2
+     0.00%  ft.B.x   libc-2.26.so       [.] __restore_rt
+     0.00%  ft.B.x   libgomp.so.1.0.0   [.] 0x000000000001937b
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] __clear_user
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] __dec_node_page_state
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] __fget_light
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] _copy_from_user
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] _raw_spin_lock_irqsave
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] cpumask_next_and
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] do_sigaltstack
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] do_syscall_64
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] enter_lazy_tlb
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] find_busiest_group
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] find_first_bit
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] fpu__activate_curr
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] get_signal
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] get_vma_policy.part.32
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] hash_futex
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] is_vma_temporary_stack
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] memset
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] native_set_pte_at
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] pagevec_lru_move_fn
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] pmd_devmap_trans_unstable
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] pte_alloc_one
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] put_cpu_partial
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] restore_altstack
+     0.00%  ft.B.x   [kernel.kallsyms]  [k] sync_mm_rss
+     0.00%  ft.B.x   libgcc_s.so.1      [.] __cpu_indicator_init
+     0.00%  ft.B.x   libgomp.so.1.0.0   [.] 0x00000000000195ab
+     0.00%  ft.B.x   libgomp.so.1.0.0   [.] 0x0000000000019650
+     0.00%  ft.B.x   libm-2.26.so       [.] __cos_avx
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#
