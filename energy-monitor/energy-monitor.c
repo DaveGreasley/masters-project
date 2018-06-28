@@ -7,9 +7,7 @@
 #include <sys/sysinfo.h>
 
 bool benchmark_complete;
-pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
-pthread_t launch_thread;
 pthread_t measure_thread;
 
 // Sample rate in Hz
@@ -24,9 +22,6 @@ const long long dram_energy_max_value = 65712999613;
 // The energy consumed by the launched program
 long long energy_uj = 0;
 
-// The execution time of the launched program
-double execution_time = 0;
-
 char command[100];
 
 int total_packages=0;
@@ -38,19 +33,17 @@ double get_timestamp()
     return tv.tv_sec + tv.tv_usec*1e-6;
 }
 
-void* start_benchmark(void *param)
+double run_benchmark()
 {
+    benchmark_complete = false;
+    
     double benchmark_start = get_timestamp();
     int status = system(command);
     double benchmark_end = get_timestamp();
 
-    execution_time = benchmark_end - benchmark_start;
-
-    pthread_mutex_lock(&mutex);
     benchmark_complete = true;
-    pthread_mutex_unlock(&mutex);
 
-    return NULL;
+    return benchmark_end - benchmark_start;
 }
 
 void* measure_energy(void *param)
@@ -182,16 +175,15 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
+    double execution_time;
+    
     detect_packages();
-
     get_command(argc, argv);
 
-    benchmark_complete = false;
-
-    pthread_create(&launch_thread, NULL, start_benchmark, NULL);
     pthread_create(&measure_thread, NULL, measure_energy, NULL);
 
-    pthread_join(launch_thread, NULL);
+    execution_time = run_benchmark();
+
     pthread_join(measure_thread, NULL);
 
     printf("%lld,%f\n", energy_uj, execution_time);
