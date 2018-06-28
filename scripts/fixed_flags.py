@@ -17,7 +17,7 @@ results_filename = base_dir + "/results/fix_flags." + environment + "."  + time.
 samples = 3
 
 with open(results_filename, mode="a", buffering=1) as results_file:
-    results_file.write("Benchmark, Flags, Energy, Time\n")
+    results_file.write("Benchmark, Flags, Energy, Time, Success\n")
 
     for flag in flags:
 
@@ -31,6 +31,18 @@ with open(results_filename, mode="a", buffering=1) as results_file:
                 result = p.stdout.read().decode("utf-8")
                 energy = int(result.split(",")[0])
                 time = float(result.split(",")[1])
+                
+                success = 'true'
+                with open("result", mode="r") as benchmark_output_file:
+                    benchmark_output = benchmark_output_file.read()
+                    benchmark_output = "".join(benchmark_output.split())
 
-                output = benchmark + "," + flag + "," + str(energy) + "," + str(time) + "\n"
+                    if "Verification=SUCCESSFUL" not in benchmark_output:
+                        success = 'false'
+
+                output = benchmark + ","
+                output += flag + ","
+                output += str(energy) + ","
+                output += str(time) + "," 
+                output += success +"\n"
                 results_file.write(output)
