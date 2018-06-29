@@ -4,3 +4,8 @@
 *.out
 npbparams.h
 .ipynb_checkpoints
+.idea
+setparams
+benchmarks/NPB3.3-OMP/bin
+energy-monitor/energy-monitor
+energy-monitor/result
