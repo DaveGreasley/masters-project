@@ -5,19 +5,32 @@ import os
 import subprocess
 import sys
 
+from model import NPB
+
 base_dir = "/home/dave/Documents/project"
 results_dir = base_dir + "/results"
 npb_dir = base_dir + "/benchmarks/NPB3.3-OMP"
 energy_monitor_dir = base_dir + "/energy-monitor"
 bin_dirs = {"npb": npb_dir + "/bin"}
 
-build_benchmark_command = ["make", "suite", "-C", npb_dir]
-
 # This is the number of times the benchmark programs will be run
 num_samples = 3
 
+benchmarks = [
+    NPB('BT', 'C'),
+    NPB('BT', 'C', version='VEC'),
+    NPB('CG', 'C'),
+    NPB('EP', 'D'),
+    NPB('FT', 'C'),
+    NPB('IS', 'C'),
+    NPB('LU', 'C'),
+    NPB('LU', 'C', version='VEC'),
+    NPB('MG', 'D'),
+    NPB('SP', 'C')
+]
+
 all_flags = [
-    #'-faggressive-loop-optimizations', # Not supported in 4.5
+    # '-faggressive-loop-optimizations', # Not supported in 4.5
     '-falign-functions',
     '-falign-jumps',
     '-falign-labels',
@@ -27,18 +40,18 @@ all_flags = [
     '-fbranch-target-load-optimize2',
     '-fbtr-bb-exclusive',
     '-fcaller-saves',
-    #'-fcombine-stack-adjustments',     # Not supported in 4.5
-    #'-fcommon',                        # affects semantics, unlikely to affect performance
-    #'-fcompare-elim',                  # Not supported in 4.5
+    # '-fcombine-stack-adjustments',     # Not supported in 4.5
+    # '-fcommon',                        # affects semantics, unlikely to affect performance
+    # '-fcompare-elim',                  # Not supported in 4.5
     '-fconserve-stack',
     '-fcprop-registers',
     '-fcrossjumping',
     '-fcse-follow-jumps',
-    #'-fdata-sections',                 # affects semantics unlikely to affect performance
+    # '-fdata-sections',                 # affects semantics unlikely to affect performance
     '-fdce',
     '-fdefer-pop',
     '-fdelete-null-pointer-checks',
-    #'-fdevirtualize',                  # Not supported in 4.5
+    # '-fdevirtualize',                  # Not supported in 4.5
     '-fdse',
     '-fearly-inlining',
     '-fexpensive-optimizations',
@@ -49,29 +62,29 @@ all_flags = [
     '-fgcse-lm',
     '-fgcse-sm',
     '-fguess-branch-probability',
-    #'-fhoist-adjacent-loads',          # Not supported in 4.5
+    # '-fhoist-adjacent-loads',          # Not supported in 4.5
     '-fif-conversion',
     '-fif-conversion2',
     '-finline',
-    #'-finline-atomics',                # Not supported in 4.5
+    # '-finline-atomics',                # Not supported in 4.5
     '-finline-functions',
     '-finline-functions-called-once',
-    '-finline-small-functions', 
+    '-finline-small-functions',
     '-fipa-cp',
     '-fipa-cp-clone',
-    #'-fipa-profile',                   # Not supported in 4.5
+    # '-fipa-profile',                   # Not supported in 4.5
     '-fipa-pta',
     '-fipa-pure-const',
     '-fipa-reference',
     '-fipa-sra',
-    #'-fira-hoist-pressure',            # Not supported in 4.5
+    # '-fira-hoist-pressure',            # Not supported in 4.5
     '-fivopts',
     '-fmerge-constants',
     '-fmodulo-sched',
     '-fmove-loop-invariants',
     '-fomit-frame-pointer',
     '-foptimize-sibling-calls',
-    #'-foptimize-strlen',               # Not supported in 4.5
+    # '-foptimize-strlen',               # Not supported in 4.5
     '-fpeephole',
     '-fpeephole2',
     '-fpredictive-commoning',
@@ -96,24 +109,24 @@ all_flags = [
     '-fsched-stalled-insns-dep',
     '-fschedule-insns',
     '-fschedule-insns2',
-    #'-fsection-anchors',               # may conflict with other flags
+    # '-fsection-anchors',               # may conflict with other flags
     '-fsel-sched-pipelining',
     '-fsel-sched-pipelining-outer-loops',
     '-fsel-sched-reschedule-pipelined',
     '-fselective-scheduling',
     '-fselective-scheduling2',
-    #'-fshrink-wrap',                   # Not supported in 4.5
+    # '-fshrink-wrap',                   # Not supported in 4.5
     '-fsplit-ivs-in-unroller',
     '-fsplit-wide-types',
-    #'-fstrict-aliasing',               # affects semantics
+    # '-fstrict-aliasing',               # affects semantics
     '-fthread-jumps',
     '-ftoplevel-reorder',
-    #'-ftree-bit-ccp',                  # Not supported in 4.5
+    # '-ftree-bit-ccp',                  # Not supported in 4.5
     '-ftree-builtin-call-dce',
     '-ftree-ccp',
     '-ftree-ch',
-    #'-ftree-coalesce-inlined-vars',    # No equivalent -fno for this flag
-    #'-ftree-coalesce-vars',            # Not supported in 4.5
+    # '-ftree-coalesce-inlined-vars',    # No equivalent -fno for this flag
+    # '-ftree-coalesce-vars',            # Not supported in 4.5
     '-ftree-copy-prop',
     '-ftree-copyrename',
     '-ftree-cselim',
@@ -122,13 +135,13 @@ all_flags = [
     '-ftree-dse',
     '-ftree-forwprop',
     '-ftree-fre',
-    #'-ftree-loop-distribute-patterns', # Not supported in 4.5
+    # '-ftree-loop-distribute-patterns', # Not supported in 4.5
     '-ftree-loop-distribution',
-    #'-ftree-loop-if-convert',          # Not supported in 4.5
+    # '-ftree-loop-if-convert',          # Not supported in 4.5
     '-ftree-loop-im',
     '-ftree-loop-ivcanon',
     '-ftree-loop-optimize',
-    #'-ftree-partial-pre',              # Not supported in 4.5
+    # '-ftree-partial-pre',              # Not supported in 4.5
     '-ftree-phiprop',
     '-ftree-pre',
     '-ftree-pta',
@@ -136,10 +149,10 @@ all_flags = [
     '-ftree-scev-cprop',
     '-ftree-sink',
     '-ftree-slp-vectorize',
-    #'-ftree-slsr',                     # Not supported in 4.5
+    # '-ftree-slsr',                     # Not supported in 4.5
     '-ftree-sra',
     '-ftree-switch-conversion',
-    #'-ftree-tail-merge',               # Not supported in 4.5
+    # '-ftree-tail-merge',               # Not supported in 4.5
     '-ftree-ter',
     '-ftree-vect-loop-version',
     '-ftree-vectorize',
@@ -153,50 +166,39 @@ all_flags = [
 ]
 
 
-def npb_run_successful():
-    success = 'true'
-    with open("result", mode="r") as benchmark_output_file:
-        benchmark_output = benchmark_output_file.read()
-        benchmark_output = "".join(benchmark_output.split())
-
-        if "Verification=SUCCESSFUL" not in benchmark_output:
-            success = 'false'
-
-    return success
-
-
-# Keys here must match those in bin_dirs
-verification_functions = {'npb': npb_run_successful}
-
-
-def build_and_measure(build_id, flags, results_file):
+def build_and_measure(benchmark, flags, build_id, target_var, results_file):
     os.environ['COMPILE_FLAGS'] = flags
 
-    subprocess.call(build_benchmark_command)
+    subprocess.call(benchmark.build_command())
 
-    for key in bin_dirs:
-        bin_dir = bin_dirs[key]
+    bin_dir = bin_dirs[benchmark.suite]
+    energy_monitor_command = [energy_monitor_dir + "/energy-monitor", bin_dir + "/" + benchmark.binary_name()]
 
-        for benchmark in os.listdir(bin_dir):
+    average_energy = 0
+    average_time = 0
 
-            energy_monitor_command = [energy_monitor_dir + "/energy-monitor",  bin_dir + "/" + benchmark]
+    for i in range(0, num_samples):
+        p = subprocess.Popen(energy_monitor_command, stdout=subprocess.PIPE)
+        result = p.stdout.read().decode("utf-8")
+        energy = int(result.split(",")[0])
+        time = float(result.split(",")[1])
 
-            for i in range(0, num_samples):
-                p = subprocess.Popen(energy_monitor_command, stdout=subprocess.PIPE)
-                result = p.stdout.read().decode("utf-8")
-                energy = int(result.split(",")[0])
-                time = float(result.split(",")[1])
+        average_energy += energy
+        average_time += time
 
-                # Dynamically call function for verifying benchmark ran successfully
-                success = verification_functions[key]()
+        success = benchmark.run_successful()
 
-                output = build_id + ","
-                output += benchmark + ","
-                output += str(energy) + ","
-                output += str(time) + ","
-                output += success + "\n"
-                results_file.write(output)
+        output = build_id + ","
+        output += benchmark.display_name() + ","
+        output += str(energy) + ","
+        output += str(time) + ","
+        output += str(success) + "\n"
+        results_file.write(output)
 
+    average_energy = average_energy / num_samples
+    average_time = average_time / num_samples
 
-
-
+    if target_var == 'energy':
+        return average_energy
+    else:
+        return average_time
