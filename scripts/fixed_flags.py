@@ -1,6 +1,6 @@
 import os
 import time
-from pathlib import Path
+from os.path import expanduser
 
 from subprocess import call, Popen, PIPE
 
@@ -8,7 +8,7 @@ flags = ["-O0", "-O1", "-O2", "-O3"]
 
 environment = "bc"
 
-base_dir = str(Path.home()) + "/masters-project"
+base_dir = expanduser("~") + "/masters-project"
 build_dir = base_dir + "/benchmarks/NPB3.3-OMP"
 energy_monitor = base_dir + "/energy-monitor/energy-monitor"
 bin_dir = base_dir + "/benchmarks/NPB3.3-OMP/bin"
