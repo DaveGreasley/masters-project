@@ -21,4 +21,4 @@ echo $SLURM_JOB_NODELIST > machine.file.$SLURM_JOBID
 numnodes=`wc machine.file.$SLURM_JOBID | awk '{ print $1 }'`
 echo $numnodes
 
-python3 ../scripts/fixed_flags.py
+python ../scripts/fixed_flags.py
