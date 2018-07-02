@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name dg-test
+#SBATCH --job-name fixed-flags
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node 28
 #SBATCH --time 5:00:00
@@ -8,7 +8,7 @@
 #SBATCH --output test.out
 #SBATCH --exclusive
 
-export OMP_NUM_THREADS=27
+export OMP_NUM_THREADS=26
 
 echo Running on host `hostname`
 echo Time is `date`
