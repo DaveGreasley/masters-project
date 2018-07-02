@@ -7,6 +7,7 @@
 #include <sys/sysinfo.h>
 
 bool benchmark_complete;
+bool dram_domain_available;
 
 pthread_t measure_thread;
 
@@ -88,33 +89,37 @@ void* measure_energy(void *param)
 
 		    pkg_previous_value[i] = pkg_current_value[i];
 
+            if (dram_domain_available)
+            {
+
+                sprintf(filename_dram, "/sys/class/powercap/intel-rapl/intel-rapl:%d/intel-rapl:%d:0/energy_uj", i, i);
+                fff = fopen(filename_dram, "r");
+                if (fff==NULL)
+                {
+                    printf("Error: Cannot access DRAM RAPL counters\n");
+                }
+                else
+                {
+                    fscanf(fff, "%lld", &dram_current_value[i]);
+                    fclose(fff);
+                }
+
+                if (dram_previous_value[i] > -1) 
+                {
+                    if (dram_current_value[i] < dram_previous_value[i])
+                    {
+                        // Here we handle the overflow of the sysfs energy_uj measurement 
+                        energy_uj += (dram_energy_max_value - dram_previous_value[i]) + dram_current_value[i];
+                    }
+                    else 
+                    {
+                        energy_uj += dram_current_value[i] - dram_previous_value[i];
+                    }
+                }
+
+                dram_previous_value[i] = dram_current_value[i];
         
-		    sprintf(filename_dram, "/sys/class/powercap/intel-rapl/intel-rapl:%d/intel-rapl:%d:0", i, i);
-		    fff = fopen(filename_dram, "r");
-		    if (fff==NULL)
-		    {
-		        printf("Error: Cannot access DRAM RAPL counters\n");
-		    }
-		    else
-		    {
-		        fscanf(fff, "%lld", &dram_current_value[i]);
-		        fclose(fff);
-		    }
-
-		    if (dram_previous_value[i] > -1) 
-		    {
-		        if (dram_current_value[i] < dram_previous_value[i])
-		        {
-			        // Here we handle the overflow of the sysfs energy_uj measurement 
-			        energy_uj += (dram_energy_max_value - dram_previous_value[i]) + dram_current_value[i];
-		        }
-		        else 
-		        {
-			        energy_uj += dram_current_value[i] - dram_previous_value[i];
-		        }
-		    }
-
-		    dram_previous_value[i] = dram_current_value[i];
+            }
         }
 
         sleep(1/sample_rate);
@@ -166,6 +171,14 @@ void detect_packages(void)
     }
 }
 
+void detect_dram_domain()
+{
+    dram_domain_available = false;
+    if (access("/sys/class/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:0/energy_uj", F_OK) != -1)
+    {
+        dram_domain_available = true;
+    }
+}
 
 int main(int argc, char *argv[])
 {
@@ -178,6 +191,7 @@ int main(int argc, char *argv[])
     double execution_time;
     
     detect_packages();
+    detect_dram_domain();
     get_command(argc, argv);
 
     pthread_create(&measure_thread, NULL, measure_energy, NULL);
