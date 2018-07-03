@@ -74,7 +74,9 @@ def get_cmd_string_from_config(config):
 
 
 def build_and_measure(benchmark, config, target_var, results_file):
-    os.environ['COMPILE_FLAGS'] = get_cmd_string_from_config(config)
+    config_str = get_cmd_string_from_config(config)
+
+    os.environ['COMPILE_FLAGS'] = config_str
 
     build_dir = build_dirs[benchmark.suite]
     bin_dir = bin_dirs[benchmark.suite]
@@ -90,10 +92,13 @@ def build_and_measure(benchmark, config, target_var, results_file):
     num_successes = 0
 
     for i in range(num_samples):
-        p = subprocess.Popen(energy_monitor_command, stdout=subprocess.PIPE)
-        result = p.stdout.read().decode("utf-8")
-        energy = int(result.split(",")[0])
-        time = float(result.split(",")[1])
+        #p = subprocess.Popen(energy_monitor_command, stdout=subprocess.PIPE)
+        #result = p.stdout.read().decode("utf-8")
+        #energy = int(result.split(",")[0])
+        #time = float(result.split(",")[1])
+
+        energy = 1
+        time = 1
 
         success = benchmark.run_successful()
 
@@ -103,7 +108,7 @@ def build_and_measure(benchmark, config, target_var, results_file):
             num_successes += 1
 
         output = benchmark.display_name() + ","
-        output += config
+        output += config_str
         output += str(energy) + ","
         output += str(time) + ","
         output += str(success) + "\n"
@@ -121,7 +126,7 @@ def build_and_measure(benchmark, config, target_var, results_file):
         return total_time / num_successes
 
 
-def combined_elimination(target_var, base_flag='O2'):
+def combined_elimination(target_var, base_flag='-O2'):
 
     with open(results_filename, mode='a', buffering=1) as results_file:
         for benchmark in benchmarks:
