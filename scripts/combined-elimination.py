@@ -10,8 +10,8 @@ from model import NPB
 
 debug = True
 
-#base_dir = "/home/dave/Documents/project"
-base_dir = "/mnt/storage/home/dg17763/masters-project"
+base_dir = "/home/dave/Documents/project"
+#base_dir = "/mnt/storage/home/dg17763/masters-project"
 results_dir = base_dir + "/results"
 npb_dir = base_dir + "/benchmarks/NPB3.3-OMP"
 energy_monitor_dir = base_dir + "/energy-monitor"
@@ -73,8 +73,15 @@ def build_config(all_flags, enabled_flags, base_flag=''):
 def get_cmd_string_from_config(config):
     return ' '.join(config)
 
+#
+# energy_temp = 1000
+# time_temp = 1000
+
 
 def build_and_measure(benchmark, config, target_var, results_file):
+    # global energy_temp
+    # global time_temp
+
     config_str = get_cmd_string_from_config(config)
 
     os.environ['COMPILE_FLAGS'] = config_str
@@ -97,6 +104,12 @@ def build_and_measure(benchmark, config, target_var, results_file):
         result = p.stdout.read().decode("utf-8")
         energy = int(result.split(",")[0])
         time = float(result.split(",")[1])
+
+        # energy_temp -= 1
+        # energy = energy_temp
+        #
+        # time_temp -= 1
+        # time = time_temp
 
         success = benchmark.run_successful()
 
@@ -138,7 +151,7 @@ def combined_elimination(target_var, base_flag='-O2'):
                 return False
 
             run_id = 0
-            base_flags = all_flags
+            base_flags = all_flags.copy()
 
             # Start with all flags enabled for the base line
             base_config = build_config(all_flags, base_flags, base_flag)
@@ -152,7 +165,7 @@ def combined_elimination(target_var, base_flag='-O2'):
             run_id += 1
 
             improvement = True
-            flags_to_consider = all_flags
+            flags_to_consider = base_flags.copy()
             while improvement:
                 improvement = False
                 flags_with_improvement = []
@@ -162,9 +175,9 @@ def combined_elimination(target_var, base_flag='-O2'):
                     tmp_flags = list(base_flags)
                     tmp_flags.remove(flag)
 
-                    tmp_flags = build_config(all_flags, tmp_flags, base_flag)
+                    tmp_config = build_config(all_flags, tmp_flags, base_flag)
 
-                    result = build_and_measure(benchmark, tmp_flags, target_var, results_file)
+                    result = build_and_measure(benchmark, tmp_config, target_var, results_file)
 
                     if 0 <= result < base_result:
                         flags_with_improvement += ([(flag, result)])
@@ -177,11 +190,11 @@ def combined_elimination(target_var, base_flag='-O2'):
                 flags_with_improvement = sorted(flags_with_improvement, key=lambda x: x[1])
                 for flag, result in flags_with_improvement:
                     # do a run with each flag disabled in turn
-                    tmp_flags = list(base_flags)
+                    tmp_flags = base_flags.copy()
                     tmp_flags.remove(flag)
-                    tmp_flags = build_config(all_flags, tmp_flags, base_flag)
+                    tmp_config = build_config(all_flags, tmp_flags, base_flag)
 
-                    test_result = build_and_measure(benchmark, tmp_flags, target_var, results_file)
+                    test_result = build_and_measure(benchmark, tmp_config, target_var, results_file)
 
                     if test_result <= 0:
                         print('-- Test run ' + str(run_id) + ' failed. Exiting')
