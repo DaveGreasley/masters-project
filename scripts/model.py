@@ -23,8 +23,14 @@ class NPB(Benchmark):
         else:
             return self.name + '_' + self.version
 
-    def build_command(self):
-        return ['make', self.name, 'CLASS=' + self.size, 'VERSION=' + self.version]
+    def build_command(self, build_dir=''):
+        command = ['make', self.name, 'CLASS=' + self.size, 'VERSION=' + self.version]
+
+        if build_dir != '':
+            command.append('-C')
+            command.append(build_dir)
+
+        return command
 
     def binary_name(self):
         return self.name.lower() + '.' + self.size + '.x'

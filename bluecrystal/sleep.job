@@ -1,14 +1,14 @@
 #!/bin/bash
 
-#SBATCH --job-name fixed-flags
+#SBATCH --job-name measure-sleep
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node 28
-#SBATCH --time 5:00:00
-#SBATCH --partition cpu
-#SBATCH --output fixed_flags.out
+#SBATCH --time 0:10:00
+#SBATCH --partition cpu_test
+#SBATCH --output sleep.out
 #SBATCH --exclusive
 
-export OMP_NUM_THREADS=26
+export OMP_NUM_THREADS=27
 
 echo Running on host `hostname`
 echo Time is `date`
@@ -21,4 +21,4 @@ echo $SLURM_JOB_NODELIST > machine.file.$SLURM_JOBID
 numnodes=`wc machine.file.$SLURM_JOBID | awk '{ print $1 }'`
 echo $numnodes
 
-python ../scripts/fixed_flags.py
+~/masters-project/energy-monitor/energy-monitor sleep 95
