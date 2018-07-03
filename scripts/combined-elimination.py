@@ -10,7 +10,8 @@ from model import NPB
 
 debug = True
 
-base_dir = "/home/dave/Documents/project"
+#base_dir = "/home/dave/Documents/project"
+base_dir = "/mnt/storage/home/dg17763/masters-project"
 results_dir = base_dir + "/results"
 npb_dir = base_dir + "/benchmarks/NPB3.3-OMP"
 energy_monitor_dir = base_dir + "/energy-monitor"
@@ -25,12 +26,12 @@ results_filename = base_dir + "/results/CE." + time.strftime("%Y%m%d-%H%M%S") + 
 num_samples = 3
 
 benchmarks = [
-    NPB('BT', 'C'),
+    #NPB('BT', 'C'),
     # NPB('BT', 'C', version='VEC'),
     # NPB('CG', 'C'),
     # NPB('EP', 'D'),
     # NPB('FT', 'C'),
-    # NPB('IS', 'C'),
+    NPB('IS', 'B'),
     # NPB('LU', 'C'),
     # NPB('LU', 'C', version='VEC'),
     # NPB('MG', 'D'),
@@ -92,13 +93,10 @@ def build_and_measure(benchmark, config, target_var, results_file):
     num_successes = 0
 
     for i in range(num_samples):
-        #p = subprocess.Popen(energy_monitor_command, stdout=subprocess.PIPE)
-        #result = p.stdout.read().decode("utf-8")
-        #energy = int(result.split(",")[0])
-        #time = float(result.split(",")[1])
-
-        energy = 1
-        time = 1
+        p = subprocess.Popen(energy_monitor_command, stdout=subprocess.PIPE)
+        result = p.stdout.read().decode("utf-8")
+        energy = int(result.split(",")[0])
+        time = float(result.split(",")[1])
 
         success = benchmark.run_successful()
 
@@ -108,7 +106,7 @@ def build_and_measure(benchmark, config, target_var, results_file):
             num_successes += 1
 
         output = benchmark.display_name() + ","
-        output += config_str
+        output += config_str + ","
         output += str(energy) + ","
         output += str(time) + ","
         output += str(success) + "\n"
