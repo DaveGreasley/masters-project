@@ -214,6 +214,8 @@ def build_and_measure(benchmark, config, target_var, results_file):
 def combined_elimination(target_var, base_flag='-O1'):
 
     with open(results_filename, mode='a', buffering=1) as results_file:
+        results_file.write("Benchmark,Flags,Energy,Time,Success\n")
+
         for benchmark in benchmarks:
             # Run at -O3 to get a point of comparison
             o3_flags = ['-O3']

@@ -17,7 +17,7 @@ results_filename = base_dir + "/results/fix_flags." + environment + "."  + time.
 samples = 3
 
 with open(results_filename, mode="a", buffering=1) as results_file:
-    results_file.write("Benchmark, Flags, Energy, Time, Success\n")
+    results_file.write("Benchmark,Flags,Energy,Time,Success\n")
 
     for flag in flags:
 
