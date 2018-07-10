@@ -1,3 +1,5 @@
+#define _GNU_SOURCE 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,6 +7,8 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <sys/sysinfo.h>
+#include <sched.h>
+
 
 bool benchmark_complete;
 bool dram_domain_available;
@@ -47,8 +51,21 @@ double run_benchmark()
     return benchmark_end - benchmark_start;
 }
 
+int stick_this_thread_to_last_core() {
+    int num_cores = sysconf(_SC_NPROCESSORS_ONLN);
+
+    cpu_set_t cpuset;
+    CPU_ZERO(&cpuset);
+    CPU_SET(num_cores - 1, &cpuset);
+
+    pthread_t current_thread = pthread_self();    
+    return pthread_setaffinity_np(current_thread, sizeof(cpu_set_t), &cpuset);
+}
+
 void* measure_energy(void *param)
 {
+    stick_this_thread_to_last_core();
+
     long long pkg_previous_value[total_packages];
     long long pkg_current_value [total_packages];
     long long dram_current_value[total_packages];
