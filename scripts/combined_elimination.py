@@ -11,7 +11,8 @@ from model import NPB
 debug = False
 
 #base_dir = "/home/dave/Documents/project"
-base_dir = "/mnt/storage/home/dg17763/masters-project"
+#base_dir = "/mnt/storage/home/dg17763/masters-project"
+base_dir = "/home/dave/masters-project/"
 results_dir = base_dir + "/results"
 npb_dir = base_dir + "/benchmarks/NPB3.3-OMP"
 energy_monitor_dir = base_dir + "/energy-monitor"
