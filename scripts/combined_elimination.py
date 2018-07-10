@@ -31,7 +31,7 @@ benchmarks = [
     NPB('CG', 'C'),
     NPB('EP', 'D'),
     NPB('FT', 'C'),
-    NPB('IS', 'C'),
+    NPB('IS', 'D'),
     NPB('LU', 'C'),
     #NPB('LU', 'C', version='VEC'),
     NPB('MG', 'C'),
