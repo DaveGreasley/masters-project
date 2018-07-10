@@ -4,7 +4,7 @@ from os.path import expanduser
 
 from subprocess import call, Popen, PIPE
 
-flags = ["-O0", "-O1", "-O2", "-O3"]
+flags = ["-O1", "-O2", "-O3"]
 
 environment = "bc"
 
