@@ -7,6 +7,7 @@
 #SBATCH --partition cpu
 #SBATCH --output fixed_flags.out
 #SBATCH --exclusive
+#SBATCH --mem 40000
 
 export OMP_NUM_THREADS=26
 export OMP_PROC_BIND=close
