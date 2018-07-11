@@ -1,0 +1,47 @@
+#!/bin/bash
+
+#SBATCH --job-name dg-test
+#SBATCH --nodes 1
+#SBATCH --ntasks-per-node 28
+#SBATCH --time 1:00:00
+#SBATCH --partition cpu_test
+#SBATCH --output test.out
+#SBATCH --exclusive
+#SBATCH --mem 40000
+  
+export OMP_NUM_THREADS=26
+export OMP_PROC_BIND=true
+export OMP_PLACES=cores
+
+echo Running on host `hostname`
+echo Time is `date`
+echo Directory is `pwd`
+echo Slurm job ID is $SLURM_JOB_ID
+echo This job runs on the following machines:
+echo `echo $SLURM_JOB_NODELIST | uniq`
+
+echo $SLURM_JOB_NODELIST > machine.file.$SLURM_JOBID
+numnodes=`wc machine.file.$SLURM_JOBID | awk '{ print $1 }'`
+echo $numnodes
+
+
+~/masters-project/benchmarks/NPB3.3-OMP/bin/sp.C.x
+sleep 5
+~/masters-project/benchmarks/NPB3.3-OMP/bin/sp.C.x
+sleep 5
+~/masters-project/benchmarks/NPB3.3-OMP/bin/sp.C.x
+sleep 5
+~/masters-project/benchmarks/NPB3.3-OMP/bin/sp.C.x
+sleep 5
+~/masters-project/benchmarks/NPB3.3-OMP/bin/sp.C.x
+sleep 5
+~/masters-project/benchmarks/NPB3.3-OMP/bin/sp.C.x
+sleep 5
+~/masters-project/benchmarks/NPB3.3-OMP/bin/sp.C.x
+sleep 5
+~/masters-project/benchmarks/NPB3.3-OMP/bin/sp.C.x
+sleep 5
+~/masters-project/benchmarks/NPB3.3-OMP/bin/sp.C.x
+sleep 5
+~/masters-project/benchmarks/NPB3.3-OMP/bin/sp.C.x
+sleep 5
