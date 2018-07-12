@@ -1,5 +1,5 @@
 # Include standard template for this suite
--include $(SPEC)/benchspec/Makefile.defaults
+-include ../Makefile.defaults
 
 nomakefiles:
 	@echo "*** Whoops!  I didn't find a Makefile.defaults file."
