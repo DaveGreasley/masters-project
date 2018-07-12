@@ -1,0 +1,12 @@
+&INPUT
+ GX      =         150,
+ GY      =         150,
+ GZ      =         150,
+! >>>select exactly one geometry from the list of available testcases<<<
+ GEONME          = "#sample#channel#",
+!GEONME          = "#sample#packing#",
+!GEONME          = "#sample#synpor#",
+ BLOCKINGFACTOR  =           1,
+ MAX_RUNTIME     =          20,
+ MAX_ITERAT      =         1000
+ /

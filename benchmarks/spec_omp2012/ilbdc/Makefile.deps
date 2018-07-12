@@ -1,0 +1,7 @@
+
+# These are the build dependencies
+
+$(addsuffix $(OBJ), mod_relax.fppized): mod_relax.fppized.f90 $(addsuffix $(OBJ),$(basename ) mod_constants.fppized)
+$(addsuffix $(OBJ), ilbdc-kernel.fppized): ilbdc-kernel.fppized.f90 $(addsuffix $(OBJ),$(basename ) mod_constants.fppized mod_benchgeo.fppized mod_preproc.fppized mod_relax.fppized)
+$(addsuffix $(OBJ), mod_preproc.fppized): mod_preproc.fppized.f90 $(addsuffix $(OBJ),$(basename ) mod_constants.fppized)
+# End dependencies
