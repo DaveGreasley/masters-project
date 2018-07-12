@@ -1,0 +1,954 @@
+%expr_int_size(noe10,_).
+%
+%expr_intcst_val(noe11,_).
+%
+%expr_lst_f(noe0,_).
+%
+%expr_lst_n(noe1,_,noe2).
+%
+%expr_op_f(noe3,_).
+%
+%expr_op_n(noe4,_,noe5).
+%
+%expr_ssa_name(noe12,nos0).
+%
+%expr_ssa_var(noe13,noe14).
+%
+%edge_flags(noed0,noflag0).
+%
+%bb_stmt_f(nobb0,noe6).
+%
+%bb_stmt_n(nobb1,_,noe7).
+%
+%phi_bb(nophi0,nobb2).
+%
+%phi_len(nophi1,0).
+%
+%phi_result(nophi2,noe8).
+%
+%phi_arg(nophi3,noe9).
+%
+%var_p(nov0).
+%
+%call_arg(nocall0,noarg0).
+%
+%expr_code(noe_44,E):- E = nocode_44.
+
+
+
+
+% Utilities
+
+count_lst([],0).
+count_lst([_|L],N):-count_lst(L,M),N is M+1.
+
+count_sum([],0).
+count_sum([E|L],N):-count_sum(L,M),N is M+E.
+
+count_sum_lst([],0,0).
+count_sum_lst([E|L],N,S):-count_sum_lst(L,N1,S1),
+	                  N is N1+1,
+	                  S is S1+E.
+
+aver(0,_N,0).
+aver(N,S,Av):-N \= 0,
+	      Av is S/N. 
+
+count_aver(L,Av):-count_sum_lst(L,N,S),
+		  aver(N,S,Av).
+
+% Utilities for instructions
+
+expr_op_2(E,E2):-expr_op_f(E,E1),
+		 expr_op_n(E,E1,E2).
+
+expr_op_3(E,E2):-expr_op_2(E,E1),
+		 expr_op_n(E,E1,E2).
+
+expr_op_4(E,E2):-expr_op_3(E,E1),
+		 expr_op_n(E,E1,E2).
+
+
+% List of features
+% 
+% 3.2	CFG (basic blocks)
+% 
+% - Number of basic blocks in the method
+
+%ft(ft1,N):-findall(B,bb_p(B),L),
+%           count_lst(L,N).
+
+ft(ft1,N):-fn_bb_nr(fn,N).
+
+% - Number of basic blocks with a single successor
+
+edge_src_pr2(B,N):-bb_p(B),
+	       	   findall(E,edge_src(E,B),L),
+	           count_lst(L,N).
+
+edge_src_pr2_sel1(B):-edge_src_pr2(B,N),
+                      N = 1.
+
+ft(ft2,N):-findall(B,edge_src_pr2_sel1(B),L),
+	   count_lst(L,N).
+
+% - Number of basic blocks with two successors
+
+edge_src_pr2_sel2(B):-edge_src_pr2(B,N),
+                      N = 2.
+
+ft(ft3,N):-findall(B,edge_src_pr2_sel2(B),L),
+	   count_lst(L,N).
+
+% - Number of basic blocks with more then two successors
+
+edge_src_pr2_sel3(B):-edge_src_pr2(B,N),
+                      N > 2.
+
+ft(ft4,N):-findall(B,edge_src_pr2_sel3(B),L),
+	   count_lst(L,N).
+
+% - Number of basic blocks with a single predecessor
+
+edge_dest_pr2(B,N):-bb_p(B),
+	       	    findall(E,edge_dest(E,B),L),
+	            count_lst(L,N).
+
+edge_dest_pr2_sel1(B):-edge_dest_pr2(B,N),
+                       N = 1.
+
+ft(ft5,N):-findall(B,edge_dest_pr2_sel1(B),L),
+	   count_lst(L,N).
+
+% - Number of basic blocks with two predecessors
+
+edge_dest_pr2_sel2(B):-edge_dest_pr2(B,N),
+                       N = 2.
+
+ft(ft6,N):-findall(B,edge_dest_pr2_sel2(B),L),
+	   count_lst(L,N).
+
+% - Number of basic blocks with more then two predecessors
+
+edge_dest_pr2_sel3(B):-edge_dest_pr2(B,N),
+                       N > 2.
+
+ft(ft7,N):-findall(B,edge_dest_pr2_sel3(B),L),
+	   count_lst(L,N).
+
+% - Number of basic blocks with a single predecessor and a single successor
+
+edge_dest_src_pr2_sel1(B):-edge_dest_pr2_sel1(B),
+                           edge_src_pr2_sel1(B).
+
+ft(ft8,N):-findall(B,edge_dest_src_pr2_sel1(B),L),
+	   count_lst(L,N).
+
+% - Number of basic blocks with a single predecessor and two successors
+
+edge_dest_src_pr2_sel2(B):-edge_dest_pr2_sel1(B),
+                       edge_src_pr2_sel2(B).
+
+ft(ft9,N):-findall(B,edge_dest_src_pr2_sel2(B),L),
+	   count_lst(L,N).
+
+% - Number of basic blocks with a two predecessors and one successor
+
+edge_dest_src_pr2_sel3(B):-edge_dest_pr2_sel2(B),
+                       edge_src_pr2_sel1(B).
+
+ft(ft10,N):-findall(B,edge_dest_src_pr2_sel3(B),L),
+	    count_lst(L,N).
+
+% - Number of basic blocks with two successors and two predecessors
+
+edge_dest_src_pr2_sel4(B):-edge_dest_pr2_sel2(B),
+                           edge_src_pr2_sel2(B).
+
+ft(ft11,N):-findall(B,edge_dest_src_pr2_sel4(B),L),
+	    count_lst(L,N).
+
+% - Number of basic blocks with more then two successors and more then two predecessors
+
+edge_dest_src_pr2_sel5(B):-edge_dest_pr2_sel3(B),
+                           edge_src_pr2_sel3(B).
+
+ft(ft12,N):-findall(B,edge_dest_src_pr2_sel5(B),L),
+	    count_lst(L,N).
+
+% - Number of basic blocks with no calls
+% - Number of basic blocks with no loads and no stores
+% - Number of basic blocks with only non-volatile (no side-effects / no throw exception) instructions
+% - Number of basic blocks with number of instructions in the interval [M, N] (N<15, [M, N]=[15, 500], M > 500)
+
+bb_stmt_in(B,E):-bb_stmt_f(B,E).
+
+bb_stmt_in(B,E):-bb_stmt_n(B,_,E).
+
+bb_stmt_in_pr1(B,N):-bb_p(B),
+	             findall(E,bb_stmt_in(B,E),L),
+	             count_lst(L,N).
+
+bb_stmt_in_pr1_sel1(B):-bb_stmt_in_pr1(B,N),
+	                N < 15.
+                     
+ft(ft13,N):-findall(B,bb_stmt_in_pr1_sel1(B),L),
+	    count_lst(L,N).
+
+bb_stmt_in_pr1_sel2(B):-bb_stmt_in_pr1(B,N),
+	                N =< 500,
+                        N >= 15.
+                     
+ft(ft14,N):-findall(B,bb_stmt_in_pr1_sel2(B),L),
+	    count_lst(L,N).
+
+bb_stmt_in_pr1_sel3(B):-bb_stmt_in_pr1(B,N),
+                        N > 500.
+                     
+ft(ft15,N):-findall(B,bb_stmt_in_pr1_sel3(B),L),
+	    count_lst(L,N).
+
+% - Number of basic blocks in loops
+% - Number of basic blocks not in loops
+% - Number of basic blocks in loops at nesting level 0
+% - Number of basic blocks in loops at nesting level 1
+
+% 
+% 3.3	CFG (edges)
+% 
+% - Number of edges in the control flow graph
+
+ft(ft16,N):-fn_edge_nr(fn,N).
+
+% - Number of critical edges
+
+edge_critical(E):-edge_src(E,B1),
+	          edge_dest(E,B2),
+	          edge_src_pr2(B1,N1),
+	          N1 >= 2,
+	          edge_dest_pr2(B2,N2),
+                  N2 >= 2.
+
+ft(ft17,N):-findall(E,edge_critical(E),L),
+	    count_lst(L,N).
+
+% - Number of abnormal edges
+
+ft(ft18,N):-findall(E, edge_flags(E,abnormal),L),
+	    count_lst(L,N).
+
+% - Number of fallthru edges
+% - Number of edges taken when controlling predicate is true
+% - Number of edges taken when controlling predicate is false
+% - Number of if-then patterns in CFG
+% - Number of if-then-else patterns in CFG
+% - Number of edges that are exits from loop
+% - Number of edges that are part of an irreducible loop
+% - Number of edges connecting basic blocks in the same loop.
+% 
+% 3.4	Instructions
+% 
+% - Number of instructions in (method, loops)
+
+ft(ft24,N):-findall(N,bb_stmt_in_pr1(_,N),L),
+	    count_sum(L,N).
+
+% - Average of number of instructions in basic blocks
+
+ft(ft25,N):-findall(N,bb_stmt_in_pr1(_,N),L),
+	    count_aver(L,N).
+
+% - Weighted number of instructions in a method (an instruction in a loop at nesting level k is counted as 10*k)
+% - Number of instructions in loops at nesting level 0 (inner)
+% - Variance of number of instructions in basic blocks
+% - Average of number of instructions in basic blocks that are part of loops
+% - Number of instructions in loops at nesting level 1 (but not to nesting level 0)
+% - Number of instructions outside any loop
+% - Number of direct calls in (method, loops)
+
+expr_addr_func(E):-expr_code(E,addr_expr),
+	           expr_op_f(E,E1),
+	           expr_code(E1,function_decl).
+
+call_direct(S):-stmt_code(S,gimple_call),
+                call_fn(S,E1),
+	        expr_addr_func(E1).
+
+ft(ft19,N):-findall(E, call_direct(E),L),
+	    count_lst(L,N).
+
+% - Number of indirect calls (i.e. done via pointers) in (method, loops)
+
+call_indirect(S):-stmt_code(S,gimple_call),
+                  call_fn(S,E1),
+	          \+expr_addr_func(E1).
+
+ft(ft39,N):-findall(E, call_indirect(E),L),
+	    count_lst(L,N).
+
+% - Number of conditional branches in (method, loops)
+
+ft(ft20,N):-findall(E, stmt_code(E,gimple_cond),L),
+	    count_lst(L,N).
+
+%ft20n:-ft(ft20,N),
+%       write(N).
+
+% - Number of unconditional branches in (method, loops)
+
+ft(ft56,N):-findall(E, stmt_code(E,gimple_goto),L),
+	    count_lst(L,N).
+
+% - Number of switch instructions in (method, loops)
+
+ft(ft33,N):-findall(E, stmt_code(E,gimple_switch),L),
+	    count_lst(L,N).
+
+% - Number of non-volatile (no side-effects / no throw exception) instructions in (method, loops)
+
+% - Number of assignments in (method, loops)
+
+ft(ft21,N):-findall(E, stmt_code(E,gimple_assign),L),
+    	    count_lst(L,N).
+
+% - Number of instructions that do pointer arithmetic in (method, loops)
+
+stmt_binary_pointer(S):-stmt_code(S,gimple_assign),
+                        assign_class(S,binary),
+                        assign_rhs1(S,E),
+		        expr_type(E,E1),
+                        expr_code(E1,pointer_type).
+
+% expr_binary_pointer(E):-expr_class(E,binary),
+%		          expr_type(E,E1),
+%                         expr_code(E1,pointer_type).
+
+ft(ft35,N):-findall(E,stmt_binary_pointer(E),L),
+	    count_lst(L,N).
+
+% - Number of binary integer operations in (method, loops)
+
+stmt_binary_int(S):-stmt_code(S,gimple_assign),
+                    assign_class(S,binary),
+                    assign_rhs1(S,E),
+		    expr_type(E,E1),
+                    expr_code(E1,integer_type).	            
+
+ft(ft22,N):-findall(E,stmt_binary_int(E),L),
+	    count_lst(L,N).
+
+% - Number of binary floating point operations in (method, loops)
+
+stmt_binary_float(S):-stmt_code(S,gimple_assign),
+                      assign_class(S,binary),
+                      assign_rhs1(S,E),
+		      expr_type(E,E1),
+                      expr_code(E1,real_type).	            
+
+ft(ft23,N):-findall(E,stmt_binary_float(E),L),
+	    count_lst(L,N).
+
+% - Number of unary operations in (method, loops)
+
+% stmt_unary_pointer(S):-stmt_code(S,gimple_assign),
+%                        stmt_class(S,unary).
+
+stmt_unary(S):-stmt_code(S,gimple_assign),
+               assign_class(S,unary).
+
+ft(ft34,N):-findall(E,stmt_unary(E),L),
+	    count_lst(L,N).
+
+% - Number of indirect references via pointers ('*' in C).
+
+stmt_indref(S):-stmt_code(S,gimple_assign),
+	        assign_subcode(S,indirect_ref).
+
+ft(ft36,N):-findall(E,stmt_indref(E),L),
+	    count_lst(L,N).
+
+% - Number of times the address of a variables is taken ('&' in C).
+%stmt_addr_nofunc(S):-stmt_subcode(S,addr_expr),
+%	             stmt_rhs_1(S,E1),
+%	             \+expr_code(E1,function_decl).
+
+% expr_addr_nofunc(E):-expr_code(E,addr_expr),
+%	             expr_op_f(E,E1),
+%	             \+expr_code(E1,function_decl).
+
+stmt_addr(S):-stmt_code(S,gimple_assign),
+	      assign_subcode(S,addr_expr).
+
+ft(ft37,N):-findall(E,stmt_addr(E),L),
+	    count_lst(L,N).
+
+% MN: to check this: 
+% - Number of times the address of a function is taken ('&' in C).
+
+stmt_addr_func(S):-stmt_code(S,gimple_assign),
+                   assign_subcode(S,addr_expr),
+	           assign_rhs1(S,E1),
+	           expr_code(E1,function_decl).
+
+ft(ft38,N):-findall(E,stmt_addr_func(E),L),
+	    count_lst(L,N).
+
+% - Number of loads from memory in (method, loops)
+% - Number of stores from memory in (method, loops)
+% - Number of copy instructions in (method, loops)
+% - Number of assignment instructions with the right operand an integer constant in (method, loops)
+
+stmt_modify_cst(S):-stmt_code(S,gimple_assign),
+                    assign_class(S,single),
+                    assign_rhs1(S,E1),
+	            expr_code(E1,integer_cst).
+
+ft(ft40,N):-findall(E,stmt_modify_cst(E),L),
+	    count_lst(L,N).
+ 
+% - Number of binary operations with one of the operands an integer constant in (method, loops)
+
+stmt_binary_cst(S):-stmt_code(S,gimple_assign),
+	            assign_class(S,binary),
+	            assign_rhs1(S,E1),
+	            expr_code(E1,integer_cst).
+
+stmt_binary_cst(S):-stmt_code(S,gimple_assign),
+	            assign_class(S,binary),
+	            assign_rhs2(S,E2),
+	            expr_code(E2,integer_cst).
+
+ft(ft41,N):-findall(E,stmt_binary_cst(E),L),
+	    count_lst(L,N).
+
+% - Number of cast instructions between pointers in (method, loops)
+% - Number of cast instructions between integers in (method, loops)
+% - Number of cast instructions between floating-point in (method, loops)
+% - Number of cast instructions between integers and floating point in (method, loops)
+% - Number of logical operations in (method, loops)
+% - Number of computations of array elements addresses in (method, loops)
+% - Number of integer multiplications/division in (method, loops)
+% - Number of floating point multiplication/division in (method, loops)
+% - Number of rotate instructions in (method, loops)
+% - Number of calls where the number of arguments of the callee is in the interval [M, N] ([M,N]=[0, 3], N > 4)
+
+%stmt_call_arg(E,E1):-stmt_code(E,gimple_call),
+%                     call_arg(E,E1).
+
+%stmt_call_arg_pr1(E,N):-stmt_code(E,gimple_call),
+%                        findall(E1,stmt_call_arg(E,E1),L),
+%	                count_lst(L,N).
+
+stmt_call_arg_pr1(E,N):-stmt_code(E,gimple_call),
+	                call_num_args(E,N).
+
+stmt_call_arg_pr1_sel1(E):-stmt_call_arg_pr1(E,N),
+	                   N > 4.
+
+ft(ft42,N):-findall(E,stmt_call_arg_pr1_sel1(E),L),
+	    count_lst(L,N).
+
+% - Number of calls with pointers as arguments
+
+stmt_call_arg(E,E1):-stmt_code(E,gimple_call),
+                     call_arg(E,E1).
+
+stmt_call_ptrarg(E,E1):-stmt_call_arg(E,E1),
+	                expr_type(E1,E3),
+		        expr_code(E3,pointer_type).
+	
+stmt_call_ptrarg_pr1(E,N):-stmt_code(E,gimple_call),
+                           findall(E1,stmt_call_ptrarg(E,E1),L),
+	                   count_lst(L,N).
+
+stmt_call_ptrarg_pr1_sel1(E):-stmt_call_ptrarg_pr1(E,N),
+	                      N > 0.
+
+ft(ft43,N):-findall(E,stmt_call_ptrarg_pr1_sel1(E),L),
+	    count_lst(L,N).
+
+% - Number of calls that return a pointer
+
+expr_call_ptrret(E):-stmt_code(E,gimple_call),
+	             call_treturn(E,E1),
+	             expr_code(E1,pointer_type).
+
+ft(ft44,N):-findall(E,expr_call_ptrret(E),L),
+	    count_lst(L,N).
+
+% - Number of calls that return an integer
+
+%stmt_call_intret(E):-stmt_code(E,gimple_call),
+%                     expr_lhs(E,E1),
+%	              expr_code(E1,integer_type).
+
+stmt_call_intret(E):-stmt_code(E,gimple_call),
+	             call_treturn(E,E1),
+	             expr_code(E1,integer_type).
+
+ft(ft45,N):-findall(E,stmt_call_intret(E),L),
+	    count_lst(L,N).
+
+% - Number of return instructions
+% 
+% 3.5	Data Dependence
+% 
+% - Average number of flow dependencies for an instruction
+% - Average number of input dependencies for an instruction
+% - Average number of anti dependencies for an instruction
+% - Number of blocks where the number of dependencies for each instruction is in the range [M, N] ([0, 4])
+% - Number of loops where the number of dependencies for each instruction is in the range [M, N] ([0, 4])
+% - Number of loops with no carry-on dependencies.
+% - Average number of dependencies for instructions in countable single-basic block inner loops.
+% - Average number of carry-on dependencies for a loop.
+% - Number of inner loops with less then N carry-on dependencies (N < 2)
+% - Average of number of parallel computations in a loop
+% - Number of inner loops with more then N parallel computations (N > 1)
+% - Average of memory to memory data dependencies in a loop
+% - Number of inner loops with no memory to memory dependencies in a loop
+% - Number of inner loops with no memory to memory dependencies)
+% - The average dependence height of computations in a loop
+% - Number of inner loops with the height of computations less the M (M < 5)
+% - Number of loops with height of computations more the M (M < 5) and more then N parallel computations (M > 4, N > 2)
+% 
+% 3.6	Constants
+% 
+% - Number of occurrences of integer constant zero
+
+expr_intcst_zero(E):-expr_code(E,integer_cst),
+	             expr_intcst_val(E,0).
+
+ft(ft46,N):-findall(E,expr_intcst_zero(E),L),
+	 count_lst(L,N).
+
+% - Number of occurrences of integer constant one
+
+expr_intcst_one(E):-expr_code(E,integer_cst),
+                    expr_intcst_val(E,1).
+
+ft(ft48,N):-findall(E,expr_intcst_one(E),L),
+	 count_lst(L,N).
+
+% - Number of occurrences of 8-bit integer constants
+% - Number of occurrences of 16-bit integer constants
+% - Number of occurrences of 32-bit integer constants
+
+expr_intcst_32(E):-expr_code(E,integer_cst),
+		   expr_type(E,E1),
+	           expr_int_size(E1,32).
+
+ft(ft47,N):-findall(E,expr_intcst_32(E),L),
+	    count_lst(L,N).
+
+% - Number of occurrences of 64-bit integer constants
+
+expr_intcst_64(E):-expr_code(E,integer_cst),
+		   expr_type(E,E1),
+	           expr_int_size(E1,64).
+
+ft(ft49,N):-findall(E,expr_intcst_64(E),L),
+	 count_lst(L,N).
+
+% - Number of basic blocks with occurrences of integer constants
+% - Number of loops with occurrences of integer constants
+% - Number of basic blocks with occurrences of floating point constants
+% - Number of occurrences single precision floating point constants
+% - Number of occurrences double precision floating point constants
+% 
+% 3.7	Variables
+% 
+% - Number of references (def/use) of a static/extern variables in (method, loops)
+
+expr_global(E):-expr_code(E,var_decl),
+                expr_flags(E,static).
+
+expr_global(E):-expr_code(E,var_decl),
+                expr_flags(E,public).
+
+expr_global_var(E,V):-expr_global(E),
+	              expr_var(E,V).
+
+expr_global_var_pr2(V,N):-var_p(V),
+                          findall(E,expr_global_var(E,V),L),
+                          count_lst(L,N).
+
+ft(ft51,N):-findall(N1,expr_global_var_pr2(_,N1),L),
+         count_sum(L,N).
+
+% - Number of references of a local variables in (method, loops)
+
+expr_local(E):-expr_code(E,parm_decl).
+
+expr_local(E):-expr_code(E,var_decl),
+               \+expr_flags(E,static),
+	       \+expr_flags(E,public).
+
+expr_local_var(E,V):-expr_local(E),
+                     expr_var(E,V).
+
+expr_local_var_pr2(V,N):-var_p(V),
+                         findall(E,expr_local_var(E,V),L),
+                         count_lst(L,N).
+
+ft(ft50,N):-findall(N1,expr_local_var_pr2(_,N1),L),
+            count_sum(L,N).
+
+% - Number of local variables referred in (method, loops)
+
+expr_local_var_pr2_sel1(V):-expr_local_var_pr2(V,N),
+			    N > 0.
+
+ft(ft52,N):-findall(V,expr_local_var_pr2_sel1(V),L),
+            count_lst(L,N).
+
+% - Number of static/extern variables referred in (method, loops)\
+
+expr_global_var_pr2_sel1(V):-expr_global_var_pr2(V,N),
+			     N > 0.
+
+ft(ft53,N):-findall(V,expr_global_var_pr2_sel1(V),L),
+         count_lst(L,N).
+
+% - Number of local variables that are pointers in (method, loops)
+
+expr_local_pvar(E,V):-expr_local(E),
+		      expr_type(E,E1),
+		      expr_code(E1,pointer_type),
+                      expr_var(E,V).
+
+expr_local_pvar_pr2(V,N):-var_p(V),
+                          findall(E,expr_local_pvar(E,V),L),
+                          count_lst(L,N).
+
+expr_local_pvar_pr2_sel1(V):-expr_local_pvar_pr2(V,N),
+			     N > 0.
+
+ft(ft54,N):-findall(V,expr_local_pvar_pr2_sel1(V),L),
+         count_lst(L,N).
+
+% - Number of static/extern variables that are pointers in (method, loops)
+
+expr_global_pvar(E,V):-expr_global_var(E,V),
+	               expr_type(E,E1),
+	               expr_code(E1,pointer_type).
+
+expr_global_pvar_pr2(V,N):-var_p(V),
+                           findall(E,expr_global_pvar(E,V),L),
+                           count_lst(L,N).
+
+expr_global_pvar_pr2_sel1(V):-expr_global_pvar_pr2(V,N),
+			      N > 0.
+
+ft(ft55,N):-findall(V,expr_global_pvar_pr2_sel1(V),L),
+         count_lst(L,N).
+
+% - Number of local floating-point variables in (method, loop)
+% - Number of static/extern floating-point variables in (method/loop)
+% - Number of local integer variables in (method, loop)
+% - Number of static/extern integer variables in (method/loop)
+% - Number of occurrences where a local variable is defined in (method, loops)
+% - Number of occurrences where a local variable is used in (method, loops)
+% - Number of occurrences where a static/extern variable is defined in (method, loops)
+% - Number of occurrences where a static/extern variable is used in (method, loops)
+% - Number of occurrences where the address of a local variable is taken in (method, loops)
+% - Number of occurrences where the addresses of a static/extern variable is taken in  (method, loops)
+% - Number of occurrences where a pointer to a local variable is de-referenced in (method, loops)
+% - Number of occurrences where a pointer to a local variable is de-referenced in the right side of an assignment in (method, loops)
+% - Number of occurrences where a pointer to a static/extern variable is de-referenced in  (method, loops)
+% - Number of occurrences where a pointer to a static/extern variable is
+% de-referenced in the right side of an assignment in (method, loops)
+% - Number of variable with the may-alias set empty (if alias analysis was done)
+% - Number of variables that escape (requires escape analysis)
+% - Number of loops where no variable has its address taken
+% - Number of loops where no pointer is de-referenced
+% - Number of parameters of the method currently compiled
+% - Number of pointers parameters of the method currently compiled
+% - Number of const parameters of the method currently compiled
+% - Average number of SSA names for a variable. 
+%
+ssa_var(E,V,N):-expr_ssa_name(E,N),expr_ssa_var(E,E1),expr_var(E1,V).
+ 
+% - Number of variables with number of SSA names in the interval [M,N].
+
+
+% 3.8	Types
+% 
+% The outcome of different optimizations may depend in a great measure on the composite types (structures, arrays) used in the code. In general arrays present more opportunities for optimization than structures. For example, classical loop optimizations are particularly useful in the presence of arrays,
+% 
+% - Number of composite types referred in (method, loops)
+% - Number of composites type that has no pointers or arrays as fields in (method, loops)
+% - Average number of fields of a composite type referred in (method, loops)
+% - Number of composite types with the number of fields in the interval [M, N] ([0, 6])
+% - Number of flat (i.e. no nested composite type) composite types
+% - Average depth of a composite type referred in (method, loops)
+% - Number of composite types with bit-fields referred in (method, loops)
+% - Number of static/extern pointers to a composite type referred in (method, loops)
+% - Number of occurrences where pointers to composite type are passed as parameters in (method, loops)
+% - Number of loops with no accesses to fields of composite types
+% - Number of loops where fields of a single composite type are accessed
+% - Number of array types referred in (method, loops)
+% - Number of static/extern array types referred in (method, loops)
+% - Number of array types whose size is statically known referred in (method, loops)
+% - Number of occurrences where arrays are passed as parameters in (method, loops)
+% - Number of occurrences where elements of arrays are accessed in (method, loops)
+% - Number of one-dimensional array types referred in (method, loops)
+% - Number of two-dimensional array types referred in (method, loops)
+% - Number of pointers to arrays in (method, loops)
+% - Number of arrays of pointers referred in (method, loops)
+% - Number of loops where no array is accessed
+% - Number of loops where elements of a single array is accessed
+% - Number of loops where elements of two arrays are accessed
+% - Number of loops where elements of more then M arrays are accessed (M = 3)
+% - Number of loops where only single-dimensional arrays are accessed
+% - Number of loops where M multi-dimensional arrays are accessed (M > 1)
+% 
+% 3.9	Live information
+% 
+% Live information critically affects the potential gains of many optimizations, as it is a major factor influencing register pressure. The following features describe live information within program structures.
+% 
+% - Average number of variables live on the entrance of a basic block
+% - Average number of variables live on exit of a basic block
+% - Maximal number of variable live at the entrance of a basic block
+% - Minimal number of variables live at the entrance of a basic block
+% - Number of basic block with the number of variables live at the entrance of a basic block in the interval [M, N] ([0, 3])
+% - Number of loops where the maximal number of variables live at any point in the loop does not exceed M (M = 32, M = 64)
+% - Number of loops where the maximal number of variables live at the beginning of the header is less then N (N <5)
+% - Number of loops where the maximal number of variables on exits is less then N (N < 5)
+% - Average number of "last_use" notes in basic blocks
+% 
+% 3.10	 PHI-NODES
+% 
+% The single static assignment (SSA) is a representation used in the GCC compiler (as in other optimizing compilers). In order to bring a program into SSA representation, PHI_NODES may need to be generated at the beginning of basic blocks.
+% 
+% (for SSA representation)
+% - Average of number of phi-nodes at the beginning of a basic block
+
+phi_bb_pr2(B,N):-bb_p(B),
+	         findall(P,phi_bb(P,B),L),
+                 count_lst(L,N).
+
+ft(ft26,N):-findall(N,phi_bb_pr2(_,N),L),
+	 count_aver(L,N).
+
+% - Variance of number of phi-nodes at the beginning of a basic block
+% - Average of arguments for a phi-node
+
+phi_len_e(P,N):-phi_bb(P,_),
+                phi_len(P,N).
+
+ft(ft27,N):-findall(N,phi_len_e(_,N),L),
+	    count_aver(L,N).
+ 
+% - Variance of arguments for a phi-node
+% - Average number of phi-nodes in headers of countable single-basic blocks loops.
+% - Number of basic blocks with the number of phi-nodes in the interval [M, N] (M < 1, [M,N]=[1,3], N>2)
+
+phi_bb_pr2_sel1(B):-phi_bb_pr2(B,N),
+                    N >= 1,
+                    N =< 3.
+
+ft(ft28,N):-findall(B,phi_bb_pr2_sel1(B),L),
+	 count_lst(L,N).
+
+phi_bb_pr2_sel2(B):-phi_bb_pr2(B,N),
+                    N > 3.
+
+ft(ft29,N):-findall(B,phi_bb_pr2_sel2(B),L),
+	 count_lst(L,N).
+
+phi_bb_pr2_sel3(B):-phi_bb_pr2(B,N),
+                    N = 0.
+
+ft(ft30,N):-findall(B,phi_bb_pr2_sel3(B),L),
+	 count_lst(L,N).
+
+%  - Number of basic blocks where the number of arguments for a phi-node is in the interval [M, N] ([0, 3]).
+% - Number of basic block where total number of arguments for all phi-nodes is in the interval [M,N] ([M,N]=[1, 5], N > 5)
+
+phi_len_bb(B,N):-phi_bb(P,B),
+	         phi_len(P,N).
+
+phi_len_bb_pr1(B,N):-bb_p(B),
+	             findall(N,phi_len_bb(B,N),L),
+	             count_sum(L,N).
+
+phi_len_bb_pr1_sel1(B):-phi_len_bb_pr1(B,N),
+	                N >= 1,
+                        N =< 5. 
+
+ft(ft31,N):-findall(B,phi_len_bb_pr1_sel1(B),L),
+	 count_lst(L,N).
+	
+phi_len_bb_pr1_sel2(B):-phi_len_bb_pr1(B,N),
+	                N > 5.
+
+ft(ft32,N):-findall(B,phi_len_bb_pr1_sel2(B),L),
+	 count_lst(L,N).
+
+% - Average of number of uses of a result of a phi-node
+% - Average of number of uses of a result of a phi-node as an argument of a phi-node
+% - Number of phi-nodes whose result is used in more then N basic blocks (N = 3)
+% - Number of phi-nodes whose result is used in a single basic block
+%  
+% 3.1 Loops 
+%
+% - Number of loops
+% count (is_loop (L)).
+% count_loops.
+% - Number of irreducible loop
+% count (loop_flags (L, irreducible))
+% - Number of while-loops
+% - Number of do-until-loops
+% - Number of loops with no outer and no inner loops
+% count (loop_inner (
+% - Number of loops with no outer loops
+% - Number of inner loops
+% - Number of loops with outer and inner loops
+% - Number of loops with outer and inner loops at nesting level one
+% - Number of loops with outer and inner loops at nesting level two
+% - Number of loops with outer and inner loops at nesting level greater then M (M = 2)
+% - Number of static countable loops
+% count (is_loop (L), loop_flags (L, static))
+% - Number of dynamic countable loops
+% count (is_loop )L), loop_flags (L. dynamic))
+%  Number of single-basic blocks loops
+% count (count (is_loop (L), is_bb (B), in (B, L)) == 1)
+% - Number of loops with two basic blocks
+% 
+% - Number of loops with three basic blocks
+% - Number of loops with number of basic blocks in the interval [M, N] (M = 4, N = 10]
+% - Number of unrolled loops (if unrolling was performed)
+% - Number of versioned loops (if an optimization that creates versions of loops was executed)
+% - Number of loops with single exit
+% - Number of loop with two exits
+% - Number of loops with more then M exits (M = 3)
+% 
+% - Number of loops with a single latch
+% - Number of loops with no calls
+% - Number of loops with no loads and no stores
+% - Number of countable single basic block loops with no calls
+% loop_flags (L, countable), loop_bb_nr (L, 1), loop_in (L, I), insn_opcode (I, F), F != call.
+% - Number of countable single basic blocks loops with no loads and no stores
+% loop_flags (L, countable), loop_bb_nr (L, 1),
+% - Number of loops with number of instructions in the interval [M, N] ([0, 10], [10, 50], [50, 500]
+% loop_count (L, C), C >= M, C <= N.
+% - Number of loops with only integer computations
+% count_I (L, N) :- count (loop_in (L, I), insn_flags (I, arith))
+% select_L (L) :- count_I (L, N). loop_count (L, M), M == N.
+% - Number of loops with only floating point computations (beside address computations for array elements)
+% - Average of number of induction variables in countable loops
+% loop_induct_nr (L, Ind).
+% - Variance of number of induction variables in countable loops
+% - Number of countable loops that have more then M induction variables (M > 3)
+
+% expr_code(noe_44,nocode_44).    
+
+%% Software metrics features for GCC-ICI static features
+
+%%  CYCLOMATIC COMPLEXITY
+%% N == number of return instrs in fn
+%% N1 == number of cond instrs in fn
+%% N2 == N1-N
+%% N3 == N2+2. definition of cyclomatic complexity from:
+%% http://en.wikipedia.org/wiki/Cyclomatic_complexity
+ft(ft57,N3):-findall(E,stmt_code(E,gimple_return),L),
+            count_lst(L,N),
+            findall(E1, stmt_code(E1,gimple_cond),L1),
+            count_lst(L1,N1),
+            N2 is N1-N,
+            N3 is N2+2.
+
+%% @jsinger addition
+%%   HALSTEAD's METRICS
+%% described at
+%% http://en.wikipedia.org/wiki/Halstead_complexity_measures
+
+%% HN2 is total number of operands (Halstead N2)
+ft(ft58,HN2):-findall(E,expr_var(E,_),L),
+            count_lst(L,HN2).
+
+%% Hn2 is number of distinct operands (Halstead n2)
+ft(ft59,Hn2):-findall(V,var_p(V),L),
+            count_lst(L,Hn2).
+
+%% N is num var defs (should be == Halstead n2 or Halstead N2?)
+ft(ft60,N):-findall(E,expr_code(E,var_decl),L),
+            count_lst(L,N).
+
+%% HN1 is total number of operators (Halstead N1) (approx due to
+%%abstraction)
+ft(ft61,HN1):-findall(E,expr_code(E,_),L),
+            count_lst(L,HN1).
+
+%% Hn1 is number of distinct operators (Halstead n1) (approx due to
+%%abstraction)
+ft(ft62,Hn1):-findall(C,expr_code(_,C),L),
+            sort(L,S),
+            count_lst(S,Hn1).
+
+%% approx of Halstead difficulty D == Hn1/2 * (HN2 / Hn2)
+%% (NB uses the aver routine to avoid problems with 0 divisor in
+%% computation of HN2/Hn2)
+ft(ft63, D):-findall(C,expr_code(_,C),L1),
+             sort(L1,S),
+             count_lst(S,Hn1),
+             findall(V,var_p(V),L),
+             count_lst(L,Hn2),
+             findall(E,expr_var(E,_),L2),
+             count_lst(L2,HN2),
+             aver(Hn2,HN2,Y),
+             X is Hn1/2,
+             D is X*Y.
+
+%% approx of Halstead volume
+%% volume == HN *log_2(Hn)
+%% where HN == HN1+HN2
+%% and Hn == Hn1+Hn2
+ft(ft64,Volume):-findall(E,expr_code(E,_),L),
+                 count_lst(L,HN1),
+                 findall(C,expr_code(_,C),L1),
+                 sort(L1,S),
+                 count_lst(S,Hn1),
+                 findall(E1,expr_var(E1,_),L2),
+                 count_lst(L2,HN2),
+                 findall(V,var_p(V),L3),
+                 count_lst(L3,Hn2),
+                 HN is HN1+HN2,
+                 Hn is Hn1+Hn2,
+                 Logterm is log10(Hn),
+                 Logterm2 is Logterm*3.32,
+                 Volume is HN*Logterm2.
+
+%% approx of Halstead effort, which
+%% == Difficulty * Volume
+ft(ft65,Effort):-findall(E,expr_code(E,_),L),
+            count_lst(L,HN1),
+            findall(C,expr_code(_,C),L1),
+            sort(L1,S),
+            count_lst(S,Hn1),
+            findall(E1,expr_var(E1,_),L2),
+            count_lst(L2,HN2),
+            findall(V,var_p(V),L3),
+            count_lst(L3,Hn2),
+            HN is HN1+HN2,
+            Hn is Hn1+Hn2,
+            Logterm is log10(Hn),
+            Logterm2 is Logterm*3.32,
+            V is HN*Logterm2,
+            aver(Hn2,HN2,Y),
+            X is Hn1/2,
+            D is X*Y,
+            Effort is D*V.
+
+% Static features for MILEPOST GCC / ICI
+% Developed by Mircea Namolaru during MILEPOST project (2006-2009)
+% namolaru@il.ibm.com
+%
+% Grigori Fursin fixed duplication of ft21 feature in February, 2010 (ft56)
+% (reported by Jeremy Singer)
+% http://fursin.net/research
+%
+% Jeremy Singer added software metrics features in November, 2009 (ft57-65)
+% jsinger@cs.man.ac.uk
+%
+% More info: http://cTuning.org/milepost-gcc
