@@ -5,7 +5,7 @@
 #SBATCH --ntasks-per-node 28
 #SBATCH --time 1:00:00
 #SBATCH --partition cpu_test
-#SBATCH --output test.out
+#SBATCH --output npb_sp.out
 #SBATCH --exclusive
 #SBATCH --mem 40000
   
