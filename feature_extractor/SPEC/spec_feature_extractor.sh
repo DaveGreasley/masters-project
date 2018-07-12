@@ -8,3 +8,5 @@ whereis $CK_F95
 cd bwaves
 $CK_F95 -O3 -c -fopenmp -fno-strict-aliasing -fno-range-check block_solver.fppized.f --ct-extract-features -lm
 
+cd ../botsalgn
+$CK_CC -O3 -c -DSPEC -DSPEC_OMP -DSPEC_OPENMP -DNDEBUG -fopenmp alignment.c --ct-extract-features -lm
