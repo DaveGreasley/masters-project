@@ -11,3 +11,4 @@ energy-monitor/energy-monitor
 energy-monitor/rapl-read
 energy-monitor/result
 __pycache__
+*.cmp
