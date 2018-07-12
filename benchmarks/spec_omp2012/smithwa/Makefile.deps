@@ -1,0 +1,16 @@
+
+# These are the build dependencies
+
+$(addsuffix $(OBJ), $(basename pairwiseAlign.c)): pairwiseAlign.c $(addsuffix $(OBJ),$(basename sequenceAlignment.h) )
+$(addsuffix $(OBJ), $(basename verifyData.c)): verifyData.c $(addsuffix $(OBJ),$(basename sequenceAlignment.h) )
+$(addsuffix $(OBJ), $(basename genSimMatrix.c)): genSimMatrix.c $(addsuffix $(OBJ),$(basename sequenceAlignment.h) )
+$(addsuffix $(OBJ), $(basename genScalData.c)): genScalData.c $(addsuffix $(OBJ),$(basename sequenceAlignment.h) )
+$(addsuffix $(OBJ), $(basename mergeAlignment.c)): mergeAlignment.c $(addsuffix $(OBJ),$(basename sequenceAlignment.h pairwiseAlign.c) )
+$(addsuffix $(OBJ), $(basename sequenceAlignment.c)): sequenceAlignment.c $(addsuffix $(OBJ),$(basename sequenceAlignment.h) )
+$(addsuffix $(OBJ), $(basename verifyMergeAlignment.c)): verifyMergeAlignment.c $(addsuffix $(OBJ),$(basename sequenceAlignment.h) )
+$(addsuffix $(OBJ), $(basename scanBackward.c)): scanBackward.c $(addsuffix $(OBJ),$(basename sequenceAlignment.h) )
+$(addsuffix $(OBJ), $(basename specrand.c)): specrand.c $(addsuffix $(OBJ),$(basename specrand.h) )
+$(addsuffix $(OBJ), $(basename getUserParameters.c)): getUserParameters.c $(addsuffix $(OBJ),$(basename sequenceAlignment.h) )
+$(addsuffix $(OBJ), $(basename dispElapsedTime.c)): dispElapsedTime.c $(addsuffix $(OBJ),$(basename sequenceAlignment.h) )
+$(addsuffix $(OBJ), $(basename verifyAlignment.c)): verifyAlignment.c $(addsuffix $(OBJ),$(basename sequenceAlignment.h) )
+# End dependencies
