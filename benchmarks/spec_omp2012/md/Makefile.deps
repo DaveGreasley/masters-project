@@ -1,0 +1,19 @@
+
+# These are the build dependencies
+
+$(addsuffix $(OBJ), $(basename s.f)): s.f $(addsuffix $(OBJ),$(basename md_comm_ser.f md_globals.f md_types.f) )
+$(addsuffix $(OBJ), $(basename int_control.f)): int_control.f $(addsuffix $(OBJ),$(basename md_comm_ser.f md_globals.f md_types.f) )
+$(addsuffix $(OBJ), $(basename dwallclock00.f)): dwallclock00.f $(addsuffix $(OBJ),$(basename md_comm_ser.f md_globals.f md_types.f) )
+$(addsuffix $(OBJ), $(basename randnums.f)): randnums.f $(addsuffix $(OBJ),$(basename md_comm_ser.f md_globals.f md_types.f) )
+$(addsuffix $(OBJ), $(basename g.f)): g.f $(addsuffix $(OBJ),$(basename md_comm_ser.f md_globals.f md_types.f) )
+$(addsuffix $(OBJ), $(basename md_globals.f)): md_globals.f $(addsuffix $(OBJ),$(basename md_types.f) )
+$(addsuffix $(OBJ), $(basename inital.f)): inital.f $(addsuffix $(OBJ),$(basename md_comm_ser.f md_globals.f md_types.f) )
+$(addsuffix $(OBJ), $(basename int_nn_direct.f)): int_nn_direct.f $(addsuffix $(OBJ),$(basename md_comm_ser.f md_globals.f md_types.f) )
+$(addsuffix $(OBJ), md.fppized): md.fppized.f $(addsuffix $(OBJ),$(basename md_comm_ser.f md_globals.f md_types.f) )
+$(addsuffix $(OBJ), $(basename md_comm_ser.f)): md_comm_ser.f $(addsuffix $(OBJ),$(basename md_types.f md_globals.f) )
+$(addsuffix $(OBJ), input1.fppized): input1.fppized.f $(addsuffix $(OBJ),$(basename md_comm_ser.f md_globals.f md_types.f) )
+$(addsuffix $(OBJ), $(basename int_ion_mix_direct.f)): int_ion_mix_direct.f $(addsuffix $(OBJ),$(basename md_comm_ser.f md_globals.f md_types.f) )
+$(addsuffix $(OBJ), $(basename md_types.f)): md_types.f $(addsuffix $(OBJ),$(basename ) )
+$(addsuffix $(OBJ), $(basename perf_stubs.f)): perf_stubs.f $(addsuffix $(OBJ),$(basename md_comm_ser.f md_globals.f md_types.f) )
+$(addsuffix $(OBJ), $(basename int_ion_pure_direct.f)): int_ion_pure_direct.f $(addsuffix $(OBJ),$(basename md_comm_ser.f md_globals.f md_types.f) )
+# End dependencies

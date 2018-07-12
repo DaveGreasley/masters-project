@@ -1,0 +1,39 @@
+&run_parameters
+  sim_type= 'ion-mixture', !type of simulation
+  tstart  =   1228000000.00, !start time (fm/c)
+  dt      =   100.0,     !time step (fm/c)
+!
+!   For warmup steps:
+  nwgroup =       0,     !number of warmup groups
+  nwsteps =       0,     !number of steps per warmup group
+!
+!   For measurement steps:
+  ngroup  =       2,     !number of groups
+  ntot    =       2,     !number of measurements per group
+  nind    =      10,     !number of steps between measurements
+  tnormalize =    0,     !number of steps between temperature normalizations
+  ncom    =       0,     !number of steps between C.O.M velocity corrections
+!
+!   The type of output
+  nckpt   =     200,     !frequency to checkpoint the run (number of timesteps)
+!
+!   System description (size, density, temperature, etc.)
+! ion_file= 'c824o176.ion.dat',
+  spec_file='follows',   !number of ions of each species. Charge and mass of each.
+  spec =
+   22784,  6.00,  12.00,
+    4864,  8.00,  16.00,
+  xmass   =  931.00,     !nucleon mass (MeV)
+  rho     =   7.913e-05, !ion number density (ions/fm^3)
+  t       =    0.01985,  !temperature kT (MeV)
+!
+!   Screened Coulomb interaction parameters.
+  coulomb = 'screened-coulomb',  !type of coulomb interaction
+  xlambda =   42.1769,   !coulomb screening length (fm)
+!
+  irnd    =   4,         !random number generator
+  iseed   =   11,        !seed
+!
+!   Specify type of starting configuration:
+  istart  =   4,         !read x and v from md.in
+/
