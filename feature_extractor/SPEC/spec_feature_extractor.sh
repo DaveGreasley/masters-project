@@ -6,11 +6,14 @@ whereis $CK_CXX
 
 #gfortran -c   -fopenmp -mcmodel=medium ua.f
 
-cd md
-/CK-TOOLS/gcc-milepost-4.4.4-linux-64/bin/gfortran -c -fopenmp -fno-strict-aliasing -fno-range-check -ffree-form md_types.f
-/CK-TOOLS/gcc-milepost-4.4.4-linux-64/bin/gfortran -c -fopenmp -fno-strict-aliasing -fno-range-check -ffree-form md_globals.f
-/CK-TOOLS/gcc-milepost-4.4.4-linux-64/bin/gfortran -c -fopenmp -fno-strict-aliasing -fno-range-check -ffree-form md_comm_ser.f
-$CK_F95 -O3 -c -fopenmp -fno-strict-aliasing -fno-range-check -ffree-form int_ion_mix_direct.f --ct-extract-features -lm
+cd nab
+$CK_CC -O3 -c -DSPEC -DSPEC_OMP -DSPEC_OPENMP -DNDEBUG -DNOREDUCE -DNOPERFLIB -fopenmp sff.c --ct-extract-features -lm
+
+#cd md
+#/CK-TOOLS/gcc-milepost-4.4.4-linux-64/bin/gfortran -c -fopenmp -fno-strict-aliasing -fno-range-check -ffree-form md_types.f
+#/CK-TOOLS/gcc-milepost-4.4.4-linux-64/bin/gfortran -c -fopenmp -fno-strict-aliasing -fno-range-check -ffree-form md_globals.f
+#/CK-TOOLS/gcc-milepost-4.4.4-linux-64/bin/gfortran -c -fopenmp -fno-strict-aliasing -fno-range-check -ffree-form md_comm_ser.f
+#$CK_F95 -O3 -c -fopenmp -fno-strict-aliasing -fno-range-check -ffree-form int_ion_mix_direct.f --ct-extract-features -lm
 
 #cd bwaves
 #$CK_F95 -O3 -c -fopenmp -fno-strict-aliasing -fno-range-check block_solver.fppized.f --ct-extract-features -lm
