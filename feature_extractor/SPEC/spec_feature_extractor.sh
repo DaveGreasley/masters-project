@@ -6,8 +6,11 @@ whereis $CK_CXX
 
 #gfortran -c   -fopenmp -mcmodel=medium ua.f
 
-cd nab
-$CK_CC -O3 -c -DSPEC -DSPEC_OMP -DSPEC_OPENMP -DNDEBUG -DNOREDUCE -DNOPERFLIB -fopenmp sff.c --ct-extract-features -lm
+cd smithwa
+$CK_CC -O3 -c -DSPEC -DSPEC_OMP -DSPEC_OPENMP -DNDEBUG -fopenmp pairwiseAlign.c --ct-extract-features -lm
+
+#cd nab
+#$CK_CC -O3 -c -DSPEC -DSPEC_OMP -DSPEC_OPENMP -DNDEBUG -DNOREDUCE -DNOPERFLIB -fopenmp sff.c --ct-extract-features -lm
 
 #cd md
 #/CK-TOOLS/gcc-milepost-4.4.4-linux-64/bin/gfortran -c -fopenmp -fno-strict-aliasing -fno-range-check -ffree-form md_types.f
