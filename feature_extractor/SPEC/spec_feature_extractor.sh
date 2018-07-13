@@ -2,21 +2,25 @@ ck set env tags=compiler,ctuning-cc bat_file=tmp-ck-env.sh --bat_new --print && 
 
 whereis $CK_CC
 whereis $CK_F95
+whereis $CK_CXX
 
 #gfortran -c   -fopenmp -mcmodel=medium ua.f
 
-cd bwaves
-$CK_F95 -O3 -c -fopenmp -fno-strict-aliasing -fno-range-check block_solver.fppized.f --ct-extract-features -lm
-
-cd ../botsalgn
-$CK_CC -O3 -c -DSPEC -DSPEC_OMP -DSPEC_OPENMP -DNDEBUG -fopenmp alignment.c --ct-extract-features -lm
-
-cd ../botsspar
-$CK_CC -O3 -c -DSPEC -DSPEC_OMP -DSPEC_OPENMP -DNDEBUG -fopenmp sparselu.c --ct-extract-features -lm
-
-cd ../ilbdc
-/CK-TOOLS/gcc-milepost-4.4.4-linux-64/bin/gfortran -c  -fopenmp -fno-strict-aliasing -fno-range-check mod_constants.fppized.f90
-$CK_F95 -O3 -c -fopenmp -fno-strict-aliasing -fno-range-check mod_relax.fppized.f90 --ct-extract-features -lm
+#cd bwaves
+#$CK_F95 -O3 -c -fopenmp -fno-strict-aliasing -fno-range-check block_solver.fppized.f --ct-extract-features -lm
+#
+#cd kdtree
+#$CK_CXX -c -o kdtree.o -DSPEC -DSPEC_OMP -DSPEC_OPENMP -DNDEBUG -fopenmp kdtree.cc --ct-extract-features -lm
+#
+#cd ../botsalgn
+#$CK_CC -O3 -c -DSPEC -DSPEC_OMP -DSPEC_OPENMP -DNDEBUG -fopenmp alignment.c --ct-extract-features -lm
+#
+#cd ../botsspar
+#$CK_CC -O3 -c -DSPEC -DSPEC_OMP -DSPEC_OPENMP -DNDEBUG -fopenmp sparselu.c --ct-extract-features -lm
+#
+#cd ../ilbdc
+#/CK-TOOLS/gcc-milepost-4.4.4-linux-64/bin/gfortran -c  -fopenmp -fno-strict-aliasing -fno-range-check mod_constants.fppized.f90
+#$CK_F95 -O3 -c -fopenmp -fno-strict-aliasing -fno-range-check mod_relax.fppized.f90 --ct-extract-features -lm
 
 #cd ../../../benchmarks/spec_omp2012/fma3d/
 #/CK-TOOLS/gcc-milepost-4.4.4-linux-64/bin/gfortran -c -o fma3d.o -fopenmp -fno-strict-aliasing -fno-range-check fma3d.f90
