@@ -6,8 +6,11 @@ whereis $CK_CXX
 
 #gfortran -c   -fopenmp -mcmodel=medium ua.f
 
-cd smithwa
-$CK_CC -O3 -c -DSPEC -DSPEC_OMP -DSPEC_OPENMP -DNDEBUG -fopenmp pairwiseAlign.c --ct-extract-features -lm
+cd swim
+$CK_F95 -O3 -c -o swim.o -O3 -fopenmp -fno-strict-aliasing -fno-range-check swim.f --ct-extract-features -lm
+
+#cd smithwa
+#$CK_CC -O3 -c -DSPEC -DSPEC_OMP -DSPEC_OPENMP -DNDEBUG -fopenmp pairwiseAlign.c --ct-extract-features -lm
 
 #cd nab
 #$CK_CC -O3 -c -DSPEC -DSPEC_OMP -DSPEC_OPENMP -DNDEBUG -DNOREDUCE -DNOPERFLIB -fopenmp sff.c --ct-extract-features -lm
