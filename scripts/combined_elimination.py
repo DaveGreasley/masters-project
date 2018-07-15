@@ -1,24 +1,22 @@
 #!/usr/bin/env python3
 
-import argparse
 import time
 import os
 import subprocess
-import sys
 
 from model import NPB
+from model import SPEC
 
-debug = False
+debug = True
 
-#base_dir = "/home/dave/Documents/project"
+base_dir = "/home/dave/Documents/project"
 #base_dir = "/mnt/storage/home/dg17763/masters-project"
-base_dir = "/home/dave/masters-project/"
+#base_dir = "/home/dave/masters-project/"
 results_dir = base_dir + "/results"
 npb_dir = base_dir + "/benchmarks/NPB3.3-OMP"
+spec_dir = base_dir + "/benchmarks/spec_omp2012"
 energy_monitor_dir = base_dir + "/energy-monitor"
 
-build_dirs = {"npb": npb_dir}
-bin_dirs = {"npb": npb_dir + "/bin"}
 
 energy_monitor = energy_monitor_dir + "/energy-monitor"
 results_filename = base_dir + "/results/CE." + time.strftime("%Y%m%d-%H%M%S") + ".csv"
@@ -27,17 +25,27 @@ results_filename = base_dir + "/results/CE." + time.strftime("%Y%m%d-%H%M%S") + 
 num_samples = 3
 
 benchmarks = [
-    NPB('BT', 'C'),
-    # NPB('BT', 'C', version='VEC'),
-    NPB('CG', 'C'),
-    NPB('EP', 'D'),
-    NPB('FT', 'C'),
-    NPB('IS', 'D'),
-    NPB('LU', 'C'),
-    #NPB('LU', 'C', version='VEC'),
-    NPB('MG', 'C'),
-    NPB('SP', 'C'),
-    NPB('UA', 'C')
+    #NPB('BT', 'C', npb_dir),
+    # NPB('BT', 'C', npb_dir, version='VEC'),
+    # NPB('CG', 'C', npb_dir),
+    # NPB('EP', 'D', npb_dir),
+    # NPB('FT', 'C', npb_dir),
+    # NPB('IS', 'D', npb_dir),
+    # NPB('LU', 'C', npb_dir),
+    # #NPB('LU', 'C', npb_dir, version='VEC'),
+    # NPB('MG', 'C', npb_dir),
+    # NPB('SP', 'C', npb_dir),
+    # NPB('UA', 'C', npb_dir),
+    SPEC('botsalgn', spec_dir),
+    # SPEC('botsspar', spec_dir),
+    # SPEC('bwaves', spec_dir),
+    # SPEC('fma3d', spec_dir),
+    # SPEC('ilbdc', spec_dir),
+    # SPEC('kdtree', spec_dir),
+    # SPEC('md', spec_dir),
+    # SPEC('nab', spec_dir),
+    # SPEC('smithwa', spec_dir),
+    # SPEC('swim', spec_dir)
 ]
 
 all_flags = [
@@ -257,27 +265,20 @@ def build_config(all_flags, enabled_flags, base_flag=''):
 def get_cmd_string_from_config(config):
     return ' '.join(config)
 
-#
-# energy_temp = 1000
-# time_temp = 1000
-
 
 def build_and_measure(benchmark, config, target_var, results_file, type):
-    # global energy_temp
-    # global time_temp
+    global energy_temp
+    global time_temp
 
     config_str = get_cmd_string_from_config(config)
 
     os.environ['COMPILE_FLAGS'] = config_str
 
-    build_dir = build_dirs[benchmark.suite]
-    bin_dir = bin_dirs[benchmark.suite]
-
-    build_result = subprocess.call(benchmark.build_command(build_dir))
+    build_result = subprocess.call(benchmark.build_command())
     if build_result != 0:
         return -1
 
-    energy_monitor_command = [energy_monitor, bin_dir + "/" + benchmark.binary_name()]
+    energy_monitor_command = [energy_monitor].extend(benchmark.run_command())
 
     total_energy = 0
     total_time = 0
@@ -288,12 +289,6 @@ def build_and_measure(benchmark, config, target_var, results_file, type):
         result = p.stdout.read().decode("utf-8")
         energy = int(result.split(",")[0])
         time = float(result.split(",")[1])
-
-        # energy_temp -= 1
-        # energy = energy_temp
-        #
-        # time_temp -= 1
-        # time = time_temp
 
         success = benchmark.run_successful()
 
