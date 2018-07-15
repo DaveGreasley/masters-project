@@ -1,0 +1,7 @@
+# Format is:
+# exename outputfile errfile time? arg [arg...]
+#
+convert convert1.out convert1.err 1 -shear 31 -resize 1280x960 -negate -edge 14 -implode 1.2 -flop -convolve 1,2,1,4,3,4,1,2,1 -edge 100 input1.tga output1.tga
+#
+ImageValidator val1.out val1.err 0 expected1.tga output1.tga 
+#
