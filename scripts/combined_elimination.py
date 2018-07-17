@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import sys
 import time
 import os
 import subprocess
@@ -24,28 +25,28 @@ results_filename = base_dir + "/results/CE." + time.strftime("%Y%m%d-%H%M%S") + 
 # This is the number of times the benchmark programs will be run
 num_samples = 3
 
-benchmarks = [
-    #NPB('BT', 'C', npb_dir),
-    # NPB('BT', 'C', npb_dir, version='VEC'),
-    # NPB('CG', 'C', npb_dir),
-    #NPB('EP', 'D', npb_dir),
-    # NPB('FT', 'C', npb_dir),
+available_benchmarks = [
+    NPB('BT', 'C', npb_dir),
+    #NPB('BT', 'C', npb_dir, version='VEC'),
+    NPB('CG', 'C', npb_dir),
+    NPB('EP', 'D', npb_dir),
+    NPB('FT', 'C', npb_dir),
     NPB('IS', 'D', npb_dir),
     NPB('LU', 'C', npb_dir),
-    # #NPB('LU', 'C', npb_dir, version='VEC'),
-    # NPB('MG', 'C', npb_dir),
-    # NPB('SP', 'C', npb_dir),
+    #NPB('LU', 'C', npb_dir, version='VEC'),
+    NPB('MG', 'C', npb_dir),
+    NPB('SP', 'C', npb_dir),
     NPB('UA', 'C', npb_dir),
-    # SPEC('botsalgn', spec_dir),
-    # SPEC('botsspar', spec_dir),
-    # SPEC('bwaves', spec_dir),
-    # SPEC('fma3d', spec_dir),
-    # SPEC('ilbdc', spec_dir),
-    # SPEC('kdtree', spec_dir),
-    # SPEC('md', spec_dir),
-    # SPEC('nab', spec_dir),
-    # SPEC('smithwa', spec_dir),
-    # SPEC('swim', spec_dir)
+    SPEC('botsalgn', spec_dir),
+    SPEC('botsspar', spec_dir),
+    SPEC('bwaves', spec_dir),
+    SPEC('fma3d', spec_dir),
+    SPEC('ilbdc', spec_dir),
+    SPEC('kdtree', spec_dir),
+    SPEC('md', spec_dir),
+    SPEC('nab', spec_dir),
+    SPEC('smithwa', spec_dir),
+    SPEC('swim', spec_dir)
 ]
 
 all_flags = [
@@ -315,7 +316,7 @@ def build_and_measure(benchmark, config, target_var, results_file, type):
         return total_time / num_successes
 
 
-def combined_elimination(target_var, base_flag='-O3'):
+def combined_elimination(target_var, benchmarks, base_flag='-O3'):
 
     with open(results_filename, mode='a', buffering=1) as results_file:
         results_file.write("Benchmark,Flags,Energy,Time,Success,Type\n")
@@ -401,7 +402,20 @@ def combined_elimination(target_var, base_flag='-O3'):
 
 
 def main():
-    result = combined_elimination('energy')
+    if len(sys.argv) == 1:
+        print("You must list the benchmarks to use. For all say all")
+        exit(1)
+
+    benchmarks = available_benchmarks
+
+    enabled_benchmarks = sys.argv[1].lower()
+    if enabled_benchmarks != 'all':
+        enabled_benchmarks = enabled_benchmarks.split(',')
+
+        benchmarks = [b for b in available_benchmarks if b.name.lower() in enabled_benchmarks]
+
+    print("Starting Combined Elimination for " + str(len(benchmarks)) + " benchmakrs")
+    result = combined_elimination('energy', benchmarks)
 
     if result:
         return 0
