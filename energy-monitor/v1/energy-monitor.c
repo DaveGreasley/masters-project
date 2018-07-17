@@ -27,6 +27,10 @@ const long long dram_energy_max_value = 65712999613;
 // The energy consumed by the launched program
 long long energy_uj = 0;
 
+// The number of times the pkg and dram counters over flow
+int num_pkg_overflows = 0;
+int num_dram_overflows = 0;
+
 char command[100];
 
 int total_packages=0;
@@ -96,6 +100,7 @@ void* measure_energy(void *param)
 		        if (pkg_current_value[i] < pkg_previous_value[i])
 		        {
 			        // Here we handle the overflow of the sysfs energy_uj measurement 
+                    num_pkg_overflows++;
 			        energy_uj += (pkg_energy_max_value - pkg_previous_value[i]) + pkg_current_value[i];
 		        }
 		        else 
@@ -126,6 +131,7 @@ void* measure_energy(void *param)
                     if (dram_current_value[i] < dram_previous_value[i])
                     {
                         // Here we handle the overflow of the sysfs energy_uj measurement 
+                        num_dram_overflows++;
                         energy_uj += (dram_energy_max_value - dram_previous_value[i]) + dram_current_value[i];
                     }
                     else 
@@ -217,7 +223,7 @@ int main(int argc, char *argv[])
 
     pthread_join(measure_thread, NULL);
 
-    printf("%lld,%f\n", energy_uj, execution_time);
+    printf("%lld,%f,%d,%d\n", energy_uj, execution_time,num_pkg_overflows, num_dram_overflows);
 
     return 0;
 }
