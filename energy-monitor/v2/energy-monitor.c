@@ -85,6 +85,24 @@ long long get_energy(enum Measurement measurement)
     return value_total;
 }
 
+long long check_overflow(enum Measurement measurement, long long start, long long end)
+{
+    if (start < end)
+        return end - start;
+
+    long long max_value;
+    if (measurement == PKG)
+    {
+        max_value = pkg_energy_max_value;
+    }
+    else
+    {
+        max_value = dram_energy_max_value;
+    }
+
+    return max_value - start + end;
+}
+
 void run_and_measure()
 {
     double start_time = get_timestamp();
@@ -98,8 +116,10 @@ void run_and_measure()
     long long end_energy_dram = get_energy(DRAM);
 
     runtime =  end_time - start_time;
-    energy_uj += end_energy_pkg - start_energy_pkg;
-    energy_uj += end_energy_dram - start_energy_dram;
+    
+    
+    energy_uj += check_overflow(PKG, start_energy_pkg, end_energy_pkg);
+    energy_uj += check_overflow(DRAM, start_energy_dram, end_energy_dram);
 }
 
 void get_command(int argc, char *argv[])

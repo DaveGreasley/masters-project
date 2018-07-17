@@ -8,7 +8,7 @@ npbparams.h
 .idea
 setparams
 benchmarks/NPB3.3-OMP/bin
-energy-monitor/energy-monitor.v*
+energy-monitor/energy-monitor.*
 energy-monitor/rapl-read
 energy-monitor/result
 __pycache__
