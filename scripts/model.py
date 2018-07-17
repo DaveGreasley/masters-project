@@ -40,7 +40,7 @@ class NPB(Benchmark):
     @staticmethod
     def run_successful():
         success = True
-        with open("result", mode="r") as benchmark_output_file:
+        with open("energy-monitor.out", mode="r") as benchmark_output_file:
             benchmark_output = benchmark_output_file.read()
             benchmark_output = "".join(benchmark_output.split())
 

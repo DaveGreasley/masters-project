@@ -162,7 +162,7 @@ void get_command(int argc, char *argv[])
         strcat(command, " ");
     }
 
-    strcat(command, "> result");
+    strcat(command, "> energy-monitor.out");
 }
 
 #define MAX_CPUS	1024
