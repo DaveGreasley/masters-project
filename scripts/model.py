@@ -22,10 +22,12 @@ class NPB(Benchmark):
         self.size = size
 
     def display_name(self):
-        if self.version == '':
-            return self.name
-        else:
-            return self.name + '_' + self.version
+        disp_name = self.name + '.' + self.size
+
+        if self.version != '':
+            disp_name += '_' + self.version
+
+        return disp_name
 
     def build_command(self):
         command = ['make', self.name, 'CLASS=' + self.size, 'VERSION=' + self.version, '-C', self.root_dir]
@@ -53,9 +55,6 @@ class SPEC(Benchmark):
 
     def __init__(self, name, root_dir):
         Benchmark.__init__(self, 'spec', name, root_dir)
-
-    def display_name(self):
-        return self.name
 
     def build_command(self):
         return ['make', '-C', self.root_dir + "/" + self.name]
