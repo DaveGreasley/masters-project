@@ -6,8 +6,14 @@ whereis $CK_CXX
 
 #gfortran -c   -fopenmp -mcmodel=medium ua.f
 
-cd swim
-$CK_F95 -O3 -c -o swim.o -O3 -fopenmp -fno-strict-aliasing -fno-range-check swim.f --ct-extract-features -lm
+cd imagick
+$CK_CC -O3 -c -DSPEC -DSPEC_OMP -DSPEC_OPENMP -DNDEBUG -I. -fopenmp  magick_effect.c --ct-extract-features -lm
+
+#cd kdtree
+#$CK_CXX -O3 -c -o kdtree.o -DSPEC -DSPEC_OMP -DSPEC_OPENMP -DNDEBUG    -fopenmp kdtree.cc --ct-extract-features -lm
+
+#cd swim
+#$CK_F95 -O3 -c -o swim.o -O3 -fopenmp -fno-strict-aliasing -fno-range-check swim.f --ct-extract-features -lm
 
 #cd smithwa
 #$CK_CC -O3 -c -DSPEC -DSPEC_OMP -DSPEC_OPENMP -DNDEBUG -fopenmp pairwiseAlign.c --ct-extract-features -lm
@@ -139,3 +145,6 @@ $CK_F95 -O3 -c -o swim.o -O3 -fopenmp -fno-strict-aliasing -fno-range-check swim
 #
 #cd ../../../feature_extractor/SPEC/fma3d/
 #$CK_F95 -c -o fma2.o -I/home/masters-project/benchmarks/spec_omp2012/fma3d -O3 -fopenmp -fno-strict-aliasing -fno-range-check --ct-extract-features ../../../benchmarks/spec_omp2012/fma3d/fma2.f90
+
+
+
