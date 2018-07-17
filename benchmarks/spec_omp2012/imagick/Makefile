@@ -1,3 +1,10 @@
+TARGET = convert
+
+# Include standard template for this suite
+-include $(SPEC)/benchspec/Makefile.defaults
+
+TARGET = ImageValidator
+
 # Include standard template for this suite
 -include $(SPEC)/benchspec/Makefile.defaults
 
