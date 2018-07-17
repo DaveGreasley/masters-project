@@ -7,10 +7,10 @@ import subprocess
 from model import NPB
 from model import SPEC
 
-debug = True
+debug = False
 
-base_dir = "/home/dave/Documents/project"
-#base_dir = "/mnt/storage/home/dg17763/masters-project"
+#base_dir = "/home/dave/Documents/project"
+base_dir = "/mnt/storage/home/dg17763/masters-project"
 #base_dir = "/home/dave/masters-project/"
 results_dir = base_dir + "/results"
 npb_dir = base_dir + "/benchmarks/NPB3.3-OMP"
@@ -28,15 +28,15 @@ benchmarks = [
     #NPB('BT', 'C', npb_dir),
     # NPB('BT', 'C', npb_dir, version='VEC'),
     # NPB('CG', 'C', npb_dir),
-    # NPB('EP', 'D', npb_dir),
+    #NPB('EP', 'D', npb_dir),
     # NPB('FT', 'C', npb_dir),
-    # NPB('IS', 'D', npb_dir),
-    # NPB('LU', 'C', npb_dir),
+    NPB('IS', 'D', npb_dir),
+    NPB('LU', 'C', npb_dir),
     # #NPB('LU', 'C', npb_dir, version='VEC'),
     # NPB('MG', 'C', npb_dir),
     # NPB('SP', 'C', npb_dir),
-    # NPB('UA', 'C', npb_dir),
-    SPEC('botsalgn', spec_dir),
+    NPB('UA', 'C', npb_dir),
+    # SPEC('botsalgn', spec_dir),
     # SPEC('botsspar', spec_dir),
     # SPEC('bwaves', spec_dir),
     # SPEC('fma3d', spec_dir),
@@ -267,9 +267,6 @@ def get_cmd_string_from_config(config):
 
 
 def build_and_measure(benchmark, config, target_var, results_file, type):
-    global energy_temp
-    global time_temp
-
     config_str = get_cmd_string_from_config(config)
 
     os.environ['COMPILE_FLAGS'] = config_str
@@ -278,7 +275,8 @@ def build_and_measure(benchmark, config, target_var, results_file, type):
     if build_result != 0:
         return -1
 
-    energy_monitor_command = [energy_monitor].extend(benchmark.run_command())
+    energy_monitor_command = [energy_monitor]
+    energy_monitor_command.extend(benchmark.run_command())
 
     total_energy = 0
     total_time = 0
@@ -297,7 +295,7 @@ def build_and_measure(benchmark, config, target_var, results_file, type):
             total_time += time
             num_successes += 1
 
-        output = benchmark.binary_name() + ","
+        output = benchmark.display_name() + ","
         output += config_str + ","
         output += str(energy) + ","
         output += str(time) + ","
