@@ -105,6 +105,7 @@ long long get_energy(enum Measurement measurement)
         if (fff==NULL)
         {
             printf("Error: Cannot access RAPL counters (%d)\n", measurement);
+            exit(1);
         }
         else
         {
@@ -136,18 +137,25 @@ long long check_overflow(enum Measurement measurement, long long start, long lon
     return max_value - start + end;
 }
 
-void run_and_measure(struct arguments arguments)
+char* get_command(struct arguments arguments)
 {
-    char command[100] = "";
+    int command_len = strlen(arguments.command) + strlen(arguments.out_file) + 3;
+    char command[command_len];
+
     strcat(command, arguments.command);
     strcat(command, "> ");
     strcat(command, arguments.out_file);
 
+    return command;
+}
+
+void run_and_measure(struct arguments arguments)
+{
     double start_time = get_timestamp();
     long long start_energy_pkg = get_energy(PKG);
     long long start_energy_dram = get_energy(DRAM);
     
-    system(arguments.command);
+    system(get_command(arguments));
     
     double end_time = get_timestamp();
     long long end_energy_pkg = get_energy(PKG);
