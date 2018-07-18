@@ -30,7 +30,8 @@ class NPB(Benchmark):
         return disp_name
 
     def build_command(self):
-        command = ['make', self.name, 'CLASS=' + self.size, 'VERSION=' + self.version, '-C', self.root_dir]
+        command = f"make {self.name} CLASS={self.size}, VERSION={self.version} -C {self.root_dir}"
+        #command = ['make', self.name, 'CLASS=' + self.size, 'VERSION=' + self.version, '-C', self.root_dir]
 
         return command
 
@@ -57,7 +58,8 @@ class SPEC(Benchmark):
         Benchmark.__init__(self, 'spec', name, root_dir)
 
     def build_command(self):
-        return ['make', '-C', self.root_dir + "/" + self.name]
+        return f"make -C {self.root_dir}/{self.name}"
+        #return ['make', '-C', self.root_dir + "/" + self.name]
 
     def run_command(self):
         return self.root_dir + "/" + self.name + "/run.sh"
