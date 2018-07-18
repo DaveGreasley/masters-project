@@ -3,11 +3,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <pthread.h>
 #include <stdbool.h>
 #include <unistd.h>
 #include <sys/sysinfo.h>
 #include <sched.h>
+#include <argp.h>
+
+// Holds command line arguments
+struct arguments
+{
+    char *command, *out_file;
+};
 
 // Should we perform DRAM measurements
 bool dram_domain_available;
@@ -34,11 +40,38 @@ int num_dram_overflows = 0;
 // The measurements this script supports
 enum Measurement { PKG = 0, DRAM = 1 };
 
-// The run benchmark command
-char command[100];
-
 // The number of packages (sockets) available on the current machine
 int total_packages=0;
+
+static struct argp_option options[] =
+{
+    {"command", 'c', "\"./your-command\"", 0, "The command to run and measure"},
+    {"output", 'o', "energy-monitor.out", 0, "The name of the file to redirect command output to"},
+    {0}
+};
+
+static error_t
+parse_opt (int key, char *arg, struct argp_state *state)
+{
+    struct arguments *arguments = state->input;
+    
+    switch (key)
+    {
+        case 'c':
+            arguments->command = arg;
+            break;
+        case 'o':
+            arguments->out_file = arg;
+            break;
+        default:
+            return ARGP_ERR_UNKNOWN;
+    }
+    
+    return 0;
+}
+
+// ARGP struct
+static struct argp argp = {options, parse_opt, 0, 0};
 
 double get_timestamp()
 {
@@ -103,13 +136,21 @@ long long check_overflow(enum Measurement measurement, long long start, long lon
     return max_value - start + end;
 }
 
-void run_and_measure()
+void run_and_measure(struct arguments arguments)
 {
+    printf("test");
+    char *command = "";
+    strcat(command, arguments.command);
+    strcat(command, "> ");
+    strcat(command, arguments.out_file);
+
+    printf("test2");
+
     double start_time = get_timestamp();
     long long start_energy_pkg = get_energy(PKG);
     long long start_energy_dram = get_energy(DRAM);
     
-    int status = system(command);
+    system(arguments.command);
     
     double end_time = get_timestamp();
     long long end_energy_pkg = get_energy(PKG);
@@ -120,19 +161,6 @@ void run_and_measure()
     
     energy_uj += check_overflow(PKG, start_energy_pkg, end_energy_pkg);
     energy_uj += check_overflow(DRAM, start_energy_dram, end_energy_dram);
-}
-
-void get_command(int argc, char *argv[])
-{
-    int i;
-
-    for (i = 1; i < argc; i = i +1)
-    {
-        strcat(command, argv[i]);
-        strcat(command, " ");
-    }
-
-    strcat(command, "> energy-monitor.out");
 }
 
 #define MAX_CPUS	1024
@@ -175,17 +203,29 @@ void detect_dram_domain()
 
 int main(int argc, char *argv[])
 {
-    if (argc <= 1)
+    printf("main-1");
+    struct arguments arguments;
+
+    arguments.command = "";
+    arguments.out_file = "";
+
+    printf("main0");
+
+    // Parse command line arguments
+    argp_parse (&argp, argc, argv, 0, 0, &arguments);
+
+    if (strlen(arguments.command) == 0)
     {
-        printf("You must provide an executable to monitor\n");
-        exit(1);
+        printf("You must specifiy a command with -c=\"./your-command\"\n");
+        return 1;
     }
+
+    printf("main1");
 
     detect_packages();
     detect_dram_domain();
-    get_command(argc, argv);
 
-    run_and_measure();
+    run_and_measure(arguments);
 
     printf("%lld,%f\n", energy_uj, runtime);
 
