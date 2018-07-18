@@ -276,8 +276,7 @@ def build_and_measure(benchmark, config, target_var, results_file, type):
     if build_result != 0:
         return -1
 
-    energy_monitor_command = [energy_monitor]
-    energy_monitor_command.extend(benchmark.run_command())
+    energy_monitor_command = [energy_monitor, "--command", f"\"{benchmark.run_command()}\""]
 
     total_energy = 0
     total_time = 0
@@ -414,7 +413,7 @@ def main():
 
         benchmarks = [b for b in available_benchmarks if b.name.lower() in enabled_benchmarks]
 
-    print("Starting Combined Elimination for " + str(len(benchmarks)) + " benchmakrs")
+    print("Starting Combined Elimination for " + str(len(benchmarks)) + " benchmakrs\n",flush=True)
     result = combined_elimination('energy', benchmarks)
 
     if result:
