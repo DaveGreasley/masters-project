@@ -3,9 +3,9 @@
 #SBATCH --job-name emon-test
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node 28
-#SBATCH --time 00:11:00
-#SBATCH --partition cpu_test
-#SBATCH --output emon-test.out
+#SBATCH --time 01:00:00
+#SBATCH --partition veryshort
+#SBATCH --output emon-test-2.out
 #SBATCH --exclusive
 #SBATCH --mem 40000
 
@@ -20,4 +20,4 @@ echo Slurm job ID is $SLURM_JOB_ID
 echo This job runs on the following machines:
 echo `echo $SLURM_JOB_NODELIST | uniq`
 
-../energy-monitor/energy-monitor.v2 sleep 600
+../energy-monitor/energy-monitor.v1 ~/masters-project/benchmarks/NPB3.3-OMP/bin/ep.D.x 

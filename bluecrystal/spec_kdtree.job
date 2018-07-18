@@ -20,10 +20,6 @@ echo Slurm job ID is $SLURM_JOB_ID
 echo This job runs on the following machines:
 echo `echo $SLURM_JOB_NODELIST | uniq`
 
-echo $SLURM_JOB_NODELIST > machine.file.$SLURM_JOBID
-numnodes=`wc machine.file.$SLURM_JOBID | awk '{ print $1 }'`
-echo $numnodes
-
 
 cd ~/masters-project/benchmarks/spec_omp2012/kdtree
 time ./run.sh

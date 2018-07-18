@@ -1,11 +1,11 @@
 #!/bin/bash
 
-#SBATCH --job-name ce
+#SBATCH --job-name ce2
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node 28
 #SBATCH --time 5-00:00:00
 #SBATCH --partition cpu
-#SBATCH --output ce.out
+#SBATCH --output ce2.out
 #SBATCH --exclusive
 #SBATCH --mem 40000
 
@@ -20,4 +20,4 @@ echo Slurm job ID is $SLURM_JOB_ID
 echo This job runs on the following machines:
 echo `echo $SLURM_JOB_NODELIST | uniq`
 
-python ../scripts/combined_elimination.py BT,CG 
+python ../scripts/combined_elimination.py EP,FT 
