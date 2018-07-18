@@ -139,30 +139,35 @@ long long check_overflow(enum Measurement measurement, long long start, long lon
 
 char* get_command(struct arguments arguments)
 {
-    int command_len = strlen(arguments.command) + strlen(arguments.out_file) + 3;
-    char command[command_len];
+    int command_len = strlen(arguments.command) + strlen(arguments.out_file) + 4;
+    char* command = (char*) calloc(command_len, sizeof(char));
 
     strcat(command, arguments.command);
-    strcat(command, "> ");
+    strcat(command, " > ");
     strcat(command, arguments.out_file);
+    strcat(command, "\0");
 
     return command;
 }
 
 void run_and_measure(struct arguments arguments)
 {
+    char* command = get_command(arguments);
+
+    // printf("Command: %s\n", command);
+    // exit(1);
+
     double start_time = get_timestamp();
     long long start_energy_pkg = get_energy(PKG);
     long long start_energy_dram = get_energy(DRAM);
-    
-    system(get_command(arguments));
+  
+    system(command);
     
     double end_time = get_timestamp();
     long long end_energy_pkg = get_energy(PKG);
     long long end_energy_dram = get_energy(DRAM);
 
     runtime =  end_time - start_time;
-    
     
     energy_uj += check_overflow(PKG, start_energy_pkg, end_energy_pkg);
     energy_uj += check_overflow(DRAM, start_energy_dram, end_energy_dram);
@@ -211,15 +216,15 @@ int main(int argc, char *argv[])
     struct arguments arguments;
 
     arguments.command = "";
-    arguments.out_file = "";
+    arguments.out_file = "energy-monitor.out";
 
     // Parse command line arguments
     argp_parse (&argp, argc, argv, 0, 0, &arguments);
 
     if (strlen(arguments.command) == 0)
     {
-        printf("You must specifiy a command with -c=\"./your-command\"\n");
-        return 1;
+        printf("You must specify a command to run\n");
+        return(1);
     }
 
     detect_packages();
