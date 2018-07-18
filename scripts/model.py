@@ -30,13 +30,13 @@ class NPB(Benchmark):
         return disp_name
 
     def build_command(self):
-        command = f"make {self.name} CLASS={self.size}, VERSION={self.version} -C {self.root_dir}"
-        #command = ['make', self.name, 'CLASS=' + self.size, 'VERSION=' + self.version, '-C', self.root_dir]
+        command = ['make', self.name, 'CLASS=' + self.size, 'VERSION=' + self.version, '-C', self.root_dir]
 
         return command
 
     def run_command(self):
-        return [self.root_dir + "/bin/" + self.name.lower() + "." + self.size + ".x"]
+        return f"{self.root_dir}/bin/{self.name.lower()}.{self.size}.x"
+        #return [self.root_dir + "/bin/" + self.name.lower() + "." + self.size + ".x"]
 
     @staticmethod
     def run_successful():
@@ -58,11 +58,11 @@ class SPEC(Benchmark):
         Benchmark.__init__(self, 'spec', name, root_dir)
 
     def build_command(self):
-        return f"make -C {self.root_dir}/{self.name}"
-        #return ['make', '-C', self.root_dir + "/" + self.name]
+        return ['make', '-C', self.root_dir + "/" + self.name]
 
     def run_command(self):
-        return self.root_dir + "/" + self.name + "/run.sh"
+        return f"{self.root_dir}/{self.name}/run.sh"
+        #return self.root_dir + "/" + self.name + "/run.sh"
 
     def run_successful(self):
         validate_command = [self.root_dir + "/" + self.name + "/validate.sh"]
