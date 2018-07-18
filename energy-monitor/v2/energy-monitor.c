@@ -138,13 +138,10 @@ long long check_overflow(enum Measurement measurement, long long start, long lon
 
 void run_and_measure(struct arguments arguments)
 {
-    printf("test");
-    char *command = "";
+    char command[100] = "";
     strcat(command, arguments.command);
     strcat(command, "> ");
     strcat(command, arguments.out_file);
-
-    printf("test2");
 
     double start_time = get_timestamp();
     long long start_energy_pkg = get_energy(PKG);
@@ -203,13 +200,10 @@ void detect_dram_domain()
 
 int main(int argc, char *argv[])
 {
-    printf("main-1");
     struct arguments arguments;
 
     arguments.command = "";
     arguments.out_file = "";
-
-    printf("main0");
 
     // Parse command line arguments
     argp_parse (&argp, argc, argv, 0, 0, &arguments);
@@ -219,8 +213,6 @@ int main(int argc, char *argv[])
         printf("You must specifiy a command with -c=\"./your-command\"\n");
         return 1;
     }
-
-    printf("main1");
 
     detect_packages();
     detect_dram_domain();
