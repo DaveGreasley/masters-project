@@ -10,7 +10,7 @@
 !   For measurement steps:
   ngroup  =       2,     !number of groups
   ntot    =       2,     !number of measurements per group
-  nind    =      10,     !number of steps between measurements
+  nind    =     150,     !number of steps between measurements
   tnormalize =    0,     !number of steps between temperature normalizations
   ncom    =       0,     !number of steps between C.O.M velocity corrections
 !
