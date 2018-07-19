@@ -1,11 +1,11 @@
 #!/bin/bash
 
-#SBATCH --job-name ce_spec_10
+#SBATCH --job-name ce_spec_5
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node 28
 #SBATCH --time 5-00:00:00
 #SBATCH --partition cpu
-#SBATCH --output ce_spec_10.out
+#SBATCH --output ce_spec_5.out
 #SBATCH --exclusive
 #SBATCH --mem 40000
 
