@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 import time
 from os.path import expanduser
@@ -11,6 +13,7 @@ environment = "bc"
 base_dir = expanduser("~") + "/masters-project"
 build_dir = base_dir + "/benchmarks/NPB3.3-OMP"
 energy_monitor = base_dir + "/energy-monitor/energy-monitor"
+energy_monitor_output_file = "energy-monitor.out"
 bin_dir = base_dir + "/benchmarks/NPB3.3-OMP/bin"
 results_filename = base_dir + "/results/fix_flags." + environment + "."  + time.strftime("%Y%m%d-%H%M%S") + ".csv"
 
@@ -27,13 +30,16 @@ with open(results_filename, mode="a", buffering=1) as results_file:
 
         for benchmark in os.listdir(bin_dir):
             for i in range(0, samples):
-                p = Popen([energy_monitor, bin_dir + "/" + benchmark], stdout=PIPE)
+                energy_monitor_command = [energy_monitor, 
+                                          "--output", output_file, 
+                                          "--command", f"\"{bin_dir}/{benchmark}\""]
+                p = Popen(energy_monitor_command, stdout=PIPE)
                 result = p.stdout.read().decode("utf-8")
                 energy = int(result.split(",")[0])
                 time = float(result.split(",")[1])
                 
                 success = 'true'
-                with open("result", mode="r") as benchmark_output_file:
+                with open(energy_monitor_output_file, mode="r") as benchmark_output_file:
                     benchmark_output = benchmark_output_file.read()
                     benchmark_output = "".join(benchmark_output.split())
 
