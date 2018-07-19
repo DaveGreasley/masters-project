@@ -20,4 +20,4 @@ echo Slurm job ID is $SLURM_JOB_ID
 echo This job runs on the following machines:
 echo `echo $SLURM_JOB_NODELIST | uniq`
 
-python ../scripts/combined_elimination.py EP,FT 
+../scripts/combined_elimination.py --variable energy --benchmarks=EP,FT --id=2

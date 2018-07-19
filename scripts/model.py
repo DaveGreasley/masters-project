@@ -38,10 +38,9 @@ class NPB(Benchmark):
         return f"{self.root_dir}/bin/{self.name.lower()}.{self.size}.x"
         #return [self.root_dir + "/bin/" + self.name.lower() + "." + self.size + ".x"]
 
-    @staticmethod
-    def run_successful():
+    def run_successful(self, output_file):
         success = True
-        with open("energy-monitor.out", mode="r") as benchmark_output_file:
+        with open(output_file, mode="r") as benchmark_output_file:
             benchmark_output = benchmark_output_file.read()
             benchmark_output = "".join(benchmark_output.split())
 
@@ -64,7 +63,7 @@ class SPEC(Benchmark):
         return f"{self.root_dir}/{self.name}/run.sh"
         #return self.root_dir + "/" + self.name + "/run.sh"
 
-    def run_successful(self):
+    def run_successful(self, output_file=''):
         validate_command = [self.root_dir + "/" + self.name + "/validate.sh"]
 
         validation_result = subprocess.call(validate_command)

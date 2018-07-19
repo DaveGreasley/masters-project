@@ -1,9 +1,10 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 import sys
 import time
 import os
 import subprocess
+import argparse
 
 from model import NPB
 from model import SPEC
@@ -267,7 +268,7 @@ def get_cmd_string_from_config(config):
     return ' '.join(config)
 
 
-def build_and_measure(benchmark, config, target_var, results_file, type):
+def build_and_measure(benchmark, config, target_var, results_file, type, id):
     config_str = get_cmd_string_from_config(config)
 
     os.environ['COMPILE_FLAGS'] = config_str
@@ -276,7 +277,8 @@ def build_and_measure(benchmark, config, target_var, results_file, type):
     if build_result != 0:
         return -1
 
-    energy_monitor_command = [energy_monitor, "--command", f"\"{benchmark.run_command()}\""]
+    output_file = f"energy-monitor.{id}.out"
+    energy_monitor_command = [energy_monitor, "--output", output_file, "--command", f"\"{benchmark.run_command()}\""]
 
     total_energy = 0
     total_time = 0
@@ -288,7 +290,7 @@ def build_and_measure(benchmark, config, target_var, results_file, type):
         energy = int(result.split(",")[0])
         time = float(result.split(",")[1])
 
-        success = benchmark.run_successful()
+        success = benchmark.run_successful(output_file)
 
         if success:
             total_energy += energy
@@ -315,7 +317,7 @@ def build_and_measure(benchmark, config, target_var, results_file, type):
         return total_time / num_successes
 
 
-def combined_elimination(target_var, benchmarks, base_flag='-O3'):
+def combined_elimination(target_var, benchmarks, id, base_flag='-O3'):
 
     with open(results_filename, mode='a', buffering=1) as results_file:
         results_file.write("Benchmark,Flags,Energy,Time,Success,Type\n")
@@ -324,7 +326,7 @@ def combined_elimination(target_var, benchmarks, base_flag='-O3'):
             # Run at -O3 to get a point of comparison
             o3_flags = ['-O3']
 
-            o3_result = build_and_measure(benchmark, o3_flags, target_var, results_file, 'O3')
+            o3_result = build_and_measure(benchmark, o3_flags, target_var, results_file, 'O3', id)
 
             if o3_result <= 0:
                 print('-- O3 build failed. Exiting')
@@ -335,7 +337,7 @@ def combined_elimination(target_var, benchmarks, base_flag='-O3'):
 
             # Start with all flags enabled for the base line
             base_config = build_config(all_flags, base_flags, base_flag)
-            base_result = build_and_measure(benchmark, base_config, target_var, results_file, 'initial')
+            base_result = build_and_measure(benchmark, base_config, target_var, results_file, 'initial', id)
             initial_base_result = base_result
 
             if base_result <= 0:
@@ -357,7 +359,7 @@ def combined_elimination(target_var, benchmarks, base_flag='-O3'):
 
                     tmp_config = build_config(all_flags, tmp_flags, base_flag)
 
-                    result = build_and_measure(benchmark, tmp_config, target_var, results_file, 'test')
+                    result = build_and_measure(benchmark, tmp_config, target_var, results_file, 'test', id)
 
                     if 0 <= result < base_result:
                         flags_with_improvement += ([(flag, result)])
@@ -374,7 +376,7 @@ def combined_elimination(target_var, benchmarks, base_flag='-O3'):
                     tmp_flags.remove(flag)
                     tmp_config = build_config(all_flags, tmp_flags, base_flag)
 
-                    test_result = build_and_measure(benchmark, tmp_config, target_var, results_file, 'test')
+                    test_result = build_and_measure(benchmark, tmp_config, target_var, results_file, 'test', id)
 
                     if test_result <= 0:
                         print('-- Test run ' + str(run_id) + ' failed. Exiting')
@@ -391,7 +393,7 @@ def combined_elimination(target_var, benchmarks, base_flag='-O3'):
                         # build and measure the new baseline
                         tmp_flags = build_config(all_flags, base_flags, base_flag)
 
-                        base_result = build_and_measure(benchmark, tmp_flags, target_var, results_file, 'baseline')
+                        base_result = build_and_measure(benchmark, tmp_flags, target_var, results_file, 'baseline', id)
                         if base_result <= 0:
                             print('-- Base run ' + str(run_id) + ' failed. Exiting')
                             return False
@@ -401,20 +403,22 @@ def combined_elimination(target_var, benchmarks, base_flag='-O3'):
 
 
 def main():
-    if len(sys.argv) == 1:
-        print("You must list the benchmarks to use. For all say all")
-        exit(1)
+    parser = argparse.ArgumentParser(description='Run Combined Elimination..')
+    parser.add_argument('--variable', type=str, required=True, help="The variable to optimise for: energy or  time")
+    parser.add_argument('--benchmarks', type=str, required=True, help="Comma separated list of benchmarks to use or 'all'")
+    parser.add_argument('--id', type=int, required=True, help="A value to identify this run from other concurrent runs.")
+    args = parser.parse_args()
 
     benchmarks = available_benchmarks
 
-    enabled_benchmarks = sys.argv[1].lower()
-    if enabled_benchmarks != 'all':
-        enabled_benchmarks = enabled_benchmarks.split(',')
+    if args.benchmarks != 'all':
+        enabled_benchmarks = args.benchmarks.lower().split(',')
 
+        print(enabled_benchmarks)
         benchmarks = [b for b in available_benchmarks if b.name.lower() in enabled_benchmarks]
 
-    print("Starting Combined Elimination for " + str(len(benchmarks)) + " benchmakrs\n",flush=True)
-    result = combined_elimination('energy', benchmarks)
+    print("Starting Combined Elimination for " + str(len(benchmarks)) + " benchmarks\n",flush=True)
+    result = combined_elimination(args.variable, benchmarks, args.id)
 
     if result:
         return 0
