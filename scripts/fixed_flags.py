@@ -31,7 +31,7 @@ with open(results_filename, mode="a", buffering=1) as results_file:
         for benchmark in os.listdir(bin_dir):
             for i in range(0, samples):
                 energy_monitor_command = [energy_monitor, 
-                                          "--output", output_file, 
+                                          "--output", energy_monitor_output_file, 
                                           "--command", f"\"{bin_dir}/{benchmark}\""]
                 p = Popen(energy_monitor_command, stdout=PIPE)
                 result = p.stdout.read().decode("utf-8")

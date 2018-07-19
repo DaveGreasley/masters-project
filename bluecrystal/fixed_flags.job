@@ -3,14 +3,14 @@
 #SBATCH --job-name fixed-flags
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node 28
-#SBATCH --time 5:00:00
+#SBATCH --time 1:00:00
 #SBATCH --partition cpu
 #SBATCH --output fixed_flags.out
 #SBATCH --exclusive
 #SBATCH --mem 40000
 
-export OMP_NUM_THREADS=26
-export OMP_PROC_BIND=spread
+export OMP_NUM_THREADS=28
+export OMP_PROC_BIND=true
 export OMP_PLACES=cores
 
 echo Running on host `hostname`
@@ -20,4 +20,4 @@ echo Slurm job ID is $SLURM_JOB_ID
 echo This job runs on the following machines:
 echo `echo $SLURM_JOB_NODELIST | uniq`
 
-python ../scripts/fixed_flags.py
+../scripts/fixed_flags.py
