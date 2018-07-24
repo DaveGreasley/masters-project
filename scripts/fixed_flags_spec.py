@@ -28,7 +28,9 @@ with open(results_filename, mode="a", buffering=1) as results_file:
             benchmark_dir = spec_dir + "/" + benchmark
 
             if os.path.isdir(benchmark_dir):
-                call(["make", "-C", benchmark_dir])
+                os.chdir(benchmark_dir)
+
+                call(["make"])
 
                 for i in range(0, samples):
                     energy_monitor_command = [energy_monitor,
@@ -48,3 +50,5 @@ with open(results_filename, mode="a", buffering=1) as results_file:
                     output += str(time) + ","
                     output += str(success) + "\n"
                     results_file.write(output)
+
+                call(["make", "clean"])
