@@ -3,6 +3,7 @@
 *.x
 *machine.file.*
 *.out
+*.out.*
 npbparams.h
 .ipynb_checkpoints
 .idea
@@ -13,3 +14,6 @@ energy-monitor/rapl-read
 energy-monitor/result
 __pycache__
 *.cmp
+benchmark_run.err
+compare_run.err
+*.ckpt.*
