@@ -80,63 +80,6 @@ double get_timestamp()
     return tv.tv_sec + tv.tv_usec*1e-6;
 }
 
-long long get_energy(enum Measurement measurement)
-{
-    if (measurement == DRAM && !dram_domain_available)
-        return 0;
-
-    int i = 0;
-    char filename[100];
-    long long value = 0;
-    long long value_total = 0;
-
-    for (i=0;i<total_packages;i++)
-    {
-        if (measurement == PKG)
-        {
-            sprintf(filename, "/sys/class/powercap/intel-rapl/intel-rapl:%d/energy_uj", i);
-        } 
-        else 
-        {
-            sprintf(filename, "/sys/class/powercap/intel-rapl/intel-rapl:%d/intel-rapl:%d:0/energy_uj", i, i);
-        }
-
-        FILE *fff = fopen(filename, "r");
-        if (fff==NULL)
-        {
-            printf("Error: Cannot access RAPL counters (%d)\n", measurement);
-            exit(1);
-        }
-        else
-        {
-            fscanf(fff, "%lld", &value);
-            fclose(fff);
-        }
-
-        value_total += value;
-    }
-
-    return value_total;
-}
-
-long long check_overflow(enum Measurement measurement, long long start, long long end)
-{
-    if (start < end)
-        return end - start;
-
-    long long max_value;
-    if (measurement == PKG)
-    {
-        max_value = pkg_energy_max_value;
-    }
-    else
-    {
-        max_value = dram_energy_max_value;
-    }
-
-    return max_value - start + end;
-}
-
 char* get_command(struct arguments arguments)
 {
     int command_len = strlen(arguments.command) + strlen(arguments.out_file) + 4;
@@ -150,27 +93,109 @@ char* get_command(struct arguments arguments)
     return command;
 }
 
+char* get_rapl_powercap_filename(enum Measurement measurement, int package)
+{
+    char* filename = calloc(100, sizeof(char));
+
+    if (measurement == PKG)
+    {
+        sprintf(filename, "/sys/class/powercap/intel-rapl/intel-rapl:%d/energy_uj", package);
+    }
+    else
+    {
+        sprintf(filename, "/sys/class/powercap/intel-rapl/intel-rapl:%d/intel-rapl:%d:0/energy_uj", package, package);
+    }
+
+    return filename;
+}
+
+long long read_rapl_energy(char* filename)
+{
+    long long value = 0;
+    FILE *fff = fopen(filename, "r");
+    if (fff==NULL)
+    {
+        printf("Error: Cannot access RAPL counters\n");
+        exit(1);
+    }
+    else
+    {
+        fscanf(fff, "%lld", &value);
+        fclose(fff);
+    }
+
+    return value;
+}
+
+long long* get_energy(enum Measurement measurement)
+{
+    if (measurement == DRAM && !dram_domain_available)
+        return NULL;
+
+    long long* energy = (long long*) calloc(total_packages, sizeof(long long));
+
+    int i;
+    for (i=0; i<total_packages; i++)
+    {
+        char* filename = get_rapl_powercap_filename(measurement, i);
+        energy[i] = read_rapl_energy(filename);
+    }
+
+    return energy;
+}
+
+long long check_overflow(enum Measurement measurement, long long* start, long long* end)
+{
+    long long value = 0;
+    long long max_value;
+    if (measurement == PKG)
+    {
+        max_value = pkg_energy_max_value;
+    }
+    else
+    {
+        max_value = dram_energy_max_value;
+    }
+
+    int i;
+    for (i=0; i<total_packages; i++)
+    {
+        if (start[i] < end[i])
+        {
+            value += end[i] - start[i];
+        }
+        else
+        {
+            value += max_value - start[i] + end[i];
+        }
+    }
+    return value;
+}
+
 void run_and_measure(struct arguments arguments)
 {
     char* command = get_command(arguments);
 
-    // printf("Command: %s\n", command);
-    // exit(1);
-
     double start_time = get_timestamp();
-    long long start_energy_pkg = get_energy(PKG);
-    long long start_energy_dram = get_energy(DRAM);
+    long long* start_energy_pkg = get_energy(PKG);
+    long long* start_energy_dram = get_energy(DRAM);
   
     system(command);
     
     double end_time = get_timestamp();
-    long long end_energy_pkg = get_energy(PKG);
-    long long end_energy_dram = get_energy(DRAM);
+    long long* end_energy_pkg = get_energy(PKG);
+    long long* end_energy_dram = get_energy(DRAM);
 
     runtime =  end_time - start_time;
     
     energy_uj += check_overflow(PKG, start_energy_pkg, end_energy_pkg);
     energy_uj += check_overflow(DRAM, start_energy_dram, end_energy_dram);
+
+    free(command);
+    free(start_energy_pkg);
+    free(start_energy_dram);
+    free(end_energy_pkg);
+    free(end_energy_dram);
 }
 
 #define MAX_CPUS	1024
