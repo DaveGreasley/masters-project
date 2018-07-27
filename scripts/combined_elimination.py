@@ -268,7 +268,7 @@ def get_cmd_string_from_config(config):
     return ' '.join(config)
 
 
-def build_and_measure(benchmark, config, target_var, results_file, type, id):
+def build_and_measure(benchmark, config, target_var, results_file, type, concurrent_id, run_id):
     config_str = get_cmd_string_from_config(config)
 
     os.environ['COMPILE_FLAGS'] = config_str
@@ -277,7 +277,7 @@ def build_and_measure(benchmark, config, target_var, results_file, type, id):
     if build_result != 0:
         return -1
 
-    output_file = f"energy-monitor.{id}.out"
+    output_file = f"energy-monitor.{concurrent_id}.out"
     energy_monitor_command = [energy_monitor, "--output", output_file, "--command", f"\"{benchmark.run_command()}\""]
 
     total_energy = 0
@@ -302,7 +302,8 @@ def build_and_measure(benchmark, config, target_var, results_file, type, id):
         output += str(energy) + ","
         output += str(time) + ","
         output += str(success) + ","
-        output += type + "\n"
+        output += type + ", "
+        output += str(run_id) + "\n"
         if debug:
             print(output)
         else:
@@ -317,16 +318,16 @@ def build_and_measure(benchmark, config, target_var, results_file, type, id):
         return total_time / num_successes
 
 
-def combined_elimination(target_var, benchmarks, id, base_flag='-O3'):
+def combined_elimination(target_var, benchmarks, concurrent_id, base_flag='-O3'):
 
     with open(results_filename, mode='a', buffering=1) as results_file:
-        results_file.write("Benchmark,Flags,Energy,Time,Success,Type\n")
+        results_file.write("Benchmark,Flags,Energy,Time,Success,Type,RunId\n")
 
         for benchmark in benchmarks:
             # Run at -O3 to get a point of comparison
             o3_flags = ['-O3']
 
-            o3_result = build_and_measure(benchmark, o3_flags, target_var, results_file, 'O3', id)
+            o3_result = build_and_measure(benchmark, o3_flags, target_var, results_file, 'O3', concurrent_id, -1)
 
             if o3_result <= 0:
                 print('-- O3 build failed. Exiting')
@@ -337,8 +338,7 @@ def combined_elimination(target_var, benchmarks, id, base_flag='-O3'):
 
             # Start with all flags enabled for the base line
             base_config = build_config(all_flags, base_flags, base_flag)
-            base_result = build_and_measure(benchmark, base_config, target_var, results_file, 'initial', id)
-            initial_base_result = base_result
+            base_result = build_and_measure(benchmark, base_config, target_var, results_file, 'initial', concurrent_id, run_id)
 
             if base_result <= 0:
                 print('-- Base build failed. Exiting')
@@ -359,7 +359,7 @@ def combined_elimination(target_var, benchmarks, id, base_flag='-O3'):
 
                     tmp_config = build_config(all_flags, tmp_flags, base_flag)
 
-                    result = build_and_measure(benchmark, tmp_config, target_var, results_file, 'test', id)
+                    result = build_and_measure(benchmark, tmp_config, target_var, results_file, 'test', concurrent_id, run_id)
 
                     if 0 <= result < base_result:
                         flags_with_improvement += ([(flag, result)])
@@ -376,7 +376,7 @@ def combined_elimination(target_var, benchmarks, id, base_flag='-O3'):
                     tmp_flags.remove(flag)
                     tmp_config = build_config(all_flags, tmp_flags, base_flag)
 
-                    test_result = build_and_measure(benchmark, tmp_config, target_var, results_file, 'test', id)
+                    test_result = build_and_measure(benchmark, tmp_config, target_var, results_file, 'test', concurrent_id, run_id)
 
                     if test_result <= 0:
                         print('-- Test run ' + str(run_id) + ' failed. Exiting')
@@ -393,7 +393,7 @@ def combined_elimination(target_var, benchmarks, id, base_flag='-O3'):
                         # build and measure the new baseline
                         tmp_flags = build_config(all_flags, base_flags, base_flag)
 
-                        base_result = build_and_measure(benchmark, tmp_flags, target_var, results_file, 'baseline', id)
+                        base_result = build_and_measure(benchmark, tmp_flags, target_var, results_file, 'baseline', concurrent_id, run_id)
                         if base_result <= 0:
                             print('-- Base run ' + str(run_id) + ' failed. Exiting')
                             return False
