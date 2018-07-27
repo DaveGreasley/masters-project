@@ -3,5 +3,8 @@
 BASEDIR=$(dirname "$0")
 cd $BASEDIR
 
-./bwaves 2>> bwaves.err
 
+for i in {1..3}
+do
+    ./bwaves 2>> bwaves.err
+done

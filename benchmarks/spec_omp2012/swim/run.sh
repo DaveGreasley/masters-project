@@ -3,5 +3,7 @@
 BASEDIR=$(dirname "$0")
 cd $BASEDIR
 
-./swim < swim.in > swim.out 2>> swim.err
-
+for i in {1..10}
+do
+    ./swim < swim.in > swim.out 2>> swim.err
+done

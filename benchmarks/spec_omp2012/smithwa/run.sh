@@ -3,4 +3,8 @@
 BASEDIR=$(dirname "$0")
 cd $BASEDIR
 
-./smithwaterman 32 > trainset.out 2>> trainset.err
+
+for i in {1..50}
+do
+    ./smithwaterman 32 > trainset.out 2>> trainset.err
+done
