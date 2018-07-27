@@ -302,7 +302,7 @@ def build_and_measure(benchmark, config, target_var, results_file, type, concurr
         output += str(energy) + ","
         output += str(time) + ","
         output += str(success) + ","
-        output += type + ", "
+        output += type + ","
         output += str(run_id) + "\n"
         if debug:
             print(output)
