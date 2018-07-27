@@ -24,7 +24,8 @@ with open(results_filename, mode="a", buffering=1) as results_file:
     for flag in flags:
         os.environ['COMPILE_FLAGS'] = flag
 
-        for benchmark in os.listdir(spec_dir):
+#        for benchmark in os.listdir(spec_dir):
+        for benchmark in ['botsalgn','botsspar','bwaves','fma3d','ilbdc','imagick','kdtree','md','nab','smithwa','swim']:
             benchmark_dir = spec_dir + "/" + benchmark
 
             if os.path.isdir(benchmark_dir):
