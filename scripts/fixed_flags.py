@@ -17,7 +17,7 @@ energy_monitor_output_file = "energy-monitor.out"
 bin_dir = base_dir + "/benchmarks/NPB3.3-OMP/bin"
 results_filename = base_dir + "/results/fix_flags." + environment + "."  + time.strftime("%Y%m%d-%H%M%S") + ".csv"
 
-samples = 3
+samples = 10 
 
 with open(results_filename, mode="a", buffering=1) as results_file:
     results_file.write("Benchmark,Flags,Energy,Time,Success\n")

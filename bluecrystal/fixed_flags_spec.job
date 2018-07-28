@@ -3,8 +3,8 @@
 #SBATCH --job-name fixed-flags
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node 28
-#SBATCH --time 6:00:00
-#SBATCH --partition veryshort
+#SBATCH --time 1-00:00:00
+#SBATCH --partition cpu
 #SBATCH --output fixed_flags_spec.out
 #SBATCH --exclusive
 #SBATCH --mem 40000
