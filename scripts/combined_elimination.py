@@ -35,7 +35,7 @@ available_benchmarks = [
     NPB('IS', 'D', npb_dir),
     NPB('LU', 'C', npb_dir),
     #NPB('LU', 'C', npb_dir, version='VEC'),
-    NPB('MG', 'C', npb_dir),
+    NPB('MG', 'D', npb_dir),
     NPB('SP', 'C', npb_dir),
     NPB('UA', 'C', npb_dir),
     SPEC('botsalgn', spec_dir),
