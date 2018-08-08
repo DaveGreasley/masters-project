@@ -273,6 +273,12 @@ def build_and_measure(benchmark, config, target_var, results_file, type, concurr
 
     os.environ['COMPILE_FLAGS'] = config_str
 
+    # First clean the benchmark build
+    clean_result = subprocess.call(benchmark.clean_command())
+    if clean_result != 0:
+        return -1
+
+    # Now build the benchmark
     build_result = subprocess.call(benchmark.build_command())
     if build_result != 0:
         return -1

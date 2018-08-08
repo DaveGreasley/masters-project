@@ -30,13 +30,13 @@ class NPB(Benchmark):
         return disp_name
 
     def build_command(self):
-        command = ['make', self.name, 'CLASS=' + self.size, 'VERSION=' + self.version, '-C', self.root_dir]
+        return ['make', self.name, 'CLASS=' + self.size, 'VERSION=' + self.version, '-C', self.root_dir]
 
-        return command
+    def clean_command(self):
+        return ['make', 'clean', '-C', f"{self.root_dir}/{self.name}"]
 
     def run_command(self):
         return f"{self.root_dir}/bin/{self.name.lower()}.{self.size}.x"
-        #return [self.root_dir + "/bin/" + self.name.lower() + "." + self.size + ".x"]
 
     def run_successful(self, output_file):
         success = True
@@ -58,6 +58,9 @@ class SPEC(Benchmark):
 
     def build_command(self):
         return ['make', '-C', self.root_dir + "/" + self.name]
+
+    def clean_command(self):
+        return ['make', 'clean', '-C', self.root_dir + "/" + self.name]
 
     def run_command(self):
         return f"{self.root_dir}/{self.name}/run.sh"
