@@ -1,0 +1,10 @@
+Benchmark   Stable  O1-O3 Range     LT 1 Mins   
+botsalgn    YES     YES             YES
+botsspar    HMM     YES             YES
+kdtree      HMMM    YES             YES
+smithwa     YES     YES             YES
+swim        HMMM    YES             YES
+UA(C)       HMM     YES             YES
+BT(C)       HMM     YES             YES
+EP(D)       HMM     YES             NO
+FT(C)       YES     HMMM            YES
