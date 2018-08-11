@@ -18,9 +18,6 @@ struct arguments
 // Should we perform DRAM measurements
 bool dram_domain_available;
 
-// Sample rate in Hz
-const float sample_rate = 100;
-
 // The cpu package sysfs energy_uj value resets at this value
 const long long pkg_energy_max_value = 262143328850;
 
@@ -32,10 +29,6 @@ long long energy_uj = 0;
 
 // The runtime of the benchmark
 double runtime = 0;
-
-// The number of times the pkg and dram counters over flow
-int num_pkg_overflows = 0;
-int num_dram_overflows = 0;
 
 // The measurements this script supports
 enum Measurement { PKG = 0, DRAM = 1 };
