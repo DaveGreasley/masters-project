@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
-import sys
 import time
 import os
-import subprocess
+from subprocess import call, Popen, PIPE
 import argparse
 
 from model import NPB
@@ -274,12 +273,12 @@ def build_and_measure(benchmark, config, target_var, results_file, type, concurr
     os.environ['COMPILE_FLAGS'] = config_str
 
     # First clean the benchmark build
-    clean_result = subprocess.call(benchmark.clean_command())
+    clean_result = call(benchmark.clean_command())
     if clean_result != 0:
         return -1
 
     # Now build the benchmark
-    build_result = subprocess.call(benchmark.build_command())
+    build_result = call(benchmark.build_command())
     if build_result != 0:
         return -1
 
@@ -291,7 +290,7 @@ def build_and_measure(benchmark, config, target_var, results_file, type, concurr
     num_successes = 0
 
     for i in range(num_samples):
-        p = subprocess.Popen(energy_monitor_command, stdout=subprocess.PIPE)
+        p = Popen(energy_monitor_command, stdout=PIPE)
         result = p.stdout.read().decode("utf-8")
         energy = int(result.split(",")[0])
         time = float(result.split(",")[1])
