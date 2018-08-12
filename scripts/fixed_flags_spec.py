@@ -2,9 +2,12 @@
 
 import os
 import time
+import tempfile
 from os.path import expanduser
 
-from subprocess import call, Popen, PIPE
+from subprocess import call
+
+from energyutils import measure
 
 flags = ["-O1", "-O2", "-O3"]
 
@@ -37,10 +40,8 @@ with open(results_filename, mode="a", buffering=1) as results_file:
                     energy_monitor_command = [energy_monitor,
                                               "--output", energy_monitor_output_file,
                                               "--command", f"\"{benchmark_dir}/run.sh\""]
-                    p = Popen(energy_monitor_command, stdout=PIPE)
-                    result = p.stdout.read().decode("utf-8")
-                    energy = int(result.split(",")[0])
-                    time = float(result.split(",")[1])
+
+                    energy, time = measure(energy_monitor_command)
 
                     validate_result = call([f"{benchmark_dir}/validate.sh"])
                     success = validate_result == 0
