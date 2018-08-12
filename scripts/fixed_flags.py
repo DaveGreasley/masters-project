@@ -4,7 +4,9 @@ import os
 import time
 from os.path import expanduser
 
-from subprocess import call, Popen, PIPE
+from subprocess import call
+
+from energyutils import measure
 
 flags = ["-O1", "-O2", "-O3"]
 
@@ -33,22 +35,20 @@ with open(results_filename, mode="a", buffering=1) as results_file:
                 energy_monitor_command = [energy_monitor, 
                                           "--output", energy_monitor_output_file, 
                                           "--command", f"\"{bin_dir}/{benchmark}\""]
-                p = Popen(energy_monitor_command, stdout=PIPE)
-                result = p.stdout.read().decode("utf-8")
-                energy = int(result.split(",")[0])
-                time = float(result.split(",")[1])
+
+                energy, time = measure(energy_monitor_command)
                 
-                success = 'true'
+                success = True
                 with open(energy_monitor_output_file, mode="r") as benchmark_output_file:
                     benchmark_output = benchmark_output_file.read()
                     benchmark_output = "".join(benchmark_output.split())
 
                     if "Verification=SUCCESSFUL" not in benchmark_output:
-                        success = 'false'
+                        success = False
 
                 output = benchmark + ","
                 output += flag + ","
                 output += str(energy) + ","
                 output += str(time) + "," 
-                output += success +"\n"
+                output += str(success) +"\n"
                 results_file.write(output)
