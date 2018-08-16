@@ -3,8 +3,9 @@
 import sys
 import time
 import os
-import subprocess
 import argparse
+
+from subprocess import call
 
 from model import NPB
 from model import SPEC
