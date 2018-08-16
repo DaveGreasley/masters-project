@@ -2,8 +2,9 @@
 
 import time
 import os
-from subprocess import call, Popen, PIPE
 import argparse
+
+from subprocess import call 
 
 from model import NPB
 from model import SPEC
