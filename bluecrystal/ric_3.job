@@ -1,0 +1,23 @@
+#!/bin/bash
+
+#SBATCH --job-name ric_3
+#SBATCH --nodes 1
+#SBATCH --ntasks-per-node 28
+#SBATCH --time 3-00:00:00
+#SBATCH --partition cpu
+#SBATCH --output ric_3.out
+#SBATCH --exclusive
+#SBATCH --mem 40000
+
+export OMP_NUM_THREADS=28
+export OMP_PROC_BIND=true
+export OMP_PLACES=cores
+
+echo Running on host `hostname`
+echo Time is `date`
+echo Directory is `pwd`
+echo Slurm job ID is $SLURM_JOB_ID
+echo This job runs on the following machines:
+echo `echo $SLURM_JOB_NODELIST | uniq`
+
+../scripts/ric.py --benchmarks=swim --id=22 --configs=../scripts/random_configs_1000.csv
