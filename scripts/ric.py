@@ -56,7 +56,13 @@ available_benchmarks = [
 def build_and_measure(benchmark, config, results_file, concurrent_id, run_id):
     os.environ['COMPILE_FLAGS'] = config
 
-    build_result = subprocess.call(benchmark.build_command())
+    # First clean the benchmark build
+    clean_result = call(benchmark.clean_command())
+    if clean_result != 0:
+        return -1
+
+    # Now build the benchmark
+    build_result = call(benchmark.build_command())
     if build_result != 0:
         return -1
 
