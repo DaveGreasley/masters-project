@@ -47,6 +47,7 @@ available_benchmarks = [
     SPEC('kdtree', spec_dir),
     SPEC('md', spec_dir),
     SPEC('nab', spec_dir),
+    SPEC('imagick', spec_dir),
     SPEC('smithwa', spec_dir),
     SPEC('swim', spec_dir)
 ]
