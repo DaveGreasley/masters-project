@@ -106,7 +106,7 @@ def do_ric(configs, benchmarks, concurrent_id):
                 run_id = 0
 
                 for config in configs_file:
-                    build_and_measure(benchmark, config, results_file, concurrent_id, run_id)
+                    build_and_measure(benchmark, config.rstrip(), results_file, concurrent_id, run_id)
                     run_id += 1
     return True
 
