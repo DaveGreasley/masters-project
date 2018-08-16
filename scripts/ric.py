@@ -9,6 +9,8 @@ import argparse
 from model import NPB
 from model import SPEC
 
+from energyutils import measure
+
 debug = False
 
 #base_dir = "/home/dave/Documents/project"
@@ -66,13 +68,9 @@ def build_and_measure(benchmark, config, results_file, concurrent_id, run_id):
     num_successes = 0
 
     for i in range(num_samples):
-        p = subprocess.Popen(energy_monitor_command, stdout=subprocess.PIPE)
-        result = p.stdout.read().decode("utf-8")
-        energy = int(result.split(",")[0])
-        time = float(result.split(",")[1])
+        energy, time = measure(energy_monitor_command)
 
         success = benchmark.run_successful(output_file)
-
         if success:
             total_energy += energy
             total_time += time
@@ -122,7 +120,7 @@ def main():
         print(enabled_benchmarks)
         benchmarks = [b for b in available_benchmarks if b.name.lower() in enabled_benchmarks]
 
-    print("Starting Combined Elimination for " + str(len(benchmarks)) + " benchmarks\n",flush=True)
+    print("Starting Random Iterative Compilation for " + str(len(benchmarks)) + " benchmarks\n",flush=True)
     result = do_ric(args.configs, benchmarks, args.id)
 
     if result:
