@@ -7,21 +7,12 @@ import argparse
 
 from subprocess import call
 
-from model import NPB
-from model import SPEC
-
-from energyutils import measure
+from common.basedirectory import *
+from common.model import NPB
+from common.model import SPEC
+from common.energyutils import measure
 
 debug = False
-
-#base_dir = "/home/dave/Documents/project"
-base_dir = "/mnt/storage/home/dg17763/masters-project"
-#base_dir = "/home/dave/masters-project/"
-results_dir = base_dir + "/results"
-npb_dir = base_dir + "/benchmarks/NPB3.3-OMP"
-spec_dir = base_dir + "/benchmarks/spec_omp2012"
-energy_monitor_dir = base_dir + "/energy-monitor"
-
 
 energy_monitor = energy_monitor_dir + "/energy-monitor"
 results_filename = base_dir + "/results/RIC." + time.strftime("%Y%m%d-%H%M%S") + ".csv"

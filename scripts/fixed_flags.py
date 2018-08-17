@@ -6,20 +6,20 @@ from os.path import expanduser
 
 from subprocess import call
 
-from energyutils import measure
+from common.basedirectory import *
+from common.energyutils import measure
 
 flags = ["-O1", "-O2", "-O3"]
 
 environment = "bc"
 
-base_dir = expanduser("~") + "/masters-project"
-build_dir = base_dir + "/benchmarks/NPB3.3-OMP"
-energy_monitor = base_dir + "/energy-monitor/energy-monitor"
-energy_monitor_output_file = "energy-monitor.out"
-bin_dir = base_dir + "/benchmarks/NPB3.3-OMP/bin"
-results_filename = base_dir + "/results/fix_flags." + environment + "."  + time.strftime("%Y%m%d-%H%M%S") + ".csv"
+bin_dir = npb_dir + "/bin"
+
+energy_monitor = energy_monitor_dir + "/energy-monitor"
 
 samples = 10 
+energy_monitor_output_file = "energy-monitor.out"
+results_filename = results_dir + "/fix_flags." + environment + "."  + time.strftime("%Y%m%d-%H%M%S") + ".csv"
 
 with open(results_filename, mode="a", buffering=1) as results_file:
     results_file.write("Benchmark,Flags,Energy,Time,Success\n")
@@ -28,7 +28,7 @@ with open(results_filename, mode="a", buffering=1) as results_file:
 
         os.environ['COMPILE_FLAGS'] = flag
 
-        call(["make", "suite", "-C", build_dir])
+        call(["make", "suite", "-C", npb_dir])
 
         for benchmark in os.listdir(bin_dir):
             for i in range(0, samples):

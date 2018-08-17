@@ -7,19 +7,18 @@ from os.path import expanduser
 
 from subprocess import call
 
-from energyutils import measure
+from common.basedirectory import *
+from common.energyutils import measure
 
 flags = ["-O1", "-O2", "-O3"]
 
 environment = "bc"
 
-base_dir = expanduser("~") + "/masters-project"
-energy_monitor = base_dir + "/energy-monitor/energy-monitor"
-energy_monitor_output_file = "energy-monitor.out"
-spec_dir = base_dir + "/benchmarks/spec_omp2012"
-results_filename = base_dir + "/results/fix_flags." + environment + "."  + time.strftime("%Y%m%d-%H%M%S") + ".csv"
+energy_monitor = energy_monitor_dir + "/energy-monitor"
 
 samples = 10
+energy_monitor_output_file = "energy-monitor.out"
+results_filename = results_dir = "/fix_flags." + environment + "."  + time.strftime("%Y%m%d-%H%M%S") + ".csv"
 
 with open(results_filename, mode="a", buffering=1) as results_file:
     results_file.write("Benchmark,Flags,Energy,Time,Success\n")
