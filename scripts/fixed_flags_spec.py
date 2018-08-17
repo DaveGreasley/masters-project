@@ -18,7 +18,7 @@ energy_monitor = energy_monitor_dir + "/energy-monitor"
 
 samples = 10
 energy_monitor_output_file = "energy-monitor.out"
-results_filename = results_dir = "/fix_flags." + environment + "."  + time.strftime("%Y%m%d-%H%M%S") + ".csv"
+results_filename = results_dir + "/fix_flags." + environment + "."  + time.strftime("%Y%m%d-%H%M%S") + ".csv"
 
 with open(results_filename, mode="a", buffering=1) as results_file:
     results_file.write("Benchmark,Flags,Energy,Time,Success\n")

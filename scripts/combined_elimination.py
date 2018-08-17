@@ -10,7 +10,7 @@ from common.basedirectory import *
 from common.model import NPB
 from common.model import SPEC
 from common.energyutils import measure
-from common.flagutils import load_flag_list()
+from common.flagutils import load_flag_list
 
 debug = False
 
