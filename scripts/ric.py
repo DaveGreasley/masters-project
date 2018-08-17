@@ -8,8 +8,7 @@ import argparse
 from subprocess import call
 
 from common.basedirectory import *
-from common.model import NPB
-from common.model import SPEC
+from common.benchmarkutils import get_available_benchmarks
 from common.energyutils import measure
 
 debug = False
@@ -19,31 +18,7 @@ results_filename = base_dir + "/results/RIC." + time.strftime("%Y%m%d-%H%M%S") +
 
 # This is the number of times the benchmark programs will be run
 num_samples = 3
-
-available_benchmarks = [
-    NPB('BT', 'C', npb_dir),
-    #NPB('BT', 'C', npb_dir, version='VEC'),
-    NPB('CG', 'C', npb_dir),
-    NPB('EP', 'D', npb_dir),
-    NPB('FT', 'C', npb_dir),
-    NPB('IS', 'D', npb_dir),
-    NPB('LU', 'C', npb_dir),
-    #NPB('LU', 'C', npb_dir, version='VEC'),
-    NPB('MG', 'D', npb_dir),
-    NPB('SP', 'C', npb_dir),
-    NPB('UA', 'C', npb_dir),
-    SPEC('botsalgn', spec_dir),
-    SPEC('botsspar', spec_dir),
-    SPEC('bwaves', spec_dir),
-    SPEC('fma3d', spec_dir),
-    SPEC('ilbdc', spec_dir),
-    SPEC('kdtree', spec_dir),
-    SPEC('md', spec_dir),
-    SPEC('nab', spec_dir),
-    SPEC('smithwa', spec_dir),
-    SPEC('swim', spec_dir)
-]
-
+available_benchmarks = get_available_benchmarks()
 
 def build_and_measure(benchmark, config, results_file, concurrent_id, run_id):
     os.environ['COMPILE_FLAGS'] = config

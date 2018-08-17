@@ -4,27 +4,10 @@ import argparse
 import numpy as np
 
 from common.flagutils import load_flag_list
+from common.flagutils import build_config
+from common.flagutils import get_cmd_string_from_config
 
 all_flags = load_flag_list()
-
-def build_config(all_flags, enabled_flags, base_flag=''):
-    config = []
-    if base_flag != '':
-        config.append(base_flag)
-
-    for f in enabled_flags:
-        assert f in all_flags
-
-    for f in all_flags:
-        if f in enabled_flags:
-            config.append(f)
-        else:
-            config.append('-fno-' + f[2:])
-    return config
-
-
-def get_cmd_string_from_config(config):
-    return ' '.join(config)
 
 
 def generate(num, output):
