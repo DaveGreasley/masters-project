@@ -1,0 +1,11 @@
+C++ specific:
+-fno-threadsafe-statics - for non threadsafe code
+-fstrict-enums
+-frtti
+-fnothrow-opt
+
+
+No -fno for these:
+-fstack-protector-all
+-fstack-protector-explicit
+-fstack-protector-strong

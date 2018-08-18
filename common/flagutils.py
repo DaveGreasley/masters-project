@@ -9,6 +9,12 @@ def load_flag_list():
         return [f.rstrip() for f in flag_file]
 
 
+def load_o3_flags():
+    with io.open(base_dir + '/o3_flags.csv') as flag_file:
+        next(flag_file)
+        return [f.rstrip() for f in flag_file]
+
+
 def build_config(all_flags, enabled_flags, base_flag=''):
     config = []
     if base_flag != '':
