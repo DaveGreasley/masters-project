@@ -71,7 +71,7 @@ def test_threads(max_threads, benchmarks, concurrent_id):
                 return False
             
             run_id = 0
-            for thread_count in range(1, max_threads):
+            for thread_count in range(1, max_threads + 1):
                 run_test(benchmark, thread_count, results_file, concurrent_id, run_id)
                 run_id += 1
     return True
