@@ -1,0 +1,19 @@
+Benchmark,Dwarf,Number
+botsalgn,Dynamic Programming,10
+botsspar,Sparse Linear Algebra,2
+smithwa,Dynamic Programming,10
+imagick,Structured Grid,5
+kdtree,Graph Traversal,9
+nab,N-Body,4
+swim,Structured Grid,5
+bwaves,Sparse Linear Algebra,2
+fma3d,Structured Grid,5
+IS,N-Body,4
+EP,Map Reduce,7
+CG,Sparse Linear Algebra,2
+MG,Structured Grid,5
+FT,Spectral,3
+BT,Dense Linear Algebra,1
+SP,Structured Grid,5
+LU,Dense Linear Algebra,1
+UA,Unstructured Grid,6
