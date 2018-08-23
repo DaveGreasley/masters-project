@@ -11,5 +11,5 @@ debug:
 
 clean:
 	rm -f pathfinder
-
+	rm -f out
 

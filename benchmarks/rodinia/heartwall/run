@@ -1,1 +1,1 @@
-./heartwall ../../data/heartwall/test.avi 20 4
+./heartwall ~/rodinia_3.1/data/heartwall/test.avi 20 4

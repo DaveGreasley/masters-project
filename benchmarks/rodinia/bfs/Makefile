@@ -1,15 +1,15 @@
 # C compiler
-CC = g++
-ICC = icc
+CXX = g++
+CC = icc
 CC_FLAGS = -g -fopenmp -O2
 
-all: bfs bfs_offload
+#all: bfs bfs_offload
 
 bfs: bfs.cpp 
-	$(CC) $(CC_FLAGS) bfs.cpp -o bfs 
+	$(CXX) $(CC_FLAGS) bfs.cpp -o bfs 
 
 bfs_offload: bfs.cpp
-	$(ICC) $(CC_FLAGS) -DOMP_OFFLOAD bfs.cpp -o bfs_offload
+	$(CC) $(CC_FLAGS) -DOMP_OFFLOAD bfs.cpp -o bfs_offload
 
 clean:
 	rm -f bfs bfs_offload result.txt

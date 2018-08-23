@@ -1,4 +1,4 @@
-all: OPENMP/kmeans SERIAL/kmeans
+#all: OPENMP/kmeans SERIAL/kmeans
 
 OPENMP/kmeans:
 	cd kmeans_openmp; make

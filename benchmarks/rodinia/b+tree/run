@@ -1,1 +1,1 @@
-./b+tree.out core 2 file ../../data/b+tree/mil.txt command ../../data/b+tree/command.txt
+./b+tree.out core 2 file ~/rodinia_3.1/data/b+tree/mil.txt command ~/rodinia_3.1/data/b+tree/command.txt

@@ -4,7 +4,7 @@ ICC = icc
 CC_FLAGS = -g -fopenmp -O2
 OFFLOAD_CC_FLAGS = -offload-option,mic,compiler,"-no-opt-prefetch"
 
-all: hotspot hotspot_offload 
+#all: hotspot hotspot_offload 
 
 
 hotspot: hotspot_openmp.cpp Makefile 

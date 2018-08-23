@@ -4,7 +4,7 @@ ICC = icc
 CC_FLAGS = -g -O3 -fopenmp
 OFFLOAD_CC_FLAGS = -offload-option,mic,compiler,"-no-opt-prefetch"
 
-all: needle needle_offload
+#all: needle needle_offload
 
 needle: 
 	$(CC) $(CC_FLAGS) needle.cpp -o needle 

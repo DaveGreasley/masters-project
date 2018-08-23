@@ -1,1 +1,1 @@
-./OpenMP/leukocyte 5 4 ../../data/leukocyte/testfile.avi 
+./OpenMP/leukocyte 5 4 ~/rodinia_3.1/data/leukocyte/testfile.avi 
