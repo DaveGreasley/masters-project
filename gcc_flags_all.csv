@@ -78,7 +78,6 @@ Flag
 -fmodulo-sched
 -fmodulo-sched-allow-regmoves
 -fmove-loop-invariants
--fnon-call-exceptions
 -fomit-frame-pointer
 -fopt-info
 -foptimize-sibling-calls

@@ -9,3 +9,6 @@ No -fno for these:
 -fstack-protector-all
 -fstack-protector-explicit
 -fstack-protector-strong
+
+Breaks FT benchmark:
+-fnon-call-exceptions
