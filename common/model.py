@@ -29,8 +29,16 @@ class Parboil(Benchmark):
     def run_command(self):
         return [f"{root_dir}/parboil", "run", name, "omp_base", size]
 
-    def run_successful(self):
-        pass
+    def run_successful(self, output_file):
+        success = True
+        with open(output_file, mode="r") as benchmark_output_file:
+            benchmark_output = benchmark_output_file.read()
+            benchmark_output = "".join(benchmark_output.split())
+
+            if "Pass" not in benchmark_output:
+                success = False
+
+        return success
 
 
 class NPB(Benchmark):
