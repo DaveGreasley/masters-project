@@ -18,3 +18,5 @@ benchmark_run.err
 compare_run.err
 *.ckpt.*
 /benchmarks/parboil/datasets
+/benchmarks/parboil/benchmarks/*/run
+/benchmarks/parboil/benchmarks/*/build
