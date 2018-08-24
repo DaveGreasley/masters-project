@@ -29,7 +29,10 @@ def get_available_benchmarks():
         SPEC('swim', spec_dir),
         Parboil('tpacf', 'small', parboil_dir),
         Parboil('stencil', 'default', parboil_dir),
-        Parboil('lbm', 'long', parboil_dir)
+        Parboil('lbm', 'long', parboil_dir),
+        Parboil('bfs', '1M', parboil_dir),
+        Parboil('histo', 'medium', parboil_dir),
+        Parboil('mri-gridding', 'smaller', parboil_dir)
     ]
 
 
