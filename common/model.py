@@ -13,6 +13,26 @@ class Benchmark:
         return self.name
 
 
+class Parboil(Benchmark):
+    """Represents a benchmark form the Parboil bencharmk suite"""
+
+    def __init__(self, name, size, root_dir):
+        Benchmark.__init__(self, 'parboil', name, root_dir)
+        self.size = size
+
+    def build_command(self):
+        pass
+   
+    def clean_command(self):
+        pass
+
+    def run_command(self):
+        pass
+
+    def run_successful(self):
+        pass
+
+
 class NPB(Benchmark):
     """Represents a benchmark program from the NAS Parallel Benchmark suite"""
 
