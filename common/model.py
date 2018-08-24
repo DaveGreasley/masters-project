@@ -21,13 +21,13 @@ class Parboil(Benchmark):
         self.size = size
 
     def build_command(self):
-        pass
+        return [f"{root_dir}/parboil", "compile", name, "omp_base"]
    
     def clean_command(self):
-        pass
+        return [f"{root_dir}/parboil", "clean", name]
 
     def run_command(self):
-        pass
+        return [f"{root_dir}/parboil", "run", name, "omp_base", size]
 
     def run_successful(self):
         pass

@@ -1,7 +1,7 @@
 from common.basedirectory import *
 from common.model import NPB
 from common.model import SPEC
-
+from common.modle import Parboil
 
 def get_available_benchmarks():
     return [
@@ -26,7 +26,10 @@ def get_available_benchmarks():
         SPEC('nab', spec_dir),
         SPEC('imagick', spec_dir),
         SPEC('smithwa', spec_dir),
-        SPEC('swim', spec_dir)
+        SPEC('swim', spec_dir),
+        Parboil('tpacf', 'small', parboil_dir),
+        Parboil('stencil', 'default', parboil_dir),
+        Parboil('lbm', 'long', parboil_dir)
     ]
 
 
