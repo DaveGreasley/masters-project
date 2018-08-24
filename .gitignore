@@ -17,3 +17,4 @@ __pycache__
 benchmark_run.err
 compare_run.err
 *.ckpt.*
+/benchmarks/parboil/datasets
