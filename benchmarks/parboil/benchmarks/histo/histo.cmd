@@ -1,0 +1,1 @@
+build/omp_base_default/histo -i /mnt/storage/home/dg17763/masters-project/benchmarks/parboil/datasets/histo/medium/input/img.bin -o /mnt/storage/home/dg17763/masters-project/benchmarks/parboil/benchmarks/histo/run/medium/ref.bmp -- 100 4

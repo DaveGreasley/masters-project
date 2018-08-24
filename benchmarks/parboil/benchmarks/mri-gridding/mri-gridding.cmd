@@ -1,0 +1,1 @@
+build/omp_base_default/mri-gridding -i /mnt/storage/home/dg17763/masters-project/benchmarks/parboil/datasets/mri-gridding/smaller/input/small.uks -o /mnt/storage/home/dg17763/masters-project/benchmarks/parboil/benchmarks/mri-gridding/run/smaller/output.txt -- 32 0

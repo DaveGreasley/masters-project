@@ -1,0 +1,1 @@
+build/omp_base_default/bfs -i /mnt/storage/home/dg17763/masters-project/benchmarks/parboil/datasets/bfs/1M/input/graph_input.dat -o /mnt/storage/home/dg17763/masters-project/benchmarks/parboil/benchmarks/bfs/run/1M/bfs.out

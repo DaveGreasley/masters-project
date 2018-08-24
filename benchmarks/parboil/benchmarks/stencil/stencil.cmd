@@ -1,0 +1,1 @@
+build/omp_base_default/stencil -i /mnt/storage/home/dg17763/masters-project/benchmarks/parboil/datasets/stencil/default/input/512x512x64x100.bin -o /mnt/storage/home/dg17763/masters-project/benchmarks/parboil/benchmarks/stencil/run/default/512x512x64.out -- 512 512 64 100
