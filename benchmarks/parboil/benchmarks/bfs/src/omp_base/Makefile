@@ -4,12 +4,12 @@ LANGUAGE=c
 SRCDIR_OBJS=main.o 
 
 # To use slow (but precise) math routines
-ifeq ($(slowmath), 1)
-	APP_CFLAGS += -fp-model precise
-else
-	APP_CFLAGS += -ffast-math
-	APP_CXXFLAGS += -ffast-math
-endif
+#ifeq ($(slowmath), 1)
+#	APP_CFLAGS += -fp-model precise
+#else
+#	APP_CFLAGS += -ffast-math
+#	APP_CXXFLAGS += -ffast-math
+#endif
 
 APP_CFLAGS += -fopenmp
 APP_CXXFLAGS += -fopenmp
