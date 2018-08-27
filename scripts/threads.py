@@ -25,7 +25,7 @@ def run_test(benchmark, num_threads, results_file, concurrent_id, run_id):
 
 
     output_file = f"energy-monitor.{concurrent_id}.out"
-    energy_monitor_command = [energy_monitor, "--output", output_file, "--command", f"\"{benchmark.run_command()}\""]
+    energy_monitor_command = [energy_monitor, "--output", output_file, "--command", benchmark.run_command()]
 
     total_energy = 0
     total_time = 0

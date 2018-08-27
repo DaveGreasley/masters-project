@@ -84,15 +84,15 @@ def build_and_measure(benchmark, config, disabled_flag, results_file):
         output += config + ","
         output += str(time) + ","
         output += str(energy) + ","
-        output += str(success) + ","
+        output += str(success) + "\n"
         results_file.write(output)
 
     if num_successes == 0:
         return -1
 
 
-with io.open(results_dir + '/flag_effects.' + time.strftime("%Y%m%d-%H%M%S"), mode='a', buffering=1) as results_file:
-    results_file.write('Benchmark,DisabledFlag,Flags,Time,Energy,Success')
+with io.open(results_dir + '/flag_effects.' + time.strftime("%Y%m%d-%H%M%S" + ".csv"), mode='a', buffering=1) as results_file:
+    results_file.write('Benchmark,DisabledFlag,Flags,Time,Energy,Success\n')
 
     best_configs = load_best_configurations()
 
