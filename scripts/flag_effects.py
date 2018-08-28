@@ -78,7 +78,7 @@ with io.open(results_dir + '/flag_effects.' + time.strftime("%Y%m%d-%H%M%S" + ".
 
             for flag in config:
                 config_to_test = ' '.join(config)
-                config_to_test = config_to_test.replace(flag, '')
+                config_to_test = config_to_test.replace(f"{flag} ", '')
 
                 build_and_measure(benchmark, config_to_test, flag, results_file)
 
