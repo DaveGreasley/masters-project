@@ -41,7 +41,7 @@ def build_and_measure(benchmark, config, target_var, results_file, type, concurr
         return -1
 
     output_file = f"energy-monitor.{concurrent_id}.out"
-    energy_monitor_command = [energy_monitor, "--output", output_file, "--command", f"\"{benchmark.run_command()}\""]
+    energy_monitor_command = [energy_monitor, "--output", output_file, "--command", benchmark.run_command()]
 
     total_energy = 0
     total_time = 0
