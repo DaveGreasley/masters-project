@@ -16,3 +16,10 @@ Breaks FT benchmark:
 
 Outputs loads of debug info:
 -fopt-info
+
+
+Debug Flags:
+-fvar-tracking
+-fvar-tracking-assignments
+-fvar-tracking-assignments-toggle
+-fvar-tracking-uninit
