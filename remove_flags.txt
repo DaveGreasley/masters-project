@@ -12,3 +12,7 @@ No -fno for these:
 
 Breaks FT benchmark:
 -fnon-call-exceptions
+
+
+Outputs loads of debug info:
+-fopt-info
