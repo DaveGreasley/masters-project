@@ -24,6 +24,7 @@ num_samples = 3
 all_flags = load_flag_list()
 available_benchmarks = get_available_benchmarks()
 
+
 def build_and_measure(benchmark, config, target_var, results_file, type, concurrent_id, run_id):
     config_str = get_cmd_string_from_config(config)
 

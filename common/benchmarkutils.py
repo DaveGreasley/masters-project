@@ -1,7 +1,7 @@
 from common.basedirectory import *
 from common.model import NPB
 from common.model import SPEC
-from common.modle import Parboil
+from common.model import Parboil
 
 def get_available_benchmarks():
     return [

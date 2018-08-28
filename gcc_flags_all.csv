@@ -79,7 +79,6 @@ Flag
 -fmodulo-sched-allow-regmoves
 -fmove-loop-invariants
 -fomit-frame-pointer
--fopt-info
 -foptimize-sibling-calls
 -foptimize-strlen
 -fpack-struct
