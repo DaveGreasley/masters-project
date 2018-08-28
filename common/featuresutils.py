@@ -1,9 +1,12 @@
 import pandas as pd
 
+from common.basedirectory import *
+
+
 def load_feature_frames():
-    npb = pd.read_csv('feature_extractor/NPB/features.csv', index_col=0, header=None)
-    spec = pd.read_csv('feature_extractor/SPEC/features.csv', index_col=0, header=None)
-    parboil = pd.read_csv('feature_extractor/parboil/features.csv', index_col=0, header=None)
+    npb = pd.read_csv(results_dir + '/feature_extractor/NPB/features.csv', index_col=0, header=None)
+    spec = pd.read_csv(results_dir + '/feature_extractor/SPEC/features.csv', index_col=0, header=None)
+    parboil = pd.read_csv(results_dir + '/feature_extractor/parboil/features.csv', index_col=0, header=None)
 
     return [npb, spec, parboil], ['NPB', 'SPEC', 'Parboil']
 

@@ -7,40 +7,13 @@ from subprocess import call
 from common.basedirectory import *
 from common.energyutils import measure
 from common.flagutils import load_o3_flags
-from common.benchmarkutils import get_available_benchmarks
-from common.datautils import load_ce_results
+from common.benchmarkutils import get_benchmark
+from common.datautils import load_best_configurations
 
 energy_monitor = energy_monitor_dir + "/energy-monitor"
 
 # This is the number of times the benchmark programs will be run
 num_samples = 5
-
-
-def get_benchmark(name):
-    for benchmark in get_available_benchmarks():
-        if benchmark.name == name.split('.')[0]:
-            return benchmark
-
-    print("Uknown benchmark")
-    exit()
-
-
-def best_configuration(variable, benchmark, average_data):
-    benchmark_data = average_data.loc[average_data["Benchmark"] == benchmark]
-    min_index = benchmark_data[variable].idxmin()
-    return benchmark_data.loc[min_index]["Flags"]
-
-
-def load_best_configurations():
-    average_data = load_ce_results(results_dir + '/CE.results.zip')
-    benchmarks = average_data["Benchmark"].unique()
-
-    best_configs = {}
-
-    for benchmark in benchmarks:
-        best_configs[benchmark.split('.')[0]] = best_configuration('Energy', benchmark, average_data)
-
-    return best_configs
 
 
 def remove_o3_flags(long_config):

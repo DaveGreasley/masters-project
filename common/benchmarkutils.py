@@ -36,3 +36,10 @@ def get_available_benchmarks():
     ]
 
 
+def get_benchmark(name):
+    for benchmark in get_available_benchmarks():
+        if benchmark.name == name.split('.')[0]:
+            return benchmark
+
+    print("Uknown benchmark")
+    exit()
