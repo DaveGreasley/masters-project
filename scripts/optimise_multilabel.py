@@ -6,13 +6,18 @@ from subprocess import call
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import KFold
-from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+
+from skmultilearn.problem_transform import ClassifierChain
 
 from common.basedirectory import *
+from common.datautils import load_ce_results
 from common.datautils import load_best_configurations
+from common.datautils import format_data_for_multilabel
 from common.featuresutils import load_features
 from common.benchmarkutils import get_benchmark
 from common.energyutils import measure
+from common.flagutils import remove_static_labels
 
 energy_monitor = energy_monitor_dir + "/energy-monitor"
 
@@ -23,7 +28,7 @@ best_configs = load_best_configurations()
 benchmarks_to_test = best_configs.keys()
 
 
-def build_and_measure(benchmark, config, results_file):
+def build_and_measure(benchmark, with_dwarf, config, results_file):
     os.environ['COMPILE_FLAGS'] = config
 
     # First clean the benchmark build
@@ -55,6 +60,7 @@ def build_and_measure(benchmark, config, results_file):
             num_successes += 1
 
         output = benchmark.display_name() + ","
+        output += str(with_dwarf) + ","
         output += config + ","
         output += str(time) + ","
         output += str(energy) + ","
@@ -62,24 +68,34 @@ def build_and_measure(benchmark, config, results_file):
         results_file.write(output)
 
 
-X, y = load_features(benchmarks_to_test, with_dwarf=False, with_names=True)
-X = StandardScaler().fit_transform(X)
+dwarf_options = [True, False]
 
+with io.open(results_dir + '/ML.' + time.strftime("%Y%m%d-%H%M%S" + ".csv"), mode='a', buffering=1) as results_file:
+    results_file.write('Benchmark,WithDwarf,Flags,Time,Energy,Success\n')
 
-with io.open(results_dir + '/NN.' + time.strftime("%Y%m%d-%H%M%S" + ".csv"), mode='a', buffering=1) as results_file:
-    results_file.write('Benchmark,Flags,Time,Energy,Success\n')
+    average_data = load_ce_results(results_dir + '/CE.results.zip')
+    benchmarks = average_data["Benchmark"].unique()
 
-    kf = KFold(n_splits=len(y))
-    for train_index, test_index in kf.split(X):
-        X_train, X_test = X[train_index], X[test_index]
-        y_train, y_test = y[train_index], y[test_index]
+    for with_dwarf in dwarf_options:
 
-        nn = KNeighborsClassifier(n_neighbors=1)
-        nn.fit(X_train, y_train)
-        prediction = nn.predict(X_test)
+        X, y = format_data_for_multilabel(average_data, False, benchmarks)
+        y, remaining_labels = remove_static_labels(y, with_labels=True)
 
-        for i in range(len(prediction)):
-            predicted_config = best_configs[prediction[i]]
-            test_benchmark = get_benchmark(y_test[i])
+        kf = KFold(n_splits=len(y))
+        for train_index, test_index in kf.split(X):
+            X_train, X_test = X[train_index], X[test_index]
+            y_train, y_test = y[train_index], y[test_index]
 
-            build_and_measure(test_benchmark, predicted_config, results_file)
+            clf = ClassifierChain(SVC(kernel='rbf', C=0.01, gamma=0.01))
+            clf.fit(X_train, y_train)
+            prediction = clf.predict(X_test).toarray()
+
+            config = "-O3 "
+
+            for index, flag_enabled in enumerate(prediction[0]):
+                if flag_enabled:
+                    config += remaining_labels[0][index] + " "
+                else:
+                    config += "-fno-" + remaining_labels[0][index][2:] + " "
+
+            build_and_measure(get_benchmark(benchmarks[test_index][0]), with_dwarf, config, results_file)
