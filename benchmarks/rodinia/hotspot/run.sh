@@ -1,3 +1,9 @@
+#!/bin/sh
+
+BASEDIR=$(dirname "$0")
+cd $BASEDIR
+
+
 ./hotspot 1024 1024 500000 $OMP_NUM_THREADS ~/rodinia_3.1/data/hotspot/temp_1024 ~/rodinia_3.1/data/hotspot/power_1024 output.out
 
 # Usage: ./hotspot <grid_rows> <grid_cols> <sim_time> <no. of threads><temp_file> <power_file>

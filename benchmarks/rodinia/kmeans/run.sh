@@ -1,3 +1,9 @@
+#!/bin/sh
+ 
+BASEDIR=$(dirname "$0")
+cd $BASEDIR
+
+
 ./kmeans_openmp/kmeans -n $OMP_NUM_THREADS -i ~/rodinia_3.1/data/kmeans/kdd_cup 
 
 #Usage: ./kmeans [switches] -i filename
