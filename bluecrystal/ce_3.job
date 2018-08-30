@@ -1,11 +1,11 @@
 #!/bin/bash
 
-#SBATCH --job-name ce_spec_3
+#SBATCH --job-name ce_3
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node 28
-#SBATCH --time 5-00:00:00
+#SBATCH --time 3-00:00:00
 #SBATCH --partition cpu
-#SBATCH --output ce_spec_3.out
+#SBATCH --output ce_3.out
 #SBATCH --exclusive
 #SBATCH --mem 40000
 
@@ -20,4 +20,4 @@ echo Slurm job ID is $SLURM_JOB_ID
 echo This job runs on the following machines:
 echo `echo $SLURM_JOB_NODELIST | uniq`
 
-../scripts/combined_elimination.py --variable energy --benchmarks=ilbdc,kdtree --id=8
+../scripts/combined_elimination.py --variable energy --benchmarks=hotspot --id=3

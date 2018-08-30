@@ -1,14 +1,15 @@
 #!/bin/bash
 
-#SBATCH --job-name threads_2
+#SBATCH --job-name ce_2
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node 28
-#SBATCH --time 5-00:00:00
+#SBATCH --time 3-00:00:00
 #SBATCH --partition cpu
-#SBATCH --output threads_2.out
+#SBATCH --output ce_2.out
 #SBATCH --exclusive
 #SBATCH --mem 40000
 
+export OMP_NUM_THREADS=28
 export OMP_PROC_BIND=true
 export OMP_PLACES=cores
 
@@ -19,4 +20,4 @@ echo Slurm job ID is $SLURM_JOB_ID
 echo This job runs on the following machines:
 echo `echo $SLURM_JOB_NODELIST | uniq`
 
-../energy-monitor/energy-monitor --command="../scripts/threads.py --maxthreads=28 --benchmarks=botsalgn,botsspar,bwaves,fma3d,ilbdc --id=2"
+../scripts/combined_elimination.py --variable energy --benchmarks=kmeans --id=2

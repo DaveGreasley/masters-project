@@ -1,14 +1,15 @@
 #!/bin/bash
 
-#SBATCH --job-name threads_3
+#SBATCH --job-name optimise_nn
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node 28
-#SBATCH --time 5-00:00:00
+#SBATCH --time 3-00:00:00
 #SBATCH --partition cpu
-#SBATCH --output threads_3.out
+#SBATCH --output optimise_nn.out
 #SBATCH --exclusive
 #SBATCH --mem 40000
 
+export OMP_NUM_THREADS=28
 export OMP_PROC_BIND=true
 export OMP_PLACES=cores
 
@@ -19,4 +20,4 @@ echo Slurm job ID is $SLURM_JOB_ID
 echo This job runs on the following machines:
 echo `echo $SLURM_JOB_NODELIST | uniq`
 
-../energy-monitor/energy-monitor --command="../scripts/threads.py --maxthreads=28 --benchmarks=LU,MG,SP,UA --id=3"
+../scripts/optimise_nearest_neighbour.py
