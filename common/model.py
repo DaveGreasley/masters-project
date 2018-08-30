@@ -47,6 +47,25 @@ class Parboil(Benchmark):
         return success
 
 
+class Rodinia(Benchmark):
+    """Represents a benchmark form the Rodinia bencharmk suite"""
+
+    def __init__(self, name, root_dir):
+        Benchmark.__init__(self, 'rodinia', name, root_dir)
+
+    def build_command(self):
+        return ["make", "-C", f"{self.root_dir}/{self.name}"]
+
+    def clean_command(self):
+        return ["make", "clean", "-C", f"{self.root_dir}/{self.name}"]
+
+    def run_command(self):
+        return f"{self.root_dir}/{self.name}/run.sh"
+
+    def run_successful(self, output_file):
+        return True # Rodinia doesn't provide validation scripts
+
+
 class NPB(Benchmark):
     """Represents a benchmark program from the NAS Parallel Benchmark suite"""
 
