@@ -1,7 +1,7 @@
 # C compiler
 CC = g++
 ICC = icc
-CC_FLAGS = -g -fopenmp -O2
+CC_FLAGS = -g -fopenmp $(COMPILE_FLAGS)
 OFFLOAD_CC_FLAGS = -offload-option,mic,compiler,"-no-opt-prefetch"
 
 #all: hotspot hotspot_offload 
