@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-import numpy as np
-import pandas as pd
 import io
 import time
 from subprocess import call

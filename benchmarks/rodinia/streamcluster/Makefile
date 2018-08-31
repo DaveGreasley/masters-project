@@ -16,7 +16,7 @@ cpu:
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) streamcluster_original.cpp -o $(TARGET_C) $(LIBS) -DENABLE_THREADS -pthread
 
 omp:
-	g++ -O3 -fopenmp -o $(TARGET_O) streamcluster_omp.cpp
+	g++ -fopenmp $(COMPILE_FLAGS) -o $(TARGET_O) streamcluster_omp.cpp
 
 
 clean:

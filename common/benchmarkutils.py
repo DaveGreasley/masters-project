@@ -2,6 +2,7 @@ from common.basedirectory import *
 from common.model import NPB
 from common.model import SPEC
 from common.model import Parboil
+from common.model import Rodinia
 
 def get_available_benchmarks():
     return [
@@ -32,7 +33,12 @@ def get_available_benchmarks():
         Parboil('lbm', 'long', parboil_dir),
         Parboil('bfs', '1M', parboil_dir),
         Parboil('histo', 'medium', parboil_dir),
-        Parboil('mri-gridding', 'smaller', parboil_dir)
+        Parboil('mri-gridding', 'smaller', parboil_dir),
+        Rodinia('backprop', rodinia_dir),
+        Rodinia('hotspot', rodinia_dir),
+        Rodinia('kmeans', rodinia_dir),
+        Rodinia('srad', rodinia_dir),
+        Rodinia('streamcluster', rodinia_dir)
     ]
 
 

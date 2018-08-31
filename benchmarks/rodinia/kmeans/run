@@ -1,1 +1,0 @@
-./kmeans_openmp/kmeans -n 4 -i ~/rodinia_3.1/data/kmeans/kdd_cup 

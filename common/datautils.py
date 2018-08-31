@@ -1,7 +1,13 @@
 import zipfile as zip
 import pandas as pd
+import numpy as np
+
+from sklearn.preprocessing import StandardScaler
 
 from common.basedirectory import *
+from common.featuresutils import load_features
+from common.flagutils import get_o3_config
+from common.flagutils import load_flag_list
 
 
 def load_ce_results(filename):
@@ -31,3 +37,31 @@ def load_best_configurations(average_data=None):
         best_configs[benchmark.split('.')[0]] = best_configuration('Energy', benchmark, average_data)
 
     return best_configs
+
+
+def format_data_for_multilabel(data, with_dwarf, benchmarks):
+    all_flags = load_flag_list()
+    benchmarks_nosize = [b.split('.')[0] for b in benchmarks]
+
+    X = StandardScaler().fit_transform(load_features(benchmarks_nosize, with_dwarf=with_dwarf))
+    y = []
+
+    for benchmark in benchmarks:
+        config_str = best_configuration('Energy', benchmark, data)
+        if config_str == '-O3':
+            config_str = get_o3_config()
+
+        labels = []
+
+        config = config_str[4:].split(' ')
+        for i, flag in enumerate(config):
+            if flag == all_flags[i]:
+                labels.append(1)  # Flag is turned on
+            elif flag == '-fno-' + all_flags[i][2:]:
+                labels.append(0)  # FLag is turned off -fno
+            else:
+                print("ERROR:" + flag)
+
+        y.append(labels)
+
+    return X, np.array(y)

@@ -1,6 +1,6 @@
 # C compiler
 CC = gcc
-CC_FLAGS = -g -fopenmp  -O2
+CC_FLAGS = -g -fopenmp $(COMPILE_FLAGS)
 
 
 backprop: backprop.o facetrain.o imagenet.o backprop_kernel.o 
