@@ -44,7 +44,6 @@ Flag
 -fif-conversion2
 -findirect-inlining
 -finline
--finline-atomics
 -finline-functions
 -finline-functions-called-once
 -finline-small-functions
