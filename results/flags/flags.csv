@@ -44,7 +44,6 @@ Optimisation,O0,O1,O2,O3,,
   -fif-conversion2            ,[disabled],[enabled],[enabled],[enabled],,"'-fif-conversion2',"
   -findirect-inlining         ,[disabled],[disabled],[enabled],[enabled],,"'-findirect-inlining',"
   -finline                    ,[enabled],[enabled],[enabled],[enabled],,"'-finline',"
-  -finline-atomics            ,[enabled],[enabled],[enabled],[enabled],,"'-finline-atomics',"
   -finline-functions          ,[disabled],[disabled],[disabled],[enabled],,"'-finline-functions',"
   -finline-functions-called-once ,[disabled],[enabled],[enabled],[enabled],,"'-finline-functions-called-once',"
   -finline-small-functions    ,[disabled],[disabled],[enabled],[enabled],,"'-finline-small-functions',"
