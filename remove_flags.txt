@@ -10,8 +10,9 @@ No -fno for these:
 -fstack-protector-explicit
 -fstack-protector-strong
 
-Breaks FT benchmark:
+Breaks some builds:
 -fnon-call-exceptions
+-f(no-)inline-atomics
 
 
 Outputs loads of debug info:
