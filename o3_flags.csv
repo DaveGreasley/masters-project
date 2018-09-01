@@ -130,6 +130,4 @@ Flag
 -ftree-ter
 -ftree-vrp
 -funswitch-loops
--fvar-tracking
--fvar-tracking-assignments
 -fweb

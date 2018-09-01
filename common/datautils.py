@@ -21,9 +21,13 @@ def load_ce_results(filename):
 
 
 def best_configuration(variable, benchmark, average_data):
-    benchmark_data = average_data.loc[average_data["Benchmark"] == benchmark]
+    return best_configuration_data(variable, benchmark, average_data, ["Flags"])[0]
+
+
+def best_configuration_data(variable, benchmark, average_data, fields):
+    benchmark_data = average_data.loc[average_data["Benchmark"].str.lower() == benchmark.lower()]
     min_index = benchmark_data[variable].idxmin()
-    return benchmark_data.loc[min_index]["Flags"]
+    return benchmark_data.loc[min_index][fields]
 
 
 def load_best_configurations(average_data=None):
