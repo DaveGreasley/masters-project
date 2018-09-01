@@ -7,8 +7,9 @@ def load_feature_frames():
     npb = pd.read_csv(results_dir + '/feature_extractor/NPB/features.csv', index_col=0, header=None)
     spec = pd.read_csv(results_dir + '/feature_extractor/SPEC/features.csv', index_col=0, header=None)
     parboil = pd.read_csv(results_dir + '/feature_extractor/parboil/features.csv', index_col=0, header=None)
+    rodinia = pd.read_csv(results_dir + '/feature_extractor/rodinia/features.csv', index_col=0, header=None)
 
-    return [npb, spec, parboil], ['NPB', 'SPEC', 'Parboil']
+    return [npb, spec, parboil, rodinia], ['NPB', 'SPEC', 'Parboil', 'Rodinia']
 
 
 def load_features(benchmarks, with_dwarf=False, with_names=False):
