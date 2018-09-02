@@ -17,6 +17,8 @@ def load_features(benchmarks, with_dwarf=False, with_names=False):
     combined = pd.concat(frames)
     subset = combined[combined.index.isin(benchmarks)]
 
+    subset = subset.reindex(benchmarks)
+
     if with_dwarf:
         dwarf_frame = pd.read_csv('dwarf_features.csv', index_col=0)
         dwarf_frame_subset = dwarf_frame[dwarf_frame.index.isin(benchmarks)]

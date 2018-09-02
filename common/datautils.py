@@ -15,9 +15,22 @@ def load_ce_results(filename):
         with results_zip.open(results_zip.namelist()[0]) as results_file:
             data = pd.read_csv(results_file)
             data.loc[:, 'Energy'] *= 1e-6 # Convert energy to Joules
-            data.loc[:, 'Benchmark'] = data['Benchmark'].str.replace('.x', '')
+            data.loc[:, 'Benchmark'] = data['Benchmark'].apply(lambda x: x.split('.')[0])
 
-            return data.groupby(['Benchmark','Flags', 'Type', 'RunId'], as_index=False).agg({'Energy':'mean', 'Time':'mean'})
+            return data.groupby(['Benchmark','Flags', 'Type', 'RunId', 'Success'], as_index=False).agg({'Energy':'mean', 'Time':'mean'})
+
+
+def load_csv_results(filename, group_by_cols, successful_only=True):
+    data = pd.read_csv(filename)
+    data.loc[:, 'Energy'] *= 1e-6  # Convert energy to Joules
+    data.loc[:, 'Benchmark'] = data['Benchmark'].apply(lambda x: x.split('.')[0])
+
+    average_data = data.groupby(group_by_cols, as_index = False).agg({'Energy': 'mean', 'Time': 'mean'})
+
+    if successful_only:
+        average_data = average_data[average_data["Success"] == True]
+
+    return average_data
 
 
 def best_configuration(variable, benchmark, average_data):
