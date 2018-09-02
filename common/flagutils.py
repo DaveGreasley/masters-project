@@ -22,7 +22,7 @@ def build_config(all_flags, enabled_flags, base_flag=''):
         config.append(base_flag)
 
     for f in enabled_flags:
-        assert f in all_flags
+        assert f in all_flags, f"{f} not found in all flags"
 
     for f in all_flags:
         if f in enabled_flags:
