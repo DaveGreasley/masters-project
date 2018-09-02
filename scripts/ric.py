@@ -10,7 +10,8 @@ import common.benchmarkutils as benchmarkutils
 import common.energyutils as energyutils
 
 # Ensure script runs on isolated copy of benchmarks
-import common.isolateutils
+import common.isolateutils as isolateutils
+
 
 debug = False
 
@@ -95,6 +96,7 @@ def main():
         print(enabled_benchmarks)
         benchmarks = [b for b in available_benchmarks if b.name.lower() in enabled_benchmarks]
 
+    print("Running in isolation at: " + isolateutils._temp_dir)
     print("Starting Random Iterative Compilation for " + str(len(benchmarks)) + " benchmarks\n",flush=True)
     result = do_ric(args.configs, benchmarks, args.id)
 
