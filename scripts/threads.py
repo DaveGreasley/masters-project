@@ -1,24 +1,27 @@
 #!/usr/bin/env python
 
-import sys
 import time
-import os
 import argparse
+import os
 
 from subprocess import call
 
-from common.basedirectory import *
-from common.benchmarkutils import get_available_benchmarks
-from common.energyutils import measure
+import common.basedirectory as basedirectory
+import common.benchmarkutils as benchmarkutils
+import common.energyutils as energyutils
+
+# Ensure script runs on isolated copy of benchmarks
+import common.isolateutils as isolateutils
 
 debug = False
 
-energy_monitor = energy_monitor_dir + "/energy-monitor"
-results_filename = base_dir + "/results/THREADS." + time.strftime("%Y%m%d-%H%M%S") + ".csv"
+energy_monitor = basedirectory.energy_monitor_dir + "/energy-monitor"
+results_filename = basedirectory.base_dir + "/results/THREADS." + time.strftime("%Y%m%d-%H%M%S") + ".csv"
 
 # This is the number of times the benchmark programs will be run
 num_samples = 5
-available_benchmarks = get_available_benchmarks()
+available_benchmarks = benchmarkutils.get_available_benchmarks()
+
 
 def run_test(benchmark, num_threads, results_file, concurrent_id, run_id):
     os.environ['OMP_NUM_THREADS'] = str(num_threads)
@@ -32,7 +35,7 @@ def run_test(benchmark, num_threads, results_file, concurrent_id, run_id):
     num_successes = 0
 
     for i in range(num_samples):
-        energy, time = measure(energy_monitor_command)
+        energy, time = energyutils.measure(energy_monitor_command)
 
         success = benchmark.run_successful(output_file)
         if success:
@@ -92,6 +95,7 @@ def main():
         print(enabled_benchmarks)
         benchmarks = [b for b in available_benchmarks if b.name.lower() in enabled_benchmarks]
 
+    print("Running in isolation at: " + isolateutils._temp_dir)
     print("Starting Thread tests for " + str(len(benchmarks)) + " benchmarks\n",flush=True)
     result = test_threads(args.maxthreads, benchmarks, args.id)
 
