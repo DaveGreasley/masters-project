@@ -20,10 +20,11 @@ def load_ce_results(filename):
             return data.groupby(['Benchmark','Flags', 'Type', 'RunId', 'Success'], as_index=False).agg({'Energy':'mean', 'Time':'mean'})
 
 
-def load_csv_results(filename, group_by_cols, successful_only=True):
+def load_csv_results(filename, group_by_cols, successful_only=True, benchmark_cols=['Benchmark']):
     data = pd.read_csv(filename)
     data.loc[:, 'Energy'] *= 1e-6  # Convert energy to Joules
-    data.loc[:, 'Benchmark'] = data['Benchmark'].apply(lambda x: x.split('.')[0])
+    for col in benchmark_cols:
+        data.loc[:, col] = data[col].apply(lambda x: x.split('.')[0])
 
     average_data = data.groupby(group_by_cols, as_index = False).agg({'Energy': 'mean', 'Time': 'mean'})
 
