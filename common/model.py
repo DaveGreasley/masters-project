@@ -1,8 +1,6 @@
 import os
 import subprocess
 
-from common.basedirectory import *
-
 
 class Benchmark:
     """Represents an individual benchmark program"""
@@ -24,15 +22,15 @@ class Parboil(Benchmark):
         self.size = size
 
     def build_command(self):
-        os.chdir(parboil_dir)
+        os.chdir(self.root_dir)
         return [f"{self.root_dir}/parboil", "compile", self.name, "omp_base"]
    
     def clean_command(self):
-        os.chdir(parboil_dir)
+        os.chdir(self.root_dir)
         return [f"{self.root_dir}/parboil", "clean", self.name]
 
     def run_command(self):
-        os.chdir(parboil_dir)
+        os.chdir(self.root_dir)
         return f"{self.root_dir}/parboil run {self.name} omp_base {self.size}"
 
     def run_successful(self, output_file):
@@ -117,7 +115,6 @@ class SPEC(Benchmark):
 
     def run_command(self):
         return f"{self.root_dir}/{self.name}/run.sh"
-        #return self.root_dir + "/" + self.name + "/run.sh"
 
     def run_successful(self, output_file=''):
         validate_command = [self.root_dir + "/" + self.name + "/validate.sh"]
