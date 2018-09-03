@@ -30,7 +30,7 @@ def run():
 
     globals.benchdir = bmks
 
-    globals.datadir =  parboilfile.Directory(os.getenv('PARBOIL_DATA'), [],
+    globals.datadir =  parboilfile.Directory('/mnt/storage/home/dg17763/parboil/datasets', [],
                          benchmark.dataset_repo_scanner())
 
     globals.benchmarks = benchmark.find_benchmarks()
@@ -46,4 +46,3 @@ def run():
     if act:
         return act()
 
-run()

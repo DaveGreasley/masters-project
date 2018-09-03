@@ -12,7 +12,7 @@ import common.benchmarkutils as benchmarkutils
 energy_monitor = energy_monitor_dir + "/energy-monitor"
 
 # This is the number of times the benchmark programs will be run
-num_samples = 5
+num_samples = 3
 best_configs = datautils.load_best_configurations()
 benchmarks_to_test = best_configs.keys()
 

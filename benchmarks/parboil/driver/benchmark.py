@@ -457,6 +457,7 @@ def find_benchmarks():
     db = {}
 
     try:
+        #import pdb; pdb.set_trace()
         globals.benchdir.scan()
         globals.datadir.scan()
         for bmkdir in globals.benchdir.getScannedChildren():
