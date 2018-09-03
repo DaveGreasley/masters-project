@@ -6,27 +6,29 @@ import argparse
 
 from subprocess import call 
 
-from common.basedirectory import *
-from common.energyutils import measure
-from common.benchmarkutils import get_available_benchmarks
-from common.flagutils import load_flag_list
-from common.flagutils import build_config
-from common.flagutils import get_cmd_string_from_config
+import common.basedirectory as basedirectory
+
+import common.energyutils as energyutils
+import common.benchmarkutils as benchmarkutils
+import common.flagutils as flagutils
+
+# Ensure script runs on isolated copy of benchmarks
+import common.isolateutils as isolateutils
 
 debug = False
 
-energy_monitor = energy_monitor_dir + "/energy-monitor"
-results_filename = base_dir + "/results/CE." + time.strftime("%Y%m%d-%H%M%S") + ".csv"
+energy_monitor = basedirectory.energy_monitor_dir + "/energy-monitor"
+results_filename = basedirectory.base_dir + "/results/CE." + time.strftime("%Y%m%d-%H%M%S") + ".csv"
 
 # This is the number of times the benchmark programs will be run
 num_samples = 3
 
-all_flags = load_flag_list()
-available_benchmarks = get_available_benchmarks()
+all_flags = flagutils.load_flag_list()
+available_benchmarks = benchmarkutils.get_available_benchmarks()
 
 
 def build_and_measure(benchmark, config, target_var, results_file, type, concurrent_id, run_id):
-    config_str = get_cmd_string_from_config(config)
+    config_str = flagutils.get_cmd_string_from_config(config)
 
     os.environ['COMPILE_FLAGS'] = config_str
 
@@ -48,7 +50,7 @@ def build_and_measure(benchmark, config, target_var, results_file, type, concurr
     num_successes = 0
 
     for i in range(num_samples):
-        energy, time = measure(energy_monitor_command)
+        energy, time = energyutils.measure(energy_monitor_command)
 
         success = benchmark.run_successful(output_file)
         if success:
@@ -96,7 +98,7 @@ def combined_elimination(target_var, benchmarks, concurrent_id, base_flag='-O3')
             base_flags = all_flags.copy()
 
             # Start with all flags enabled for the base line
-            base_config = build_config(all_flags, base_flags, base_flag)
+            base_config = flagutils.build_config(all_flags, base_flags, base_flag)
             base_result = build_and_measure(benchmark, base_config, target_var, results_file, 'initial', concurrent_id, run_id)
 
             if base_result <= 0:
@@ -116,7 +118,7 @@ def combined_elimination(target_var, benchmarks, concurrent_id, base_flag='-O3')
                     tmp_flags = list(base_flags)
                     tmp_flags.remove(flag)
 
-                    tmp_config = build_config(all_flags, tmp_flags, base_flag)
+                    tmp_config = flagutils.build_config(all_flags, tmp_flags, base_flag)
 
                     result = build_and_measure(benchmark, tmp_config, target_var, results_file, 'test', concurrent_id, run_id)
 
@@ -133,7 +135,7 @@ def combined_elimination(target_var, benchmarks, concurrent_id, base_flag='-O3')
                     # do a run with each flag disabled in turn
                     tmp_flags = base_flags.copy()
                     tmp_flags.remove(flag)
-                    tmp_config = build_config(all_flags, tmp_flags, base_flag)
+                    tmp_config = flagutils.build_config(all_flags, tmp_flags, base_flag)
 
                     test_result = build_and_measure(benchmark, tmp_config, target_var, results_file, 'test', concurrent_id, run_id)
 
@@ -150,7 +152,7 @@ def combined_elimination(target_var, benchmarks, concurrent_id, base_flag='-O3')
                         flags_to_consider.remove(flag)
 
                         # build and measure the new baseline
-                        tmp_flags = build_config(all_flags, base_flags, base_flag)
+                        tmp_flags = flagutils.build_config(all_flags, base_flags, base_flag)
 
                         base_result = build_and_measure(benchmark, tmp_flags, target_var, results_file, 'baseline', concurrent_id, run_id)
                         if base_result <= 0:
@@ -176,6 +178,7 @@ def main():
         print(enabled_benchmarks)
         benchmarks = [b for b in available_benchmarks if b.name.lower() in enabled_benchmarks]
 
+    print("Running in isolation at: " + isolateutils._temp_dir)
     print("Starting Combined Elimination for " + str(len(benchmarks)) + " benchmarks\n",flush=True)
     result = combined_elimination(args.variable, benchmarks, args.id)
 
