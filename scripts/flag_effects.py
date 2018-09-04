@@ -2,22 +2,27 @@
 
 import io
 import time
+import os
 from subprocess import call
 
-from common.basedirectory import *
-from common.energyutils import measure
-from common.flagutils import load_o3_flags
-from common.benchmarkutils import get_benchmark
-from common.datautils import load_best_configurations
+import common.basedirectory as basedirectory
+import common.energyutils as energyutils
+import common.flagutils as flagutils
+import common.benchmarkutils as benchmarkutils
+import common.datautils as datautils
 
-energy_monitor = energy_monitor_dir + "/energy-monitor"
+# Ensure script runs on isolated copy of benchmarks
+import common.isolateutils as isolateutils
+
+energy_monitor = basedirectory.energy_monitor_dir + "/energy-monitor"
 
 # This is the number of times the benchmark programs will be run
 num_samples = 5
+results_filename = basedirectory.results_dir + '/flag_effects.' + time.strftime("%Y%m%d-%H%M%S" + ".csv")
 
 
 def remove_o3_flags(long_config):
-    o3_flags = load_o3_flags()
+    o3_flags = flagutils.load_o3_flags()
 
     long_flags = long_config.split(' ')
     return [f for f in long_flags if not f in o3_flags]
@@ -44,7 +49,7 @@ def build_and_measure(benchmark, config, disabled_flag, results_file):
     num_successes = 0
 
     for i in range(num_samples):
-        energy, time = measure(energy_monitor_command)
+        energy, time = energyutils.measure(energy_monitor_command)
 
         success = benchmark.run_successful(output_file)
         if success:
@@ -64,13 +69,16 @@ def build_and_measure(benchmark, config, disabled_flag, results_file):
         return -1
 
 
-with io.open(results_dir + '/flag_effects.' + time.strftime("%Y%m%d-%H%M%S" + ".csv"), mode='a', buffering=1) as results_file:
+print("Running in isolation at: " + isolateutils._temp_dir)
+
+
+with io.open(results_filename, mode='a', buffering=1) as results_file:
     results_file.write('Benchmark,DisabledFlag,Flags,Time,Energy,Success\n')
 
-    best_configs = load_best_configurations()
+    best_configs = datautils.load_best_configurations()
 
     for benchmark_name in best_configs:
-        benchmark = get_benchmark(benchmark_name)
+        benchmark = benchmarkutils.get_benchmark(benchmark_name)
 
         config = best_configs[benchmark.name]
         if config != '-O3':
