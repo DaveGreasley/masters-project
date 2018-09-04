@@ -2,33 +2,34 @@
 
 import io
 import time
+import os
 from subprocess import call
 
-from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import KFold
 from sklearn.svm import SVC
 
 from skmultilearn.problem_transform import ClassifierChain
 
-from common.basedirectory import *
-from common.datautils import load_ce_results
-from common.datautils import load_best_configurations
-from common.datautils import format_data_for_multilabel
-from common.featuresutils import load_features
-from common.benchmarkutils import get_benchmark
-from common.energyutils import measure
-from common.flagutils import remove_static_labels
+import common.basedirectory as basedirectory
+import common.datautils as datautils
+import common.benchmarkutils as benchmarkutils
+import common.energyutils as energyutils
+import common.flagutils as flagutils
 
-energy_monitor = energy_monitor_dir + "/energy-monitor"
+# Ensure script runs on isolated copy of benchmarks
+import common.isolateutils as isolateutils
+
+energy_monitor = basedirectory.energy_monitor_dir + "/energy-monitor"
+results_filename = basedirectory.results_dir + '/ML.' + time.strftime("%Y%m%d-%H%M%S" + ".csv")
 
 # This is the number of times the benchmark programs will be run
 num_samples = 5
 
-best_configs = load_best_configurations()
+best_configs = datautils.load_best_configurations()
 benchmarks_to_test = best_configs.keys()
 
 
-def build_and_measure(benchmark, with_dwarf, config, results_file):
+def build_and_measure(benchmark, config, results_file):
     os.environ['COMPILE_FLAGS'] = config
 
     # First clean the benchmark build
@@ -51,7 +52,7 @@ def build_and_measure(benchmark, with_dwarf, config, results_file):
     num_successes = 0
 
     for i in range(num_samples):
-        energy, time = measure(energy_monitor_command)
+        energy, time = energyutils.measure(energy_monitor_command)
 
         success = benchmark.run_successful(output_file)
         if success:
@@ -60,42 +61,40 @@ def build_and_measure(benchmark, with_dwarf, config, results_file):
             num_successes += 1
 
         output = benchmark.display_name() + ","
-        output += str(with_dwarf) + ","
         output += config + ","
-        output += str(time) + ","
         output += str(energy) + ","
+        output += str(time) + ","
         output += str(success) + "\n"
         results_file.write(output)
 
 
-dwarf_options = [True, False]
+print("Running in isolation at: " + isolateutils._temp_dir)
 
-with io.open(results_dir + '/ML.' + time.strftime("%Y%m%d-%H%M%S" + ".csv"), mode='a', buffering=1) as results_file:
-    results_file.write('Benchmark,WithDwarf,Flags,Time,Energy,Success\n')
 
-    average_data = load_ce_results(results_dir + '/CE.results.zip')
+with io.open(results_filename, mode='a', buffering=1) as results_file:
+    results_file.write('Benchmark,Flags,Energy,Time,Success\n')
+
+    average_data = datautils.load_ce_results(basedirectory.results_dir + '/CE.results.zip')
     benchmarks = average_data["Benchmark"].unique()
 
-    for with_dwarf in dwarf_options:
+    X, y = datautils.format_data_for_multilabel(average_data, False, benchmarks)
+    y, remaining_labels = flagutils.remove_static_labels(y, with_labels=True)
 
-        X, y = format_data_for_multilabel(average_data, False, benchmarks)
-        y, remaining_labels = remove_static_labels(y, with_labels=True)
+    kf = KFold(n_splits=len(y))
+    for train_index, test_index in kf.split(X):
+        X_train, X_test = X[train_index], X[test_index]
+        y_train, y_test = y[train_index], y[test_index]
 
-        kf = KFold(n_splits=len(y))
-        for train_index, test_index in kf.split(X):
-            X_train, X_test = X[train_index], X[test_index]
-            y_train, y_test = y[train_index], y[test_index]
+        clf = ClassifierChain(SVC(kernel='rbf', C=0.01, gamma=0.01))
+        clf.fit(X_train, y_train)
+        prediction = clf.predict(X_test).toarray()
 
-            clf = ClassifierChain(SVC(kernel='rbf', C=0.01, gamma=0.01))
-            clf.fit(X_train, y_train)
-            prediction = clf.predict(X_test).toarray()
+        config = "-O3 "
 
-            config = "-O3 "
+        for index, flag_enabled in enumerate(prediction[0]):
+            if flag_enabled:
+                config += remaining_labels[0][index] + " "
+            else:
+                config += "-fno-" + remaining_labels[0][index][2:] + " "
 
-            for index, flag_enabled in enumerate(prediction[0]):
-                if flag_enabled:
-                    config += remaining_labels[0][index] + " "
-                else:
-                    config += "-fno-" + remaining_labels[0][index][2:] + " "
-
-            build_and_measure(get_benchmark(benchmarks[test_index][0]), with_dwarf, config, results_file)
+        build_and_measure(benchmarkutils.get_benchmark(benchmarks[test_index][0]), config, results_file)
