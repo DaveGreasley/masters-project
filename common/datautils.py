@@ -11,13 +11,17 @@ from common.flagutils import load_flag_list
 
 
 def load_ce_results(filename):
+    return load_zip_results(filename, ['Benchmark','Flags', 'Type', 'RunId', 'Success'])
+
+
+def load_zip_results(filename, group_by_cols):
     with zip.ZipFile(filename) as results_zip:
         with results_zip.open(results_zip.namelist()[0]) as results_file:
             data = pd.read_csv(results_file)
             data.loc[:, 'Energy'] *= 1e-6 # Convert energy to Joules
             data.loc[:, 'Benchmark'] = data['Benchmark'].apply(lambda x: x.split('.')[0])
 
-            return data.groupby(['Benchmark','Flags', 'Type', 'RunId', 'Success'], as_index=False).agg({'Energy':'mean', 'Time':'mean'})
+            return data.groupby(group_by_cols, as_index=False).agg({'Energy':'mean', 'Time':'mean'})
 
 
 def load_csv_results(filename, group_by_cols, successful_only=True, benchmark_cols=['Benchmark']):
