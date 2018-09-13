@@ -18,6 +18,7 @@ SP,Structured Grid,5
 LU,Dense Linear Algebra,1
 UA,Unstructured Grid,6
 lbm,Structured Grid,5
+bfs,Graph Traversal,9
 hotspot,Structured Grid,5
 kmeans,Dense Linear Algebra,1
 backprop,Unstructured Grid,6
